@@ -6,7 +6,8 @@ namespace DiscordScraperBot
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Utilities.GetAlert("Test2"));
+            Console.WriteLine(Config.bot.token);
+            Console.WriteLine(Utilities.GetAlert("Test"));
         }
     }
 }
