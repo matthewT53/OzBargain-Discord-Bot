@@ -22,6 +22,16 @@ namespace DiscordScraperBot
             });
 
             _client.Log += LogMessageAsync;
+
+            // Log in and start the bot. 
+            await _client.LoginAsync(TokenType.Bot, Config.bot.token);
+            await _client.StartAsync();
+
+            _cmd_handler = new CmdHandler();
+            await _cmd_handler.InitialiseAsync(_client);
+
+            // Wait until the operation finishes.
+            await Task.Delay(-1); 
         }
 
         private async Task LogMessageAsync(LogMessage m)
