@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DiscordScraperBot
@@ -9,6 +10,9 @@ namespace DiscordScraperBot
     {
         DiscordSocketClient _client;
         CmdHandler _cmd_handler;
+        ScraperManager _scraper_manager;
+        Thread _scraper_thread;  
+
         static void Main(string[] args)
         => new Program().StartAsync().GetAwaiter().GetResult();
 
@@ -29,6 +33,11 @@ namespace DiscordScraperBot
 
             _cmd_handler = new CmdHandler();
             await _cmd_handler.InitialiseAsync(_client);
+
+            // Intitialize and start the scrapers.
+            Console.WriteLine("[+] Starting scrapers.");
+            _scraper_manager = new ScraperManager();
+            _scraper_thread = new Thread(_scraper_manager.StartScraping);
 
             // Wait until the operation finishes.
             await Task.Delay(-1); 
