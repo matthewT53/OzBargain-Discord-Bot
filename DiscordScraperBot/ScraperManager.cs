@@ -11,7 +11,6 @@ namespace DiscordScraperBot
         List<Scraper> _scrapers;
         List<string> _categories;
         List<Item> _items;
-        bool _do_scrape;
         
         public ScraperManager()
         {
@@ -19,7 +18,6 @@ namespace DiscordScraperBot
             _categories = new List<string>();
             _items = new List<Item>();
 
-            _do_scrape = false;
         }
 
         private void Initialize()
@@ -28,23 +26,24 @@ namespace DiscordScraperBot
             _scrapers.Add(new OzBargainScraper());
 
             // Load all the user's categories.
-
+            _categories.Add("headphones");
+            _categories.Add("games");
 
         }
 
         public void StartScraping()
         {
-            _do_scrape = true;
-            while (_do_scrape)
+            while (true)
             {
                 Console.WriteLine("[+] Scraper running...");
+
+                foreach (Scraper bot in _scrapers)
+                {
+                    bot.Scrape();
+                }
+
                 Thread.Sleep(1000);
             }
-        }
-
-        public void StopScraping()
-        {
-            _do_scrape = false;
         }
     }
 }
