@@ -12,7 +12,6 @@ namespace DiscordScraperBot
     {
         DiscordSocketClient _client;
         CommandService _service;
-
         public async Task InitialiseAsync(DiscordSocketClient client)
         {
             _client = client;
