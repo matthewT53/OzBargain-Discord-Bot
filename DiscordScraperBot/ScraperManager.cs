@@ -20,7 +20,7 @@ namespace DiscordScraperBot
 
         }
 
-        private void Initialize()
+        public void Initialize()
         {
             // Add all the scrapers that are under the scrapers folder.
             _scrapers.Add(new OzBargainScraper());

@@ -26,7 +26,7 @@ namespace DiscordScraperBot.Scapers
 
         public void Scrape()
         {
-            Console.Out.WriteLine("\t[+] Scraping the ozbargain website: ");
+            Console.Out.WriteLine("[+] Scraping the ozbargain website: ");
 
             HtmlWeb web = new HtmlWeb();
 
@@ -39,19 +39,46 @@ namespace DiscordScraperBot.Scapers
 
                 var html_doc = web.Load(link);
 
-                // Extract the desirable items from the current page:
+                /*
+                 * Extract all the bargains from the OzBargains website. 
+                 */
                 var bargain_nodes = html_doc.DocumentNode.SelectNodes(BARGAINS_XPATH);
-                foreach (var bargain in bargain_nodes)
+                Console.Out.WriteLine("[+] Bargain nodes: ");
+                if (bargain_nodes != null)
                 {
-                    
+                    Console.Out.WriteLine("[+] Bargain nodes: ");
+                    /*
+                     * Iterate over each product that was extracted from the ozbargain page
+                     * and extract the desired information.
+                     */
+                    foreach (var product_node in bargain_nodes)
+                    {
+                        Console.Out.WriteLine("[+] Product: ");
+                        /*
+                         * Seems like the product title text is split up, so we need to select 
+                         * an XPATH that can extract all these pieces of text.
+                         */
+                        var title_nodes = product_node.SelectNodes(".//h2//a//text()");
+                        if (title_nodes == null || title_nodes.Count == 0) continue;
+
+                        foreach (var text_node in title_nodes)
+                        {
+                            Console.Out.WriteLine("[+] Text: " + text_node.InnerText);
+                        }
+
+                        /*
+                         * Extract the link to the external source selling the product.
+                         */
+
+                    }
                 }
 
                 // Acquire the links to the next pages:
-                var link_nodes = html_doc.DocumentNode.SelectNodes(NEXT_PAGE_LINKS_XPATH);
-                foreach (var node in link_nodes)
-                {
+                //var link_nodes = html_doc.DocumentNode.SelectNodes(NEXT_PAGE_LINKS_XPATH);
+                //foreach (var node in link_nodes)
+                //{
                     
-                }
+                //}
             }
         }
 
