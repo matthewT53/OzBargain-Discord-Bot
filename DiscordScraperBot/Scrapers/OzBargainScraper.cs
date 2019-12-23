@@ -16,6 +16,14 @@ namespace DiscordScraperBot.Scapers
 
         private const string URL = "https://www.ozbargain.com.au/";
 
+        /*
+         * The strings below are XPATHs for the OzBargain website. 
+         * 
+         * These XPATHs are used to extract desired information from the site.
+         */
+        private const string NEXT_PAGE_LINKS_XPATH  = "//*[@id=\"content\"]/ul/li";
+        private const string BARGAINS_XPATH         = "//*[@class=\"node node-ozbdeal node-teaser\"]";
+
         public void Scrape()
         {
             Console.Out.WriteLine("\t[+] Scraping the ozbargain website: ");
@@ -32,11 +40,15 @@ namespace DiscordScraperBot.Scapers
                 var html_doc = web.Load(link);
 
                 // Extract the desirable items from the current page:
-
+                var bargain_nodes = html_doc.DocumentNode.SelectNodes(BARGAINS_XPATH);
+                foreach (var bargain in bargain_nodes)
+                {
+                    
+                }
 
                 // Acquire the links to the next pages:
-                var nodes = html_doc.DocumentNode.SelectNodes("//*[@id=\"content\"]/ul/li");
-                foreach (var node in nodes)
+                var link_nodes = html_doc.DocumentNode.SelectNodes(NEXT_PAGE_LINKS_XPATH);
+                foreach (var node in link_nodes)
                 {
                     
                 }
