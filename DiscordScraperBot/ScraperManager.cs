@@ -60,6 +60,7 @@ namespace DiscordScraperBot
                     bot.Scrape();
                 }
 
+                Console.WriteLine("[+] Delay: " + _delay);
                 Thread.Sleep(_delay);
             }
         }

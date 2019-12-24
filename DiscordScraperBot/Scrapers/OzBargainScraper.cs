@@ -44,17 +44,17 @@ namespace DiscordScraperBot.Scapers
                  * Extract all the bargains from the OzBargains website. 
                  */
                 var bargain_nodes = html_doc.DocumentNode.SelectNodes(BARGAINS_XPATH);
-                Console.Out.WriteLine("[+] Bargain nodes: ");
+                /* Console.Out.WriteLine("[+] Bargain nodes: ");*/
                 if (bargain_nodes != null)
                 {
-                    Console.Out.WriteLine("[+] Bargain nodes: ");
+                    /*Console.Out.WriteLine("[+] Bargain nodes: ");*/
                     /*
                      * Iterate over each product that was extracted from the ozbargain page
                      * and extract the desired information.
                      */
                     foreach (var product_node in bargain_nodes)
                     {
-                        Console.Out.WriteLine("[+] Product: ");
+                        /*Console.Out.WriteLine("[+] Product: ");*/
                         /*
                          * Seems like the product title text is split up, so we need to select 
                          * an XPATH that can extract all these pieces of text.
@@ -64,7 +64,7 @@ namespace DiscordScraperBot.Scapers
 
                         foreach (var text_node in title_nodes)
                         {
-                            Console.Out.WriteLine("[+] Text: " + text_node.InnerText);
+                            /*Console.Out.WriteLine("[+] Text: " + text_node.InnerText);*/
 
                         }
 
