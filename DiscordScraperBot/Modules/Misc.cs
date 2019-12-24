@@ -10,7 +10,7 @@ namespace DiscordScraperBot.Modules
     public class Misc : ModuleBase<SocketCommandContext>
     {
         [Command("echo")]
-        public async Task echo([Remainder]string message)
+        public async Task Echo([Remainder]string message)
         {
             var embed = new EmbedBuilder();
 

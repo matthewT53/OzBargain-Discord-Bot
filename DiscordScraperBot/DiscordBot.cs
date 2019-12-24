@@ -18,6 +18,7 @@ namespace DiscordScraperBot
 
         public async Task StartAsync()
         {
+            Console.Out.WriteLine("[+] Inside StartAsync(): ");
             if (Config.bot.token == "" || Config.bot.token == null) return;
 
             _client = new DiscordSocketClient(new DiscordSocketConfig
@@ -31,8 +32,8 @@ namespace DiscordScraperBot
             await _client.LoginAsync(TokenType.Bot, Config.bot.token);
             await _client.StartAsync();
 
-            _cmd_handler = new CmdHandler();
-            await _cmd_handler.InitialiseAsync(_client);
+            _cmd_handler = new CmdHandler(_client);
+            await _cmd_handler.InitialiseAsync();
 
             // Intitialize and start the scrapers.
             Console.WriteLine("[+] Starting scrapers.");

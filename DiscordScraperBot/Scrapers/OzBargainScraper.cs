@@ -22,7 +22,8 @@ namespace DiscordScraperBot.Scapers
          * These XPATHs are used to extract desired information from the site.
          */
         private const string NEXT_PAGE_LINKS_XPATH  = "//*[@id=\"content\"]/ul/li";
-        private const string BARGAINS_XPATH         = "//*[@class=\"node node-ozbdeal node-teaser\"]";
+        private const string BARGAINS_XPATH = "//*[@class=\"node node-ozbdeal node-teaser\"]";
+        private const string BARGAIN_TITLE_XPATH = ".//h2//a//text()";
 
         public void Scrape()
         {
@@ -58,12 +59,13 @@ namespace DiscordScraperBot.Scapers
                          * Seems like the product title text is split up, so we need to select 
                          * an XPATH that can extract all these pieces of text.
                          */
-                        var title_nodes = product_node.SelectNodes(".//h2//a//text()");
+                        var title_nodes = product_node.SelectNodes(BARGAIN_TITLE_XPATH);
                         if (title_nodes == null || title_nodes.Count == 0) continue;
 
                         foreach (var text_node in title_nodes)
                         {
                             Console.Out.WriteLine("[+] Text: " + text_node.InnerText);
+
                         }
 
                         /*
@@ -74,11 +76,11 @@ namespace DiscordScraperBot.Scapers
                 }
 
                 // Acquire the links to the next pages:
-                //var link_nodes = html_doc.DocumentNode.SelectNodes(NEXT_PAGE_LINKS_XPATH);
-                //foreach (var node in link_nodes)
-                //{
+                var link_nodes = html_doc.DocumentNode.SelectNodes(NEXT_PAGE_LINKS_XPATH);
+                foreach (var node in link_nodes)
+                {
                     
-                //}
+                }
             }
         }
 
