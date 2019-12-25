@@ -23,6 +23,10 @@ namespace DiscordScraperBot
             Console.Out.WriteLine("[+] Inside StartAsync(): ");
             if (Config.bot.token == "" || Config.bot.token == null) return;
 
+            /*
+             * Create a DiscordSocketClient object which will allow us to communicate with our BOT 
+             * through the Discord API.
+             */
             _client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Verbose

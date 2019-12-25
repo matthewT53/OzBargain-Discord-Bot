@@ -13,7 +13,6 @@ namespace DiscordScraperBot
         private List<string>    _categories;
         private List<Item>      _items;
         private int             _delay;
-        private ScraperModule   _item_dispatcher;
 
         private const int SCRAPER_DEFAULT_DELAY = 1000;
         
@@ -22,7 +21,6 @@ namespace DiscordScraperBot
             _scrapers = new List<Scraper>();
             _categories = new List<string>();
             _items = new List<Item>();
-            _item_dispatcher = new ScraperModule(this);
 
             // Intialize constants here:
             _delay = SCRAPER_DEFAULT_DELAY;
