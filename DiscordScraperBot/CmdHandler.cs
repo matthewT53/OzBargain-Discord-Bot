@@ -10,20 +10,26 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DiscordScraperBot
 {
-    class InitializeCmdHandler
+    public class InitializeCmdHandler
     {
         public DiscordSocketClient _client { get; set; }
         public CommandService _commands { get; set; }
         public IServiceProvider _services { get; set; }
 
-        public InitializeCmdHandler(ref ScraperManager scrape_manager)
+        public InitializeCmdHandler(DiscordSocketClient client, ScraperManager scrape_manager)
         {
-            _client = new DiscordSocketClient();
+            Console.WriteLine("[+] IntializeCmdHandler: ");
+
+            _client = client;
             _commands = new CommandService();
-            _services = BuildServiceProvider(ref scrape_manager);
+            _services = BuildServiceProvider(scrape_manager);
+
+            Console.WriteLine("[+] _client hashcode: " + _client.GetHashCode());
+            Console.WriteLine("[+] _commands hashcode: " + _commands.GetHashCode());
+            Console.WriteLine("[+] _services hashcode: " + _services.GetHashCode());
         }
 
-        private IServiceProvider BuildServiceProvider(ref ScraperManager scrape_manager) => new ServiceCollection()
+        private IServiceProvider BuildServiceProvider(ScraperManager scrape_manager) => new ServiceCollection()
             .AddSingleton(_client)
             .AddSingleton(_commands)
             // You can pass in an instance of the desired type
@@ -37,17 +43,22 @@ namespace DiscordScraperBot
             .BuildServiceProvider();
     }
 
-    class CmdHandler
+    public class CmdHandler
     {
         private DiscordSocketClient _client;
         private CommandService _commands;
         private IServiceProvider _services;
 
-        public CmdHandler(ref InitializeCmdHandler init)
+        public CmdHandler(InitializeCmdHandler init)
         {
             _client     = init._client;
             _commands   = init._commands;
             _services   = init._services;
+
+            Console.WriteLine("[+] CmdHandler: ");
+            Console.WriteLine("[+] _client hashcode: " + _client.GetHashCode());
+            Console.WriteLine("[+] _commands hashcode: " + _commands.GetHashCode());
+            Console.WriteLine("[+] _services hashcode: " + _services.GetHashCode());
         }
 
         public async Task InitialiseAsync()
@@ -58,6 +69,7 @@ namespace DiscordScraperBot
 
         private async Task HandleCommandMessageAsync(SocketMessage s)
         {
+            Console.WriteLine("[+] Command message received: ");
             var msg = s as SocketUserMessage;
             if (msg == null)
                 return;

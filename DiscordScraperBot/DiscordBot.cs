@@ -40,8 +40,8 @@ namespace DiscordScraperBot
             _scraper_thread = new Thread(_scraper_manager.StartScraping);
 
             // Create the services that the modules will require:
-            _init = new InitializeCmdHandler(ref _scraper_manager);
-            _cmd_handler = new CmdHandler( ref _init);
+            _init = new InitializeCmdHandler(_client, _scraper_manager);
+            _cmd_handler = new CmdHandler(_init);
             
             await _cmd_handler.InitialiseAsync();
 
