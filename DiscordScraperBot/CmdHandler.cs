@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DiscordScraperBot.Modules;
 using Microsoft.Extensions.DependencyInjection;
+using Discord;
 
 namespace DiscordScraperBot
 {
@@ -16,11 +17,15 @@ namespace DiscordScraperBot
         public CommandService _commands { get; set; }
         public IServiceProvider _services { get; set; }
 
-        public InitializeCmdHandler(DiscordSocketClient client, ScraperManager scrape_manager)
+        public InitializeCmdHandler(ScraperManager scrape_manager)
         {
             Console.WriteLine("[+] IntializeCmdHandler: ");
 
-            _client = client;
+            _client = _client = new DiscordSocketClient(new DiscordSocketConfig
+            {
+                LogLevel = LogSeverity.Verbose
+            });
+
             _commands = new CommandService();
             _services = BuildServiceProvider(scrape_manager);
 

@@ -9,12 +9,12 @@ namespace DiscordScraperBot
 {
     public class ScraperManager
     {
-        private List<Scraper>   _scrapers;
-        private List<string>    _categories;
-        private List<Item>      _items;
-        private int             _delay;
+        List<Scraper>   _scrapers;
+        List<string>    _categories;
+        List<Item>      _items;
+        int             _delay;
 
-        private const int SCRAPER_DEFAULT_DELAY = 1000;
+        const int SCRAPER_DEFAULT_DELAY = 1000;
         
         public ScraperManager()
         {
@@ -34,7 +34,6 @@ namespace DiscordScraperBot
             // Load all the user's categories.
             _categories.Add("headphones");
             _categories.Add("games");
-
         }
 
         public void SetDelay(int delay)

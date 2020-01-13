@@ -10,9 +10,9 @@ namespace DiscordScraperBot.Modules
     public class ScraperModule : ModuleBase<SocketCommandContext>
     {
         private ScraperManager _manager;
+
         /*
          * The scraper manager is required to acquire items that were scraped.
-         * 
          */
         public ScraperModule(ScraperManager scraper_manager)
         {
@@ -57,5 +57,10 @@ namespace DiscordScraperBot.Modules
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
+
+        /*
+         * Sending messages to a channel.
+         * https://stackoverflow.com/questions/49663096/discord-net-c-sharp-1-0-2-how-to-send-messages-to-specific-channels 
+         */
     }
 }

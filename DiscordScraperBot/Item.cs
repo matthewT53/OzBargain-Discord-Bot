@@ -6,9 +6,10 @@ namespace DiscordScraperBot
 {
     class Item
     {
-        private string _title;
-        private string _link;
-        private double _price;
-        private string _contents;
+        private string _name { get; set; }
+        private string _link { get; set; }
+        private double _price { get; set; }
+        private string _contents { get; set; }
+        private List<string> _categories { get; set; }
     }
 }

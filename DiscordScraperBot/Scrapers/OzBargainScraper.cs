@@ -12,18 +12,18 @@ namespace DiscordScraperBot.Scapers
          * Key: Hash of the item title and contents.
          * Value: The corresponding item object.
          */
-        private Dictionary<string, Item> _items;
+        Dictionary<string, Item> _items;
 
-        private const string URL = "https://www.ozbargain.com.au/";
+        const string URL = "https://www.ozbargain.com.au/";
 
         /*
          * The strings below are XPATHs for the OzBargain website. 
          * 
          * These XPATHs are used to extract desired information from the site.
          */
-        private const string NEXT_PAGE_LINKS_XPATH  = "//*[@id=\"content\"]/ul/li";
-        private const string BARGAINS_XPATH = "//*[@class=\"node node-ozbdeal node-teaser\"]";
-        private const string BARGAIN_TITLE_XPATH = ".//h2//a//text()";
+        const string NEXT_PAGE_LINKS_XPATH  = "//*[@id=\"content\"]/ul/li";
+        const string BARGAINS_XPATH = "//*[@class=\"node node-ozbdeal node-teaser\"]";
+        const string BARGAIN_TITLE_XPATH = ".//h2//a//text()";
 
         public void Scrape()
         {
@@ -47,14 +47,14 @@ namespace DiscordScraperBot.Scapers
                 /* Console.Out.WriteLine("[+] Bargain nodes: ");*/
                 if (bargain_nodes != null)
                 {
-                    /*Console.Out.WriteLine("[+] Bargain nodes: ");*/
+                    Console.Out.WriteLine("[+] Bargain nodes: ");
                     /*
                      * Iterate over each product that was extracted from the ozbargain page
                      * and extract the desired information.
                      */
                     foreach (var product_node in bargain_nodes)
                     {
-                        /*Console.Out.WriteLine("[+] Product: ");*/
+                        Console.Out.WriteLine("[+] Product: ");
                         /*
                          * Seems like the product title text is split up, so we need to select 
                          * an XPATH that can extract all these pieces of text.
@@ -62,11 +62,11 @@ namespace DiscordScraperBot.Scapers
                         var title_nodes = product_node.SelectNodes(BARGAIN_TITLE_XPATH);
                         if (title_nodes == null || title_nodes.Count == 0) continue;
 
-                        foreach (var text_node in title_nodes)
-                        {
-                            /*Console.Out.WriteLine("[+] Text: " + text_node.InnerText);*/
+                        string name = title_nodes.Count >= 1 ? title_nodes[0].InnerText : null;
+                        string price = title_nodes.Count >= 2 ? title_nodes[1].InnerText : null;
 
-                        }
+                        Console.WriteLine("[+] Name: " + name);
+                        Console.WriteLine("[+] Price: " + price);
 
                         /*
                          * Extract the link to the external source selling the product.
