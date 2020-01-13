@@ -1,8 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DiscordScraperBot
@@ -10,7 +8,7 @@ namespace DiscordScraperBot
     class Bot
     {
         DiscordSocketClient _client;
-        CmdHandler _cmd_handler;
+        CommandHandler _cmd_handler;
 
         public async Task StartAsync(InitializeCmdHandler init)
         {
@@ -25,7 +23,7 @@ namespace DiscordScraperBot
             await _client.StartAsync();
             
             // Create the services that the modules will require:
-            _cmd_handler = new CmdHandler(init);
+            _cmd_handler = new CommandHandler(init);
             
             await _cmd_handler.InitialiseAsync();
 
