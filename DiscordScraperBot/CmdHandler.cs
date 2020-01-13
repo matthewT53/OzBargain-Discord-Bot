@@ -21,6 +21,10 @@ namespace DiscordScraperBot
         {
             Console.WriteLine("[+] IntializeCmdHandler: ");
 
+            /*
+             * Create a DiscordSocketClient object which will allow us to communicate with our BOT 
+             * through the Discord API.
+             */
             _client = _client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Verbose
