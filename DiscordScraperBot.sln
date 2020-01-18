@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordScraperBot", "DiscordScraperBot\DiscordScraperBot.csproj", "{6921FE83-24AC-40C1-AD41-40F3B86FB3A7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordScraperBot.UnitTests", "DiscordScraperBotTests\DiscordScraperBot.UnitTests.csproj", "{B90E7BA4-CA47-4F5A-9EBD-E4FABEF6AA6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordScraperBot.UnitTests", "DiscordScraperBot.UnitTests\DiscordScraperBot.UnitTests.csproj", "{621DE41A-4FB9-4E8D-BC5A-19777C7F4AA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{6921FE83-24AC-40C1-AD41-40F3B86FB3A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6921FE83-24AC-40C1-AD41-40F3B86FB3A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6921FE83-24AC-40C1-AD41-40F3B86FB3A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B90E7BA4-CA47-4F5A-9EBD-E4FABEF6AA6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B90E7BA4-CA47-4F5A-9EBD-E4FABEF6AA6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B90E7BA4-CA47-4F5A-9EBD-E4FABEF6AA6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B90E7BA4-CA47-4F5A-9EBD-E4FABEF6AA6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{621DE41A-4FB9-4E8D-BC5A-19777C7F4AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{621DE41A-4FB9-4E8D-BC5A-19777C7F4AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{621DE41A-4FB9-4E8D-BC5A-19777C7F4AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{621DE41A-4FB9-4E8D-BC5A-19777C7F4AA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

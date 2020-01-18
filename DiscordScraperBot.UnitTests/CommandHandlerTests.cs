@@ -1,16 +1,16 @@
-using System;
+﻿using System;
 using Xunit;
 using DiscordScraperBot;
 
-namespace DiscordScraperBotTests
+namespace DiscordScraperBot.UnitTests
 {
     public class CommandHandlerTests
     {
         public class InitializeCommandHandlerTests
         {
             /*
-             * The ScraperManager being equal to null is not detrimental to the initialization of 
-             * the InitializeCommandHandler context class.
+             * The ScraperManager being equal to null is not detrimental to the 
+             * initialization of the InitializeCommandHandler context class.
              */
             [Fact]
             public void TestNullScraperManager()

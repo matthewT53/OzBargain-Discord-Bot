@@ -66,12 +66,13 @@ namespace DiscordScraperBot.UnitTests
             Config.WriteConfig(bot);
             Config.BotConfig botRead = Config.ReadConfig();
 
-            Assert.Equal("test_token", bot.token);
-            Assert.Equal("test_prefix", bot.commandPrefix);
+            Assert.Equal("test_token", botRead.token);
+            Assert.Equal("test_prefix", botRead.commandPrefix);
         }
 
         /*
-         * This function is a private helper function that clears the configuration file used by the 
+         * This function is a private helper function that clears the 
+         * configuration file used by the static Config class.
          */
         private static void ClearConfig()
         {
