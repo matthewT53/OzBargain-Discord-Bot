@@ -1,4 +1,4 @@
 -
-        image: Visual Studio 2019
-        nuget_script:
-                - ps: nuget restore
+    image: Visual Studio 2019
+    before_build:
+		- ps: nuget restore
