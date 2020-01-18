@@ -10,7 +10,7 @@ namespace DiscordScraperBot
         DiscordSocketClient _client;
         CommandHandler _cmd_handler;
 
-        public async Task StartAsync(InitializeCmdHandler init)
+        public async Task StartAsync(InitializeCommandHandler init)
         {
             Console.Out.WriteLine("[+] Inside StartAsync(): ");
             if (Config.bot.token == "" || Config.bot.token == null) return;

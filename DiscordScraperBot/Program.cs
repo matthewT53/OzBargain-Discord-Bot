@@ -12,7 +12,7 @@ namespace DiscordScraperBot
             Bot b = new Bot();
             ScraperManager scraper_manager = new ScraperManager();
 
-            InitializeCmdHandler init = new InitializeCmdHandler(scraper_manager);
+            InitializeCommandHandler init = new InitializeCommandHandler(scraper_manager);
             b.StartAsync(init).GetAwaiter().GetResult();
 
             Thread thread = new Thread(scraper_manager.StartScraping);

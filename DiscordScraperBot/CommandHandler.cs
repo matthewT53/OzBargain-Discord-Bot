@@ -8,13 +8,13 @@ using Discord;
 
 namespace DiscordScraperBot
 {
-    public class InitializeCmdHandler
+    public class InitializeCommandHandler
     {
         public DiscordSocketClient _client { get; set; }
         public CommandService _commands { get; set; }
         public IServiceProvider _services { get; set; }
 
-        public InitializeCmdHandler(ScraperManager scrape_manager)
+        public InitializeCommandHandler(ScraperManager scrape_manager)
         {
             Console.WriteLine("[+] IntializeCmdHandler: ");
 
@@ -22,7 +22,7 @@ namespace DiscordScraperBot
              * Create a DiscordSocketClient object which will allow us to communicate with our BOT 
              * through the Discord API.
              */
-            _client = _client = new DiscordSocketClient(new DiscordSocketConfig
+            _client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Verbose
             });
@@ -55,8 +55,13 @@ namespace DiscordScraperBot
         private CommandService _commands;
         private IServiceProvider _services;
 
-        public CommandHandler(InitializeCmdHandler init)
+        public CommandHandler(InitializeCommandHandler init)
         {
+            if (init == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             _client     = init._client;
             _commands   = init._commands;
             _services   = init._services;
@@ -85,7 +90,7 @@ namespace DiscordScraperBot
 
             // Handle the event where the user enters a command or mentions the bot.
             // _client.CurrentUser is the bot.
-            if (msg.HasStringPrefix(Config.bot.cmdPrefix, ref argPos)
+            if (msg.HasStringPrefix(Config.bot.commandPrefix, ref argPos)
                 || msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
             {
                 var result = await _commands.ExecuteAsync(context, argPos, _services);

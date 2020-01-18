@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordScraperBot", "DiscordScraperBot\DiscordScraperBot.csproj", "{6921FE83-24AC-40C1-AD41-40F3B86FB3A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordScraperBotTests", "DiscordScraperBotTests\DiscordScraperBotTests.csproj", "{B90E7BA4-CA47-4F5A-9EBD-E4FABEF6AA6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordScraperBot.UnitTests", "DiscordScraperBotTests\DiscordScraperBot.UnitTests.csproj", "{B90E7BA4-CA47-4F5A-9EBD-E4FABEF6AA6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

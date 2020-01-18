@@ -1,0 +1,43 @@
+using System;
+using Xunit;
+using DiscordScraperBot;
+
+namespace DiscordScraperBotTests
+{
+    public class CommandHandlerTests
+    {
+        public class InitializeCommandHandlerTests
+        {
+            /*
+             * The ScraperManager being equal to null is not detrimental to the initialization of 
+             * the InitializeCommandHandler context class.
+             */
+            [Fact]
+            public void TestNullScraperManager()
+            {
+                ScraperManager scraper_manager = new ScraperManager();
+                InitializeCommandHandler init = new InitializeCommandHandler(scraper_manager);
+
+                Assert.NotNull(init._client);
+                Assert.NotNull(init._commands);
+                Assert.NotNull(init._services);
+            }
+        }
+
+        public class CommandHandlerClassTests
+        {
+            /*
+             * The InitializeCommandHandler argument cannot be null because it is used 
+             * to initialize the CommandHandler object.
+             */
+            [Fact]
+            public void TestNullInitializeCommandHandler()
+            {
+                Assert.Throws<ArgumentNullException>(() =>
+                {
+                    CommandHandler command_handler = new CommandHandler(null);
+                });
+            }
+        }
+    }
+}

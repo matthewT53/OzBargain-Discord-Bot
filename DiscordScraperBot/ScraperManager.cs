@@ -8,8 +8,6 @@ namespace DiscordScraperBot
     public class ScraperManager
     {
         List<Scraper>   _scrapers;
-        List<string>    _categories;
-        List<Item>      _items;
         int             _delay;
 
         const int SCRAPER_DEFAULT_DELAY = 1000;
@@ -17,31 +15,16 @@ namespace DiscordScraperBot
         public ScraperManager()
         {
             _scrapers = new List<Scraper>();
-            _categories = new List<string>();
-            _items = new List<Item>();
 
             // Intialize constants here:
             _delay = SCRAPER_DEFAULT_DELAY;
         }
 
+        // Transfer to user's preferences to each bot through this method.
         public void Initialize()
         {
             // Add all the scrapers that are under the scrapers folder.
             _scrapers.Add(new OzBargainScraper());
-
-            // Load all the user's categories.
-            _categories.Add("headphones");
-            _categories.Add("games");
-        }
-
-        public void SetDelay(int delay)
-        {
-            _delay = delay;
-        }
-
-        public int GetDelay()
-        {
-            return _delay;
         }
 
         public void StartScraping()
@@ -58,6 +41,16 @@ namespace DiscordScraperBot
                 Console.WriteLine("[+] Delay: " + _delay);
                 Thread.Sleep(_delay);
             }
+        }
+
+        public void SetDelay(int delay)
+        {
+            _delay = delay;
+        }
+
+        public int GetDelay()
+        {
+            return _delay;
         }
     }
 }
