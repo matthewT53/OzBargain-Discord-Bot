@@ -1,31 +1,34 @@
 ﻿using DiscordScraperBot.Scapers;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using DiscordScraperBot.Discord;
+using System.Threading.Tasks;
 using System.Threading;
 
 namespace DiscordScraperBot
 {
     class Program
     {
-        static ScraperManager _scraperManager;
-        static InitializeCommandHandler _init;
-
         static void Main(string[] args)
         {
-            Bot b = new Bot();
-            _scraperManager = new ScraperManager();
+            Bot bot = new Bot();
 
-            _init = new InitializeCommandHandler(_scraperManager);
-            b.StartAsync(_init).GetAwaiter().GetResult();
+            ScraperManager scraperManager = new ScraperManager(bot);
+            InitializeScrapers(scraperManager);
 
-            Thread thread = new Thread(_scraperManager.StartScraping);
+            InitializeCommandHandler init = new InitializeCommandHandler(scraperManager);
+            Task botTask = bot.StartAsync(init);
+
+            Thread thread = new Thread(scraperManager.StartScrapingAsync);
             thread.Start();
+            thread.Join();
+
+            // Wait indefinitely for the bot to finish.
+            botTask.Wait(-1);
         }
 
-        static void InitializeScrapers()
+        static void InitializeScrapers(ScraperManager scraperManager)
         {
-            _scraperManager.AddScraper(new OzBargainScraper());
+            ulong productsChannelId = Config.bot.productsChannelId;
+            scraperManager.AddScraper(new OzBargainScraper(productsChannelId));
         }
     }
 }

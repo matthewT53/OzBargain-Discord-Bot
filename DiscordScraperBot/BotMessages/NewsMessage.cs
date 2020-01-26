@@ -1,10 +1,16 @@
-﻿using System;
+﻿using Discord;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DiscordScraperBot.BotMessages
 {
-    class NewsMessage : IBotMessage
+    public class NewsMessage : IBotMessage
     {
+        public Embed GetEmbed()
+        {
+            Embed e = new EmbedBuilder().Build();
+            return e;
+        }
     }
 }

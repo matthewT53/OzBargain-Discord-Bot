@@ -3,39 +3,44 @@ using DiscordScraperBot.Scapers;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace DiscordScraperBot
 {
     public class ScraperManager
     {
-        List<IScraper> _scrapers;
+        List<Scraper> _scrapers;
         int _delay;
-        Endpoint _endpoint;
+        Bot _bot;
 
         const int SCRAPER_DEFAULT_DELAY = 1000;
         
-        public ScraperManager()
+        public ScraperManager(Bot bot)
         {
-            _scrapers = new List<IScraper>();
+            _bot = bot;
+            _scrapers = new List<Scraper>();
 
             // Intialize constants here:
             _delay = SCRAPER_DEFAULT_DELAY;
         }
 
-        public void AddScraper(IScraper scraper)
+        public void AddScraper(Scraper scraper)
         {
             _scrapers.Add(scraper);
         }
 
-        public void StartScraping()
+        public void StartScrapingAsync()
         {
             while (true)
             {
                 Console.WriteLine("[+] Scraper running...");
 
-                foreach (IScraper bot in _scrapers)
+                foreach (Scraper scraper in _scrapers)
                 {
-                    bot.Scrape();
+                    scraper.Scrape();
+
+                    // There is no result so we do not need to await.
+                    _bot.SendMessagesAsync(scraper.GetMessages());
                 }
 
                 Console.WriteLine("[+] Delay: " + _delay);

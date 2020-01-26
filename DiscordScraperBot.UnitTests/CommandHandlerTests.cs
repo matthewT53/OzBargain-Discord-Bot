@@ -1,5 +1,6 @@
 ﻿using System;
 using Xunit;
+using DiscordScraperBot.Discord;
 using DiscordScraperBot;
 
 namespace DiscordScraperBot.UnitTests
@@ -15,7 +16,8 @@ namespace DiscordScraperBot.UnitTests
             [Fact]
             public void TestNullScraperManager()
             {
-                ScraperManager scraper_manager = new ScraperManager();
+                Bot bot = new Bot();
+                ScraperManager scraper_manager = new ScraperManager(bot);
                 InitializeCommandHandler init = new InitializeCommandHandler(scraper_manager);
 
                 Assert.NotNull(init._client);

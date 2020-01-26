@@ -1,11 +1,13 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using DiscordScraperBot.BotMessages;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DiscordScraperBot
+namespace DiscordScraperBot.Discord
 {
-    class Bot
+    public class Bot
     {
         DiscordSocketClient _client;
         CommandHandler _cmd_handler;
@@ -26,12 +28,9 @@ namespace DiscordScraperBot
             _cmd_handler = new CommandHandler(init);
             
             await _cmd_handler.InitialiseAsync();
-
-            // Wait until the operation finishes.
-            await Task.Delay(-1); 
         }
 
-        public async Task SendMessage()
+        public async Task SendMessagesAsync(List<IBotMessage> messages)
         {
 
         }

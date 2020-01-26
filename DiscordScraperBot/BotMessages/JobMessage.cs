@@ -1,12 +1,17 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DiscordScraperBot.BotMessages
 {
-    class JobMessage : IBotMessage
+    public class JobMessage : IBotMessage
     {
-
+        public Embed GetEmbed()
+        {
+            Embed e = new EmbedBuilder().Build();
+            return e;
+        }
     }
 }

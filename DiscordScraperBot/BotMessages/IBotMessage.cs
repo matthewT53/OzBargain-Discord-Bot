@@ -9,8 +9,5 @@ namespace DiscordScraperBot.BotMessages
     {
         public Embed GetEmbed();
 
-        public ulong GetChannelID();
-        public void SetChannelID(ulong channelID);
-
     }
 }

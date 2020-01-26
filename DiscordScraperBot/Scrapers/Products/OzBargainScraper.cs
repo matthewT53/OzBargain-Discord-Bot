@@ -5,15 +5,8 @@ using HtmlAgilityPack;
 
 namespace DiscordScraperBot.Scapers
 {
-    class OzBargainScraper : IScraper
+    class OzBargainScraper : Scraper
     {
-        /*
-         * Hash table that contains the items that we scraped.
-         * Key: Hash of the item title and contents.
-         * Value: The corresponding item object.
-         */
-        Dictionary<string, IBotMessage> _items;
-
         const string URL = "https://www.ozbargain.com.au/";
 
         /*
@@ -25,7 +18,13 @@ namespace DiscordScraperBot.Scapers
         const string BARGAINS_XPATH = "//*[@class=\"node node-ozbdeal node-teaser\"]";
         const string BARGAIN_TITLE_XPATH = ".//h2//a//text()";
 
-        public void Scrape()
+        public OzBargainScraper(ulong channelId)
+            : base(channelId)
+        {
+
+        }
+
+        public override void Scrape()
         {
             Console.Out.WriteLine("[+] Scraping the ozbargain website: ");
 
@@ -79,19 +78,9 @@ namespace DiscordScraperBot.Scapers
                 var link_nodes = html_doc.DocumentNode.SelectNodes(NEXT_PAGE_LINKS_XPATH);
                 foreach (var node in link_nodes)
                 {
-                    
+
                 }
             }
-        }
-
-        public List<IBotMessage> GetItems()
-        {
-            return null;
-        }
-
-        public void ClearItems()
-        {
-
         }
     }
 }
