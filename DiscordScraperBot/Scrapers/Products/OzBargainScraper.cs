@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using DiscordScraperBot.BotMessages;
 using HtmlAgilityPack;
 
 namespace DiscordScraperBot.Scapers
 {
-    class OzBargainScraper : Scraper
+    class OzBargainScraper : IScraper
     {
         /*
          * Hash table that contains the items that we scraped.
          * Key: Hash of the item title and contents.
          * Value: The corresponding item object.
          */
-        Dictionary<string, Item> _items;
+        Dictionary<string, IBotMessage> _items;
 
         const string URL = "https://www.ozbargain.com.au/";
 
@@ -83,7 +84,7 @@ namespace DiscordScraperBot.Scapers
             }
         }
 
-        public List<Item> GetItems()
+        public List<IBotMessage> GetItems()
         {
             return null;
         }

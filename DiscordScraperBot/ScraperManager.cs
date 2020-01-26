@@ -1,4 +1,5 @@
-﻿using DiscordScraperBot.Scapers;
+﻿using DiscordScraperBot.Discord;
+using DiscordScraperBot.Scapers;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -7,24 +8,23 @@ namespace DiscordScraperBot
 {
     public class ScraperManager
     {
-        List<Scraper>   _scrapers;
-        int             _delay;
+        List<IScraper> _scrapers;
+        int _delay;
+        Endpoint _endpoint;
 
         const int SCRAPER_DEFAULT_DELAY = 1000;
         
         public ScraperManager()
         {
-            _scrapers = new List<Scraper>();
+            _scrapers = new List<IScraper>();
 
             // Intialize constants here:
             _delay = SCRAPER_DEFAULT_DELAY;
         }
 
-        // Transfer to user's preferences to each bot through this method.
-        public void Initialize()
+        public void AddScraper(IScraper scraper)
         {
-            // Add all the scrapers that are under the scrapers folder.
-            _scrapers.Add(new OzBargainScraper());
+            _scrapers.Add(scraper);
         }
 
         public void StartScraping()
@@ -33,7 +33,7 @@ namespace DiscordScraperBot
             {
                 Console.WriteLine("[+] Scraper running...");
 
-                foreach (Scraper bot in _scrapers)
+                foreach (IScraper bot in _scrapers)
                 {
                     bot.Scrape();
                 }

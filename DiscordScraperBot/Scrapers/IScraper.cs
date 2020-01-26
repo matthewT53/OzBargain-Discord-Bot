@@ -1,10 +1,11 @@
-﻿using System;
+﻿using DiscordScraperBot.BotMessages;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DiscordScraperBot.Scapers
 {
-    interface Scraper
+    public interface IScraper
     {
         /*
          * Calling this function will scrape the targeted website for items.
@@ -14,10 +15,16 @@ namespace DiscordScraperBot.Scapers
         public void Scrape();
 
         /*
+         * Associates this scraper with a specific channel.
+         */
+        public void SetChannelID(ulong channelID);
+        public ulong GetChannelID();
+
+        /*
          * This function will return a list of items that were scraped from the 
          * source. 
          */
-        public List<Item> GetItems();
+        public List<IBotMessage> GetItems();
 
         /*
          * Clears the list of scraped items.

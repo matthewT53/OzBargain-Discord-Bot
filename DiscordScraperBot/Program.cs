@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiscordScraperBot.Scapers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -7,16 +8,24 @@ namespace DiscordScraperBot
 {
     class Program
     {
+        static ScraperManager _scraperManager;
+        static InitializeCommandHandler _init;
+
         static void Main(string[] args)
         {
             Bot b = new Bot();
-            ScraperManager scraper_manager = new ScraperManager();
+            _scraperManager = new ScraperManager();
 
-            InitializeCommandHandler init = new InitializeCommandHandler(scraper_manager);
-            b.StartAsync(init).GetAwaiter().GetResult();
+            _init = new InitializeCommandHandler(_scraperManager);
+            b.StartAsync(_init).GetAwaiter().GetResult();
 
-            Thread thread = new Thread(scraper_manager.StartScraping);
+            Thread thread = new Thread(_scraperManager.StartScraping);
             thread.Start();
+        }
+
+        static void InitializeScrapers()
+        {
+            _scraperManager.AddScraper(new OzBargainScraper());
         }
     }
 }

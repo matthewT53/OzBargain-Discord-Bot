@@ -8,7 +8,7 @@ namespace DiscordScraperBot
         private const string configFolder = "Resources";
         private const string configFile = "config.json";
 
-        public const string ConfigPath = configFolder + configFile;
+        public const string ConfigPath = configFolder + "/" + configFile;
         public static BotConfig bot;
 
         static Config()
@@ -18,8 +18,7 @@ namespace DiscordScraperBot
                 Directory.CreateDirectory(configFolder);
             }
 
-            string path = configFolder + "/" + configFile;
-            if (!File.Exists(path))
+            if (!File.Exists(ConfigPath))
             {
                 bot = new BotConfig();
                 WriteConfig(bot);
@@ -48,6 +47,11 @@ namespace DiscordScraperBot
         {
             public string token;
             public string commandPrefix;
+
+            // These are the ID's of the channels for each specific type of scraper.
+            public ulong jobsChannel_ID;
+            public ulong newsChannel_ID;
+            public ulong productsChannel_ID;
         }
     }
 }
