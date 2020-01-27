@@ -5,14 +5,14 @@ using Discord.Commands;
 
 namespace DiscordScraperBot.Modules
 {
-    public class ScraperModule : ModuleBase<SocketCommandContext>
+    public class Scrapers : ModuleBase<SocketCommandContext>
     {
         private ScraperManager _manager;
 
         /*
          * The scraper manager is required to acquire items that were scraped.
          */
-        public ScraperModule(ScraperManager scraper_manager)
+        public Scrapers(ScraperManager scraper_manager)
         {
             Console.Out.WriteLine("[+] Inside scraper module constructor");
             _manager = scraper_manager;

@@ -27,7 +27,7 @@ namespace DiscordScraperBot
 
         static void InitializeScrapers(ScraperManager scraperManager)
         {
-            ulong productsChannelId = Config.bot.productsChannelId;
+            ulong productsChannelId = 0;
             scraperManager.AddScraper(new OzBargainScraper(productsChannelId));
         }
     }

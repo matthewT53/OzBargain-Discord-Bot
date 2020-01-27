@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using SQLitePCL;
 
-namespace DiscordScraperBot
+namespace DiscordScraperBot.Storage
 {
-    interface IStorage
+    public interface IStorage
     {
         
 

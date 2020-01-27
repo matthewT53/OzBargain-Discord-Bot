@@ -10,7 +10,7 @@ namespace DiscordScraperBot.Discord
     public class Bot
     {
         DiscordSocketClient _client;
-        CommandHandler _cmd_handler;
+        CommandHandler _cmdHandler;
 
         public async Task StartAsync(InitializeCommandHandler init)
         {
@@ -25,14 +25,14 @@ namespace DiscordScraperBot.Discord
             await _client.StartAsync();
             
             // Create the services that the modules will require:
-            _cmd_handler = new CommandHandler(init);
+            _cmdHandler = new CommandHandler(init);
             
-            await _cmd_handler.InitialiseAsync();
+            await _cmdHandler.InitialiseAsync();
         }
 
         public async Task SendMessagesAsync(List<IBotMessage> messages)
         {
-
+            
         }
 
         private async Task LogMessageAsync(LogMessage m)
