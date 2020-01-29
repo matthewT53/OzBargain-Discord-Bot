@@ -18,7 +18,7 @@ namespace DiscordScraperBot
         SQLiteConnection _db;
 
         const string DbFolder = "Storage";
-        const string DbFilename = "db.sqlite";
+        const string DbFilename = "pref.sqlite";
         const string DbPath = DbFolder + DbFilename;
 
         public Storage()
