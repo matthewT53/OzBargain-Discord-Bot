@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DiscordScraperBot.Storage;
+using DiscordScraperBot;
 
 namespace DiscordScraperBot
 {
@@ -12,10 +12,10 @@ namespace DiscordScraperBot
      */
     public class Preferences
     {
-        IStorage _db;
-        public Preferences(IStorage storage)
+        Storage _store;
+        public Preferences(Storage storage)
         {
-            _db = storage;
+            _store = storage;
         }
 
         public void AddCategory(string category)
