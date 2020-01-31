@@ -17,13 +17,18 @@ namespace DiscordScraperBot
     {
         SQLiteConnection _db;
 
-        const string DbFolder = "Storage";
-        const string DbFilename = "pref.sqlite";
-        const string DbPath = DbFolder + DbFilename;
+        const string DefaultDbFolder = "Storage";
+        const string DefaultDbFilename = "pref.sqlite";
+        const string DefaultDbPath = DefaultDbFolder + DefaultDbFilename;
 
         public Storage()
         {
-            _db = new SQLiteConnection(DbPath);
+            _db = new SQLiteConnection(DefaultDbPath);
+        }
+
+        public Storage(string dbPath)
+        {
+            _db = new SQLiteConnection(dbPath);
         }
 
         public bool CreatePreferenceTable()
