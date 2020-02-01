@@ -11,6 +11,21 @@ namespace DiscordScraperBot
 
         public double _minPrice { get; set; }
         public double _maxPrice { get; set; }
+
+        public UserPreference(string category)
+        {
+            _category = category;
+            _minPrice = 0.0;
+            _maxPrice = 0.0;
+        }
+
+        public UserPreference(string category, double minPrice, double maxPrice)
+        {
+            _category = category;
+            _minPrice = minPrice;
+            _maxPrice = maxPrice;
+        }
+
     }
 
     public class Storage
@@ -32,6 +47,11 @@ namespace DiscordScraperBot
         }
 
         public bool CreatePreferenceTable()
+        {
+            return false;
+        }
+
+        public bool DeletePreferenceTable()
         {
             return false;
         }
