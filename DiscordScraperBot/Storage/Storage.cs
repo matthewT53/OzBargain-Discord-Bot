@@ -71,6 +71,11 @@ namespace DiscordScraperBot
             return false;
         }
 
+        public int GetNumberOfRows()
+        {
+            return 0;
+        }
+
         public bool DestroyStorage()
         {
             return false;
