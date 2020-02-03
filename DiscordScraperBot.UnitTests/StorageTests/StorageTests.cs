@@ -15,16 +15,17 @@ namespace DiscordScraperBot.UnitTests
          */
         Storage _storage;
 
-        const string TEST_DB_PATH = "Storage/test.sqlite";
+        const string TEST_DB_FOLDER = "Storage";
+        const string TEST_DB_FILE = "test.sqlite";
 
         public StorageTests()
         { 
-            _storage = new Storage(TEST_DB_PATH);
+            _storage = new Storage(TEST_DB_FOLDER, TEST_DB_FILE);
         }
 
         public void Dispose()
         {
-            File.Delete(TEST_DB_PATH);
+            File.Delete(TEST_DB_FOLDER + "/" + TEST_DB_FILE);
         }
 
         /*

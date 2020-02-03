@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using System.Collections.Generic;
+using System.IO;
 
 namespace DiscordScraperBot
 {
@@ -25,7 +26,6 @@ namespace DiscordScraperBot
             _minPrice = minPrice;
             _maxPrice = maxPrice;
         }
-
     }
 
     public class Storage
@@ -34,21 +34,26 @@ namespace DiscordScraperBot
 
         const string DefaultDbFolder = "Storage";
         const string DefaultDbFilename = "pref.sqlite";
-        const string DefaultDbPath = DefaultDbFolder + DefaultDbFilename;
+        const string DefaultDbPath = DefaultDbFolder + "/" + DefaultDbFilename;
 
         public Storage()
         {
-            _db = new SQLiteConnection(DefaultDbPath);
+            CreateSqliteFile(DefaultDbFolder, DefaultDbFilename);
+            _db = new SQLiteConnection(DefaultDbPath, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite);
         }
 
-        public Storage(string dbPath)
+        public Storage(string dbPath, string dbFilename)
         {
-            _db = new SQLiteConnection(dbPath);
+            CreateSqliteFile(dbPath, dbFilename);
+
+            string dbFullPath = dbPath + "/" + dbFilename;
+            _db = new SQLiteConnection(dbFullPath, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite);
         }
 
         public bool CreatePreferenceTable()
         {
-            return false;
+            CreateTableResult result = _db.CreateTable<UserPreference>();
+            return (result == CreateTableResult.Created) ? true : false;
         }
 
         public bool DeletePreferenceTable()
@@ -79,6 +84,20 @@ namespace DiscordScraperBot
         public bool DestroyStorage()
         {
             return false;
+        }
+
+        private void CreateSqliteFile(string path, string filename)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            string fullPath = path + "/" + filename;
+            if (!File.Exists(fullPath))
+            {
+                File.Create(fullPath);
+            }
         }
     }
 }
