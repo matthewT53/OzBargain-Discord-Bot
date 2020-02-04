@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -53,12 +54,13 @@ namespace DiscordScraperBot
         public bool CreatePreferenceTable()
         {
             CreateTableResult result = _db.CreateTable<UserPreference>();
-            return (result == CreateTableResult.Created) ? true : false;
+            return result == CreateTableResult.Created;
         }
 
         public bool DeletePreferenceTable()
         {
-            return false;
+            int result = _db.DropTable<UserPreference>();
+            return result == 0;
         }
 
         public List<UserPreference> GetUserPreferences()
@@ -68,12 +70,24 @@ namespace DiscordScraperBot
 
         public bool InsertUserPreferences(List<UserPreference> preferences)
         {
-            return false;
+            int nRows = 0;
+            foreach (UserPreference userPreference in preferences)
+            {
+                nRows += _db.Insert(userPreference);
+            }
+
+            return nRows == preferences.Count;
         }
 
         public bool DeleteUserPreferences(List<UserPreference> preferences)
         {
-            return false;
+            int nRows = 0;
+            foreach (UserPreference userPreference in preferences)
+            {
+                nRows += _db.Delete<UserPreference>(userPreference._id);
+            }
+
+            return nRows == preferences.Count;
         }
 
         public int GetNumberOfRows()
@@ -86,6 +100,11 @@ namespace DiscordScraperBot
             return false;
         }
 
+        public void CloseStorage()
+        {
+            _db.Close();
+        }
+
         private void CreateSqliteFile(string path, string filename)
         {
             if (!Directory.Exists(path))
@@ -96,7 +115,10 @@ namespace DiscordScraperBot
             string fullPath = path + "/" + filename;
             if (!File.Exists(fullPath))
             {
-                File.Create(fullPath);
+                using (FileStream fileStream = File.Create(fullPath))
+                {
+                    // Do nothing, we just wanted to create the file.
+                }
             }
         }
     }

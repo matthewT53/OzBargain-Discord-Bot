@@ -8,7 +8,7 @@ namespace DiscordScraperBot.UnitTests
 {
     public class StorageTests : IDisposable
     {
-        /*
+        /***
          * The reason we don't use a fixture is that we want don't want the  
          * database to be shared across all tests otherwise dependecies may be 
          * created between test cases and they will nto be able to run in isolation.
@@ -25,6 +25,7 @@ namespace DiscordScraperBot.UnitTests
 
         public void Dispose()
         {
+            _storage.CloseStorage();
             File.Delete(TEST_DB_FOLDER + "/" + TEST_DB_FILE);
         }
 
@@ -75,6 +76,7 @@ namespace DiscordScraperBot.UnitTests
         public void AddingPreferencesTest()
         {
             Storage storage = _storage;
+            Assert.True(_storage.CreatePreferenceTable());
 
             List<UserPreference> preferences = new List<UserPreference>();
 
@@ -93,6 +95,7 @@ namespace DiscordScraperBot.UnitTests
         public void RemovingPreferencesTest()
         {
             Storage storage = _storage;
+            Assert.True(_storage.CreatePreferenceTable());
 
             List<UserPreference> preferences = new List<UserPreference>();
 
@@ -114,6 +117,7 @@ namespace DiscordScraperBot.UnitTests
         public void RetievePreferencesTest()
         {
             Storage storage = _storage;
+            Assert.True(_storage.CreatePreferenceTable());
 
             List<UserPreference> preferences = new List<UserPreference>();
 
@@ -139,6 +143,7 @@ namespace DiscordScraperBot.UnitTests
         public void GetNumberOfRowsTest()
         {
             Storage storage = _storage;
+            Assert.True(_storage.CreatePreferenceTable());
 
             List<UserPreference> preferences = new List<UserPreference>();
 
