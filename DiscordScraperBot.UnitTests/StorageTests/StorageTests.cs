@@ -155,10 +155,11 @@ namespace DiscordScraperBot.UnitTests
             Assert.True(result);
             Assert.True(storage.GetNumberOfRows() == preferences.Count);
 
+            int numItems = preferences.Count;
             preferences.RemoveAt(2);
             result = storage.DeleteUserPreferences(preferences);
             Assert.True(result);
-            Assert.True(storage.GetNumberOfRows() == preferences.Count);
+            Assert.True(storage.GetNumberOfRows() == (numItems - preferences.Count));
         }
     }
 }

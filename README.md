@@ -3,7 +3,7 @@
 ## What is this about?
 This project aims to create a discord bot that scrapes a variety of sources and then filters these large amounts of data according to your preferences. This information is then delivered to your Discord Server into a channel of your choosing as an Embed notification.
 
-## Documentation:
+## Documentation
 This project runs on Microsoft C# .Net Core 3.
 ### Building:
 * This project can be built with Microsoft Visual studio 2019. 
@@ -18,6 +18,12 @@ To obtain the required packages, simply use the restore Nuget packages tool in V
 
 ## Usage
 ### Commands:
+```c#
+    
+```
 
 ## Contributing:
-Feel free to fork this repo and create many pull requests for any additional scrapers, bug fixes or new test cases.
+Feel free to fork this repo and create many pull requests for any additional scrapers, bug fixes or new test cases. 
+
+### Coding standards:
+* Please read: https://www.dofactory.com/reference/csharp-coding-standards

@@ -14,6 +14,14 @@ namespace DiscordScraperBot
         public double _minPrice { get; set; }
         public double _maxPrice { get; set; }
 
+        public UserPreference()
+        {
+            _id = 0;
+            _category = "(null)";
+            _minPrice = 0.0;
+            _maxPrice = 0.0;
+        }
+
         public UserPreference(string category)
         {
             _category = category;
@@ -26,6 +34,20 @@ namespace DiscordScraperBot
             _category = category;
             _minPrice = minPrice;
             _maxPrice = maxPrice;
+        }
+
+        public override bool Equals(object obj)
+        {
+            UserPreference pref = obj as UserPreference;
+
+            if (pref == null)
+            {
+                return false;
+            }
+
+            return  (_category == pref._category) &&
+                    (_maxPrice == pref._maxPrice) &&
+                    (_minPrice == pref._minPrice);
         }
     }
 
@@ -59,13 +81,13 @@ namespace DiscordScraperBot
 
         public bool DeletePreferenceTable()
         {
-            int result = _db.DropTable<UserPreference>();
-            return result == 0;
+            return _db.DropTable<UserPreference>() == 0;
         }
 
         public List<UserPreference> GetUserPreferences()
         {
-            return null;
+            List<UserPreference> result = _db.Table<UserPreference>().ToList();
+            return result;
         }
 
         public bool InsertUserPreferences(List<UserPreference> preferences)
@@ -92,12 +114,7 @@ namespace DiscordScraperBot
 
         public int GetNumberOfRows()
         {
-            return 0;
-        }
-
-        public bool DestroyStorage()
-        {
-            return false;
+            return _db.Table<UserPreference>().Count();
         }
 
         public void CloseStorage()
