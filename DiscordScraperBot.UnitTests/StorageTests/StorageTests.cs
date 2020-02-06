@@ -66,7 +66,7 @@ namespace DiscordScraperBot.UnitTests
         {
             Assert.True(_storage.CreatePreferenceTable());
             Assert.True(_storage.DeletePreferenceTable());
-            Assert.False(_storage.DeletePreferenceTable());
+            Assert.True(_storage.DeletePreferenceTable());
         }
 
         /*

@@ -50,9 +50,13 @@ namespace DiscordScraperBot
                     (_minPrice == pref._minPrice);
         }
     }
-
+ 
     public class Storage
     {
+        /***
+        * The following links may help with using the Sqlite-net library:
+        * https://github.com/praeclarum/sqlite-net/blob/master/src/SQLite.cs
+        */
         SQLiteConnection _db;
 
         const string DefaultDbFolder = "Storage";
@@ -81,7 +85,10 @@ namespace DiscordScraperBot
 
         public bool DeletePreferenceTable()
         {
-            return _db.DropTable<UserPreference>() == 0;
+            /*
+             * Drop table returns the number of rows deleted from the table.
+             */
+            return _db.DropTable<UserPreference>() >= 0;
         }
 
         public List<UserPreference> GetUserPreferences()
