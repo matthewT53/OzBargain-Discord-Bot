@@ -51,7 +51,7 @@ namespace DiscordScraperBot
         }
     }
  
-    public class Storage
+    public class SqliteStorage : IStorage
     {
         /***
         * The following links may help with using the Sqlite-net library:
@@ -63,13 +63,13 @@ namespace DiscordScraperBot
         const string DefaultDbFilename = "pref.sqlite";
         const string DefaultDbPath = DefaultDbFolder + "/" + DefaultDbFilename;
 
-        public Storage()
+        public SqliteStorage()
         {
             CreateSqliteFile(DefaultDbFolder, DefaultDbFilename);
             _db = new SQLiteConnection(DefaultDbPath, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite);
         }
 
-        public Storage(string dbPath, string dbFilename)
+        public SqliteStorage(string dbPath, string dbFilename)
         {
             CreateSqliteFile(dbPath, dbFilename);
 
@@ -77,7 +77,12 @@ namespace DiscordScraperBot
             _db = new SQLiteConnection(dbFullPath, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite);
         }
 
-        public bool CreatePreferenceTable()
+        public bool CreateTables()
+        {
+            return CreatePreferenceTable();
+        }
+
+        private bool CreatePreferenceTable()
         {
             CreateTableResult result = _db.CreateTable<UserPreference>();
             return result == CreateTableResult.Created;

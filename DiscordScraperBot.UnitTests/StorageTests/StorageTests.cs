@@ -13,14 +13,14 @@ namespace DiscordScraperBot.UnitTests
          * database to be shared across all tests otherwise dependecies may be 
          * created between test cases and they will nto be able to run in isolation.
          */
-        Storage _storage;
+        SqliteStorage _storage;
 
         const string TEST_DB_FOLDER = "Storage";
         const string TEST_DB_FILE = "test.sqlite";
 
         public StorageTests()
         { 
-            _storage = new Storage(TEST_DB_FOLDER, TEST_DB_FILE);
+            _storage = new SqliteStorage(TEST_DB_FOLDER, TEST_DB_FILE);
         }
 
         public void Dispose()
@@ -35,7 +35,7 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void CreateTableTest()
         {
-            Assert.True(_storage.CreatePreferenceTable());
+            Assert.True(_storage.CreateTables());
         }
 
         /*
@@ -44,8 +44,8 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void CreateTableTwiceTest()
         {
-            Assert.True(_storage.CreatePreferenceTable());
-            Assert.False(_storage.CreatePreferenceTable());
+            Assert.True(_storage.CreateTables());
+            Assert.False(_storage.CreateTables());
         }
 
         /*
@@ -54,7 +54,7 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void DeleteTableTest()
         {
-            Assert.True(_storage.CreatePreferenceTable());
+            Assert.True(_storage.CreateTables());
             Assert.True(_storage.DeletePreferenceTable());
         }
 
@@ -64,7 +64,7 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void DeleteTableTwiceTest()
         {
-            Assert.True(_storage.CreatePreferenceTable());
+            Assert.True(_storage.CreateTables());
             Assert.True(_storage.DeletePreferenceTable());
             Assert.True(_storage.DeletePreferenceTable());
         }
@@ -75,8 +75,8 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void AddingPreferencesTest()
         {
-            Storage storage = _storage;
-            Assert.True(_storage.CreatePreferenceTable());
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreateTables());
 
             List<UserPreference> preferences = new List<UserPreference>();
 
@@ -94,8 +94,8 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void RemovingPreferencesTest()
         {
-            Storage storage = _storage;
-            Assert.True(_storage.CreatePreferenceTable());
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreateTables());
 
             List<UserPreference> preferences = new List<UserPreference>();
 
@@ -116,8 +116,8 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void RetievePreferencesTest()
         {
-            Storage storage = _storage;
-            Assert.True(_storage.CreatePreferenceTable());
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreateTables());
 
             List<UserPreference> preferences = new List<UserPreference>();
 
@@ -142,8 +142,8 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void GetNumberOfRowsTest()
         {
-            Storage storage = _storage;
-            Assert.True(_storage.CreatePreferenceTable());
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreateTables());
 
             List<UserPreference> preferences = new List<UserPreference>();
 

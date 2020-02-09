@@ -22,6 +22,10 @@ To obtain the required packages, simply use the restore Nuget packages tool in V
     
 ```
 
+## Libraries:
+#### 1. Sqlite-net:
+* https://github.com/praeclarum/sqlite-net
+
 ## Contributing:
 Feel free to fork this repo and create many pull requests for any additional scrapers, bug fixes or new test cases. 
 

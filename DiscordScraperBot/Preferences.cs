@@ -12,8 +12,8 @@ namespace DiscordScraperBot
      */
     public class Preferences
     {
-        Storage _store;
-        public Preferences(Storage storage)
+        IStorage _store;
+        public Preferences(IStorage storage)
         {
             _store = storage;
         }
@@ -28,12 +28,12 @@ namespace DiscordScraperBot
 
         }
 
-        public void AddPriceRange(Tuple<double, double> priceRange)
+        public void AddPriceRange(string category, Tuple<double, double> priceRange)
         {
             
         }
 
-        public void RemovePriceRange(Tuple<double, double> priceRange)
+        public void RemovePriceRange(string category, Tuple<double, double> priceRange)
         {
              
         }

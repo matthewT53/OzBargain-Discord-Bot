@@ -29,7 +29,7 @@ namespace DiscordScraperBot
             _scrapers.Add(scraper);
         }
 
-        public void StartScrapingAsync()
+        public void StartScraping()
         {
             while (true)
             {

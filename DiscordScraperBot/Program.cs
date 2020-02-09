@@ -17,7 +17,7 @@ namespace DiscordScraperBot
             InitializeCommandHandler init = new InitializeCommandHandler(scraperManager);
             Task botTask = bot.StartAsync(init);
 
-            Thread thread = new Thread(scraperManager.StartScrapingAsync);
+            Thread thread = new Thread(scraperManager.StartScraping);
             thread.Start();
             thread.Join();
 
