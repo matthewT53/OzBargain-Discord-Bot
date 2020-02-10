@@ -16,6 +16,8 @@ namespace DiscordScraperBot
 
         public int GetNumberOfRows();
 
+        public UserPreference GetUserPreference(string category);
+
         public void CloseStorage();
     }
 }
