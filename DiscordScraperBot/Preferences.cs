@@ -38,6 +38,11 @@ namespace DiscordScraperBot
              
         }
 
+        public Tuple<double, double> GetPriceRange(string category)
+        {
+            
+        }
+
         public List<string> GetCategories()
         {
             return null;

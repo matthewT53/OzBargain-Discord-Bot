@@ -118,6 +118,9 @@ namespace DiscordScraperBot.UnitTests
             });
         }
 
+        /***
+         * Ensures that a price range can be correctly applied to a category. 
+         */
         [Fact] 
         public void TestAddingPriceRange()
         {
@@ -126,7 +129,20 @@ namespace DiscordScraperBot.UnitTests
 
             List<string> categories = new List<string>();
 
+            categories.Add("test_cat");
+            categories.Add("test_cat2");
+            categories.Add("test_cat3");
 
+            Tuple<double, double> priceRange = new Tuple<double, double>(10.0, 100.0);
+
+            foreach (string category in categories) 
+            {
+                preferences.AddCategory(category);
+            }
+
+            preferences.AddPriceRange("test_cat2", priceRange);
+
+            
         }
 
         /***
