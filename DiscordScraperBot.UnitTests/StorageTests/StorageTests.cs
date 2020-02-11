@@ -161,5 +161,54 @@ namespace DiscordScraperBot.UnitTests
             Assert.True(result);
             Assert.True(storage.GetNumberOfRows() == (numItems - preferences.Count));
         }
+
+        /*
+         * Check that we can correctly retrieve a desired UserPreference.
+         */
+        [Fact]
+        public void GetUserPreferenceTest()
+        {
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreateTables());
+
+            List<UserPreference> preferences = new List<UserPreference>();
+
+            preferences.Add(new UserPreference("movies", 0.0, 0.0));
+            preferences.Add(new UserPreference("games", 0.0, 100.0));
+            preferences.Add(new UserPreference("tools", 0.0, 100.0));
+
+            bool result = storage.InsertUserPreferences(preferences);
+            Assert.True(result);
+            Assert.True(storage.GetNumberOfRows() == preferences.Count);
+
+            UserPreference userPreference = storage.GetUserPreference("games");
+            Assert.Equal(userPreference._category, "games");
+            Assert.True(userPreference._minPrice == 0.0);
+            Assert.True(userPreference._maxPrice == 100.0);
+        }
+
+        /*
+         * Check that grabbing a user preference that doesn't exist returns null.
+         */
+        [Fact]
+        public void GetUserPreferenceNullTest()
+        {
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreateTables());
+
+            List<UserPreference> preferences = new List<UserPreference>();
+
+            preferences.Add(new UserPreference("movies", 0.0, 0.0));
+            preferences.Add(new UserPreference("games", 0.0, 100.0));
+            preferences.Add(new UserPreference("tools", 0.0, 100.0));
+
+            bool result = storage.InsertUserPreferences(preferences);
+            Assert.True(result);
+            Assert.True(storage.GetNumberOfRows() == preferences.Count);
+
+            UserPreference userPreference = storage.GetUserPreference("garden");
+            Assert.Null(userPreference);
+        }
+    
     }
 }

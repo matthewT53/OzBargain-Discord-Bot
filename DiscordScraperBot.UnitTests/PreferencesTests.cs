@@ -8,7 +8,7 @@ namespace DiscordScraperBot.UnitTests
     public class PreferencesTests
     {
         [Fact]
-        public void TestNullStorage()
+        public void NullStorageTest()
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
@@ -17,7 +17,7 @@ namespace DiscordScraperBot.UnitTests
         }
 
         [Fact]
-        public void TestAddingNullCategory()
+        public void AddingNullCategoryTest()
         {
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
@@ -29,7 +29,7 @@ namespace DiscordScraperBot.UnitTests
         }
 
         [Fact] 
-        public void TestAddingCategories()
+        public void AddingCategoriesTest()
         {
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
@@ -64,7 +64,7 @@ namespace DiscordScraperBot.UnitTests
         }
 
         [Fact]
-        public void TestRemovingNullCategory()
+        public void RemovingNullCategoryTest()
         {
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
@@ -76,7 +76,7 @@ namespace DiscordScraperBot.UnitTests
         }
 
         [Fact]
-        public void TestRemovingCategories()
+        public void RemovingCategoriesTest()
         {
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
@@ -107,7 +107,7 @@ namespace DiscordScraperBot.UnitTests
         }
 
         [Fact]
-        public void TestAddingNullPriceRange()
+        public void AddingNullPriceRangeTest()
         {
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
@@ -122,7 +122,7 @@ namespace DiscordScraperBot.UnitTests
          * Ensures that a price range can be correctly applied to a category. 
          */
         [Fact] 
-        public void TestAddingPriceRange()
+        public void AddingPriceRangeTest()
         {
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
@@ -142,14 +142,17 @@ namespace DiscordScraperBot.UnitTests
 
             preferences.AddPriceRange("test_cat2", priceRange);
 
-            
+            UserPreference userPreference = storage.GetUserPreference("test_cat2");
+            Assert.Equal(userPreference._category, "test_cat2");
+            Assert.True(userPreference._minPrice == 10.0);
+            Assert.True(userPreference._maxPrice == 100.0);
         }
 
         /***
          * Ensures that the user is not able to add a price range for a NULL category.
          */
         [Fact]
-        public void TestAddPriceWithNoCategory()
+        public void AddPriceWithNoCategoryTest()
         {
 
         }
@@ -158,13 +161,13 @@ namespace DiscordScraperBot.UnitTests
          * Ensures that the user is unable to add a price range for a catefory that does NOT exist.
          */
         [Fact]
-        public void TestAddPriceWithFakeCategory()
+        public void AddPriceWithFakeCategoryTest()
         {
 
         }
 
         [Fact] 
-        public void TestRemoveNullPriceRange()
+        public void RemoveNullPriceRangeTest()
         {
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
@@ -176,7 +179,7 @@ namespace DiscordScraperBot.UnitTests
         }
 
         [Fact]
-        public void TestRemovePriceRange()
+        public void RemovePriceRangeTest()
         {
 
         }
