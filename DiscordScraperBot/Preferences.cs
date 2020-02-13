@@ -18,22 +18,22 @@ namespace DiscordScraperBot
             _store = storage;
         }
 
-        public void AddCategory(string category)
+        public bool AddCategory(string category)
         {
 
         }
 
-        public void RemoveCategory(string category)
+        public bool RemoveCategory(string category)
         {
 
         }
 
-        public void AddPriceRange(string category, Tuple<double, double> priceRange)
+        public bool AddPriceRange(string category, Tuple<double, double> priceRange)
         {
             
         }
 
-        public void RemovePriceRange(string category, Tuple<double, double> priceRange)
+        public bool RemovePriceRange(string category)
         {
              
         }

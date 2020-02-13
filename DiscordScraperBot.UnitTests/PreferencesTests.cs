@@ -42,7 +42,7 @@ namespace DiscordScraperBot.UnitTests
 
             foreach (string category in categories)
             {
-                preferences.AddCategory(category);
+                Assert.True( preferences.AddCategory(category) );
             }
 
             // Ensure these categories have been added to the mock 
@@ -96,8 +96,8 @@ namespace DiscordScraperBot.UnitTests
             }
 
             // Remove some categories 
-            preferences.RemoveCategory("policeman");
-            preferences.RemoveCategory("policewoman");
+            Assert.True( preferences.RemoveCategory("policeman") );
+            Assert.True( preferences.RemoveCategory("policewoman") );
 
             List<UserPreference> mockPreferences = storage.GetUserPreferences();
             foreach (UserPreference pref in mockPreferences)
@@ -154,7 +154,14 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void AddPriceWithNoCategoryTest()
         {
+            IStorage storage = new MockStorage();
+            Preferences preferences = new Preferences(storage);
 
+            Tuple<double, double> priceRange = new Tuple<double, double>(10.0, 100.0);
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                preferences.AddPriceRange(null, priceRange);
+            });
         }
 
         /***
@@ -163,7 +170,12 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void AddPriceWithFakeCategoryTest()
         {
+            IStorage storage = new MockStorage();
+            Preferences preferences = new Preferences(storage);
 
+            Tuple<double, double> priceRange = new Tuple<double, double>(10.0, 100.0);
+
+            Assert.False( preferences.AddPriceRange("fake_category", priceRange) );
         }
 
         [Fact] 
@@ -174,14 +186,34 @@ namespace DiscordScraperBot.UnitTests
 
             Assert.Throws<ArgumentNullException>(() =>
             {
-                preferences.RemovePriceRange(null, null);
+                preferences.RemovePriceRange(null);
             });
         }
 
         [Fact]
         public void RemovePriceRangeTest()
         {
+            IStorage storage = new MockStorage();
+            Preferences preferences = new Preferences(storage);
 
+            List<string> categories = new List<string>();
+
+            categories.Add("test_cat");
+            categories.Add("test_cat2");
+            categories.Add("test_cat3");
+
+            Tuple<double, double> priceRange = new Tuple<double, double>(10.0, 100.0);
+
+            foreach (string category in categories) 
+            {
+                preferences.AddCategory(category);
+                preferences.AddPriceRange(category, priceRange);
+            }
+
+            Assert.True( preferences.RemovePriceRange("test_cat2") );
+
+            UserPreference userPreference = storage.GetUserPreference("test_cat2");
+            Assert.Null( userPreference );
         }
 
         public class MockStorage : IStorage
@@ -201,6 +233,11 @@ namespace DiscordScraperBot.UnitTests
             public List<UserPreference> GetUserPreferences()
             {
                 return _pref;
+            }
+
+            public UserPreference GetUserPreference(string category)
+            {
+                return _pref.find(pref => pref._category == category);
             }
 
             public bool InsertUserPreferences(List<UserPreference> preferences)

@@ -10,13 +10,13 @@ namespace DiscordScraperBot
 
         public List<UserPreference> GetUserPreferences();
 
+        public UserPreference GetUserPreference(string category);
+
         public bool InsertUserPreferences(List<UserPreference> preferences);
 
         public bool DeleteUserPreferences(List<UserPreference> preferences);
 
         public int GetNumberOfRows();
-
-        public UserPreference GetUserPreference(string category);
 
         public void CloseStorage();
     }

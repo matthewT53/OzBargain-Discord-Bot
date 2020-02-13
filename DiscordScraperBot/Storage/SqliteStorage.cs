@@ -102,6 +102,12 @@ namespace DiscordScraperBot
             return result;
         }
 
+        public UserPreference GetUserPreference(string category) 
+        {
+            var preference = _db.Query<UserPreference>("select from UserPreference where _category = (?)", category);
+            return preference;
+        }
+
         public bool InsertUserPreferences(List<UserPreference> preferences)
         {
             int nRows = 0;
