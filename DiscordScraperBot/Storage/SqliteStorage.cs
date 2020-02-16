@@ -49,6 +49,11 @@ namespace DiscordScraperBot
                     (_maxPrice == pref._maxPrice) &&
                     (_minPrice == pref._minPrice);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
  
     public class SqliteStorage : IStorage
@@ -82,7 +87,7 @@ namespace DiscordScraperBot
             return CreatePreferenceTable();
         }
 
-        private bool CreatePreferenceTable()
+        public bool CreatePreferenceTable()
         {
             CreateTableResult result = _db.CreateTable<UserPreference>();
             return result == CreateTableResult.Created;
@@ -104,8 +109,8 @@ namespace DiscordScraperBot
 
         public UserPreference GetUserPreference(string category) 
         {
-            var preference = _db.Query<UserPreference>("select from UserPreference where _category = (?)", category);
-            return preference;
+            List<UserPreference> preferences = _db.Query<UserPreference>("select * from UserPreference where _category = ?", category);
+            return (preferences.Count == 1) ? preferences[0] : null;
         }
 
         public bool InsertUserPreferences(List<UserPreference> preferences)
@@ -119,6 +124,12 @@ namespace DiscordScraperBot
             return nRows == preferences.Count;
         }
 
+        public bool InsertUserPreference(UserPreference preference)
+        {
+            int nRows = _db.Insert(preference);
+            return nRows == 1;
+        }
+
         public bool DeleteUserPreferences(List<UserPreference> preferences)
         {
             int nRows = 0;
@@ -128,6 +139,12 @@ namespace DiscordScraperBot
             }
 
             return nRows == preferences.Count;
+        }
+
+        public bool DeleteUserPreference(UserPreference preference)
+        {
+            int nRows = _db.Delete<UserPreference>(preference._id);
+            return nRows == 1;
         }
 
         public int GetNumberOfRows()

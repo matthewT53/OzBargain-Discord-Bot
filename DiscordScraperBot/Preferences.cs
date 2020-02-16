@@ -13,34 +13,46 @@ namespace DiscordScraperBot
     public class Preferences
     {
         IStorage _store;
+
         public Preferences(IStorage storage)
         {
             _store = storage;
+            _store.CreatePreferenceTable();
         }
 
         public bool AddCategory(string category)
         {
+            return true;
+        }
 
+        public bool AddCategories(List<string> categories)
+        {
+            return false;
         }
 
         public bool RemoveCategory(string category)
         {
+            return false;
+        }
 
+        public bool RemoveCategories(List<string> categories)
+        {
+            return false;
         }
 
         public bool AddPriceRange(string category, Tuple<double, double> priceRange)
         {
-            
+            return false;
         }
 
         public bool RemovePriceRange(string category)
         {
-             
+            return false;
         }
 
         public Tuple<double, double> GetPriceRange(string category)
         {
-            
+            return null;
         }
 
         public List<string> GetCategories()

@@ -143,7 +143,7 @@ namespace DiscordScraperBot.UnitTests
             preferences.AddPriceRange("test_cat2", priceRange);
 
             UserPreference userPreference = storage.GetUserPreference("test_cat2");
-            Assert.Equal(userPreference._category, "test_cat2");
+            Assert.Equal("test_cat2", userPreference._category);
             Assert.True(userPreference._minPrice == 10.0);
             Assert.True(userPreference._maxPrice == 100.0);
         }
@@ -230,6 +230,11 @@ namespace DiscordScraperBot.UnitTests
                 return true;
             }
 
+            public bool CreatePreferenceTable()
+            {
+                return true;
+            }
+
             public List<UserPreference> GetUserPreferences()
             {
                 return _pref;
@@ -237,12 +242,21 @@ namespace DiscordScraperBot.UnitTests
 
             public UserPreference GetUserPreference(string category)
             {
-                return _pref.find(pref => pref._category == category);
+                return _pref.Find((userPref) =>
+                {
+                    return userPref._category == category;
+                });
             }
 
             public bool InsertUserPreferences(List<UserPreference> preferences)
             {
                 _pref.AddRange(preferences);
+                return true;
+            }
+
+            public bool InsertUserPreference(UserPreference preference)
+            {
+                _pref.Add(preference);
                 return true;
             }
 
@@ -253,6 +267,12 @@ namespace DiscordScraperBot.UnitTests
                     _pref.Remove(pref);
                 }
 
+                return true;
+            }
+
+            public bool DeleteUserPreference(UserPreference preference)
+            {
+                _pref.Remove(preference);
                 return true;
             }
 

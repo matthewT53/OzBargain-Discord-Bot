@@ -11,7 +11,7 @@ namespace DiscordScraperBot.UnitTests
         /***
          * The reason we don't use a fixture is that we want don't want the  
          * database to be shared across all tests otherwise dependecies may be 
-         * created between test cases and they will nto be able to run in isolation.
+         * created between test cases and they will not be able to run in isolation.
          */
         SqliteStorage _storage;
 
@@ -89,6 +89,19 @@ namespace DiscordScraperBot.UnitTests
         }
 
         /*
+         * Ensures that we are able to add one preference to the database.
+         */
+        [Fact]
+        public void AddingOnePreferenceTest()
+        {
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreatePreferenceTable());
+
+            bool result = storage.InsertUserPreference(new UserPreference("headphones"));
+            Assert.True(result);
+        }
+
+        /*
          * Check that removing preferences works:
          */
         [Fact]
@@ -107,6 +120,23 @@ namespace DiscordScraperBot.UnitTests
             Assert.True(result);
 
             result = storage.DeleteUserPreferences(preferences);
+            Assert.True(result);
+        }
+
+        /*
+         * Ensures that deleting one UserPreference works. 
+         */
+        [Fact]
+        public void RemovingOnePreferenceTest()
+        {
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreatePreferenceTable());
+
+            UserPreference preference = new UserPreference("headphones");
+            bool result = storage.InsertUserPreference(preference);
+            Assert.True(result);
+
+            result = storage.DeleteUserPreference(preference);
             Assert.True(result);
         }
 
@@ -182,7 +212,8 @@ namespace DiscordScraperBot.UnitTests
             Assert.True(storage.GetNumberOfRows() == preferences.Count);
 
             UserPreference userPreference = storage.GetUserPreference("games");
-            Assert.Equal(userPreference._category, "games");
+            Assert.NotNull(userPreference);
+            Assert.Equal("games", userPreference._category);
             Assert.True(userPreference._minPrice == 0.0);
             Assert.True(userPreference._maxPrice == 100.0);
         }
