@@ -116,6 +116,9 @@ namespace DiscordScraperBot
         public bool InsertUserPreferences(List<UserPreference> preferences)
         {
             int nRows = 0;
+            /*
+            * TODO: Use the insertAll function since this is incredibly inefficient.
+            */
             foreach (UserPreference userPreference in preferences)
             {
                 nRows += _db.Insert(userPreference);

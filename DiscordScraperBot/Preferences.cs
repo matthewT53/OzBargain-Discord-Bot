@@ -12,26 +12,33 @@ namespace DiscordScraperBot
      */
     public class Preferences
     {
-        IStorage _store;
+        IStorage _storage;
 
         public Preferences(IStorage storage)
         {
-            _store = storage;
-            _store.CreatePreferenceTable();
+            _storage = storage;
+            _storage.CreatePreferenceTable();
         }
 
         public bool AddCategory(string category)
         {
-            return true;
+            UserPreference preference = new UserPreference(category);
+            return _storage.InsertUserPreference(preference);
         }
 
         public bool AddCategories(List<string> categories)
         {
-            return false;
+            List<UserPreference> preferences = new List<UserPreference>();
+            foreach (string category : categories)
+            {
+                preferences.Add(new UserPreference(category));
+            }
+            return _storage.InsertUserPreferences(preferences);
         }
 
         public bool RemoveCategory(string category)
         {
+            
             return false;
         }
 
