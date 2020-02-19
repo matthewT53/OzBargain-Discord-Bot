@@ -115,15 +115,7 @@ namespace DiscordScraperBot
 
         public bool InsertUserPreferences(List<UserPreference> preferences)
         {
-            int nRows = 0;
-            /*
-            * TODO: Use the insertAll function since this is incredibly inefficient.
-            */
-            foreach (UserPreference userPreference in preferences)
-            {
-                nRows += _db.Insert(userPreference);
-            }
-
+            int nRows = _db.InsertAll(preferences);
             return nRows == preferences.Count;
         }
 
@@ -148,6 +140,17 @@ namespace DiscordScraperBot
         {
             int nRows = _db.Delete<UserPreference>(preference._id);
             return nRows == 1;
+        }
+
+        public bool UpdateUserPreference(UserPreference preference)
+        {
+            int nRows = _db.Update(preference);
+            return nRows == 1;
+        }
+
+        public bool UpdateUserPreferences(List<UserPreference> preferences)
+        {
+            return false;
         }
 
         public int GetNumberOfRows()

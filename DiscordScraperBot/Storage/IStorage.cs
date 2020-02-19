@@ -7,11 +7,9 @@ namespace DiscordScraperBot
     public interface IStorage
     {
         public bool CreateTables();
-
         public bool CreatePreferenceTable();
 
         public List<UserPreference> GetUserPreferences();
-
         public UserPreference GetUserPreference(string category);
 
         public bool InsertUserPreferences(List<UserPreference> preferences);
@@ -19,6 +17,9 @@ namespace DiscordScraperBot
 
         public bool DeleteUserPreferences(List<UserPreference> preferences);
         public bool DeleteUserPreference(UserPreference preference);
+
+        public bool UpdateUserPreferences(List<UserPreference> preferences);
+        public bool UpdateUserPreference(UserPreference preference);
 
         public int GetNumberOfRows();
 

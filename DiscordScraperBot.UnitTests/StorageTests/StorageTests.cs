@@ -167,6 +167,24 @@ namespace DiscordScraperBot.UnitTests
         }
 
         /*
+         * Check to see if we can update a UserPreference
+         */
+        [Fact]
+        public void UpdateOnePreferenceTest() 
+        {
+
+        }
+
+        /*
+         * Ensure we can update many UserPreference records.
+         */
+        [Fact]
+        public void UpdatePreferencesTest() 
+        {
+
+        }
+
+        /*
          * Ensure that we can correct determine the number of rows in a database.
          */
         [Fact]
