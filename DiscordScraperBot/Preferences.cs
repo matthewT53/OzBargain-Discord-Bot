@@ -29,10 +29,11 @@ namespace DiscordScraperBot
         public bool AddCategories(List<string> categories)
         {
             List<UserPreference> preferences = new List<UserPreference>();
-            foreach (string category : categories)
+            foreach (string category in categories)
             {
                 preferences.Add(new UserPreference(category));
             }
+
             return _storage.InsertUserPreferences(preferences);
         }
 
