@@ -70,6 +70,15 @@ namespace DiscordScraperBot.UnitTests
         }
 
         /*
+         * Ensure trying to insert null into the database.
+         */
+        [Fact]
+        public void AddingNullPreferenceTest()
+        {
+
+        }
+
+        /*
          * Check that adding preferences works.
          */
         [Fact]
@@ -99,6 +108,15 @@ namespace DiscordScraperBot.UnitTests
 
             bool result = storage.InsertUserPreference(new UserPreference("headphones"));
             Assert.True(result);
+        }
+
+        /*
+         * Ensure that deleting a null user preference is not allowed.
+         */
+        [Fact]
+        public void RemovingNullPreferenceTest()
+        {
+    
         }
 
         /*
@@ -184,7 +202,7 @@ namespace DiscordScraperBot.UnitTests
             bool result = storage.InsertUserPreferences(preferences);
             Assert.True(result);
 
-            storage.UpdateUserPreference()
+            
         }
 
         /*

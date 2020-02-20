@@ -216,6 +216,15 @@ namespace DiscordScraperBot.UnitTests
             Assert.Null( userPreference );
         }
 
+        /*
+         * Ensure that we can retrieve price ranges for categories.
+         */
+        [Fact]
+        public void RetrievePriceRangeTest()
+        {
+
+        }
+
         public class MockStorage : IStorage
         {
             List<UserPreference> _pref;
@@ -274,6 +283,16 @@ namespace DiscordScraperBot.UnitTests
             {
                 _pref.Remove(preference);
                 return true;
+            }
+
+            public bool UpdateUserPreferences(List<UserPreference> preferencesToUpdate)
+            {
+                return false;
+            }
+
+            public bool UpdateUserPreference(UserPreference preference)
+            {
+                return false;
             }
 
             public int GetNumberOfRows()

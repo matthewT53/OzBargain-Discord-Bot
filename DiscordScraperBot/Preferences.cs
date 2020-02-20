@@ -13,45 +13,58 @@ namespace DiscordScraperBot
     public class Preferences
     {
         IStorage _storage;
+        List<UserPreference> _preferences;
 
         public Preferences(IStorage storage)
         {
             _storage = storage;
             _storage.CreatePreferenceTable();
+
+            // Load the existing preferences from the database.
+            _preferences = _storage.GetUserPreferences();
         }
 
         public bool AddCategory(string category)
         {
             UserPreference preference = new UserPreference(category);
+            _preferences.Add(preference);
             return _storage.InsertUserPreference(preference);
         }
 
         public bool AddCategories(List<string> categories)
         {
-            List<UserPreference> preferences = new List<UserPreference>();
             foreach (string category in categories)
             {
-                preferences.Add(new UserPreference(category));
+                _preferences.Add(new UserPreference(category));
             }
 
-            return _storage.InsertUserPreferences(preferences);
+            return _storage.InsertUserPreferences(_preferences);
         }
 
         public bool RemoveCategory(string category)
         {
-            UserPreference preference = new UserPreference(category);
-            return _storage.RemoveCategory(preference);
+            UserPreference preference = _preferences.Find((pref) =>
+            {
+                return pref._category == category;
+            });
+
+            return _storage.DeleteUserPreference(preference);
         }
 
         public bool RemoveCategories(List<string> categories)
         {
-            List<UserPreference> preferences = new List<UserPreference>();
-            foreach (string category : categories)
+            List<UserPreference> preferencesToRemove = new List<UserPreference>();
+            foreach (string category in categories)
             {
-                preferences.Add(category);
+                UserPreference preference = _preferences.Find((pref) =>
+                {
+                    return pref._category == category;
+                });
+
+                preferencesToRemove.Add(preference);
             }
 
-            return _storage.RemoveCategories(preferences);
+            return _storage.DeleteUserPreferences(preferencesToRemove);
         }
 
         public bool AddPriceRange(string category, Tuple<double, double> priceRange)
