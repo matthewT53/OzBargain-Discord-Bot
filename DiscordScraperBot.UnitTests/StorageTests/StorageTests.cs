@@ -167,6 +167,36 @@ namespace DiscordScraperBot.UnitTests
         }
 
         /*
+         * Check to see if we can update a UserPreference
+         */
+        [Fact]
+        public void UpdateOnePreferenceTest() 
+        {
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreatePreferenceTable());
+
+            List<UserPreference> preferences = new List<UserPreference>();
+
+            // When is the primary key set, at inserion or object creation?
+            preferences.Add(new UserPreference("movies", 0.0, 0.0));
+            preferences.Add(new UserPreference("games", 0.0, 100.0));
+
+            bool result = storage.InsertUserPreferences(preferences);
+            Assert.True(result);
+
+            storage.UpdateUserPreference()
+        }
+
+        /*
+         * Ensure we can update many UserPreference records.
+         */
+        [Fact]
+        public void UpdatePreferencesTest() 
+        {
+
+        }
+
+        /*
          * Ensure that we can correct determine the number of rows in a database.
          */
         [Fact]

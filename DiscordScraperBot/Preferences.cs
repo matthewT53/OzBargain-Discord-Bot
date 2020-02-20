@@ -39,13 +39,19 @@ namespace DiscordScraperBot
 
         public bool RemoveCategory(string category)
         {
-            
-            return false;
+            UserPreference preference = new UserPreference(category);
+            return _storage.RemoveCategory(preference);
         }
 
         public bool RemoveCategories(List<string> categories)
         {
-            return false;
+            List<UserPreference> preferences = new List<UserPreference>();
+            foreach (string category : categories)
+            {
+                preferences.Add(category);
+            }
+
+            return _storage.RemoveCategories(preferences);
         }
 
         public bool AddPriceRange(string category, Tuple<double, double> priceRange)
