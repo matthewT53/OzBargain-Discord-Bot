@@ -196,13 +196,25 @@ namespace DiscordScraperBot.UnitTests
             List<UserPreference> preferences = new List<UserPreference>();
 
             // When is the primary key set, at inserion or object creation?
-            preferences.Add(new UserPreference("movies", 0.0, 0.0));
-            preferences.Add(new UserPreference("games", 0.0, 100.0));
+            UserPreference u1 = new UserPreference("movies", 0.0, 0.0);
+            UserPreference u2 = new UserPreference("games", 0.0, 100.0);
+            preferences.Add(u1);
+            preferences.Add(u2);
 
             bool result = storage.InsertUserPreferences(preferences);
             Assert.True(result);
 
-            
+            u1._category = "gardening";
+            u1._minPrice = 95.0;
+            u1._maxPrice = 165.75;
+            result = storage.UpdateUserPreference(u1);
+            Assert.True(result);
+
+            UserPreference updatedPref = storage.GetUserPreference("gardening");
+            Assert.NotNull(updatedPref);
+
+            Assert.Equal(95.0, updatedPref._minPrice);
+            Assert.Equal(165.75, updatedPref._maxPrice);
         }
 
         /*

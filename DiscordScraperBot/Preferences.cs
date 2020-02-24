@@ -31,6 +31,11 @@ namespace DiscordScraperBot
             return _storage.InsertUserPreference(preference);
         }
 
+        public bool AddCategory(string category, Tuple<double, double> priceRange)
+        {
+            return false;
+        }
+
         public bool AddCategories(List<string> categories)
         {
             foreach (string category in categories)
