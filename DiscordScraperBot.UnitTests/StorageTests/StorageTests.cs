@@ -75,7 +75,18 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void AddingNullPreferenceTest()
         {
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreateTables());
 
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                storage.InsertUserPreference(null);
+            });
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                storage.InsertUserPreferences(null);
+            });
         }
 
         /*
@@ -116,7 +127,21 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void RemovingNullPreferenceTest()
         {
-    
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreatePreferenceTable());
+
+            bool result = storage.InsertUserPreference(new UserPreference("headphones"));
+            Assert.True(result);
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                storage.DeleteUserPreference(null);
+            });
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                storage.DeleteUserPreferences(null);
+            });
         }
 
         /*
@@ -185,6 +210,26 @@ namespace DiscordScraperBot.UnitTests
         }
 
         /*
+         * Ensure that we handle updating null references properly.
+         */
+        [Fact]
+        public void UpdateNullPreferencesTest()
+        {
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreatePreferenceTable());
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                _storage.UpdateUserPreference(null);
+            });
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                _storage.UpdateUserPreferences(null);
+            });
+        }
+
+        /*
          * Check to see if we can update a UserPreference
          */
         [Fact]
@@ -223,7 +268,40 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void UpdatePreferencesTest() 
         {
+            SqliteStorage storage = _storage;
+            Assert.True(_storage.CreatePreferenceTable());
 
+            List<UserPreference> preferences = new List<UserPreference>();
+
+            // When is the primary key set, at inserion or object creation?
+            UserPreference u1 = new UserPreference("movies", 0.0, 0.0);
+            UserPreference u2 = new UserPreference("games", 0.0, 100.0);
+            preferences.Add(u1);
+            preferences.Add(u2);
+
+            bool result = storage.InsertUserPreferences(preferences);
+            Assert.True(result);
+
+            preferences[0]._category = "gardening";
+            preferences[0]._minPrice = 95.0;
+            preferences[0]._maxPrice = 165.75;
+
+            preferences[1]._category = "electrical";
+            preferences[1]._minPrice = 190.50;
+            preferences[1]._maxPrice = 567.90;
+
+            result = storage.UpdateUserPreferences(preferences);
+            Assert.True(result);
+
+            UserPreference updatedPref = storage.GetUserPreference("gardening");
+
+            Assert.NotNull(updatedPref);
+            Assert.Equal(95.0, updatedPref._minPrice);
+            Assert.Equal(165.75, updatedPref._maxPrice);
+
+            updatedPref = storage.GetUserPreference("electrical");
+            Assert.Equal(190.50, updatedPref._minPrice);
+            Assert.Equal(567.90, updatedPref._maxPrice);
         }
 
         /*

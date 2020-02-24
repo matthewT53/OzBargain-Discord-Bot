@@ -115,18 +115,33 @@ namespace DiscordScraperBot
 
         public bool InsertUserPreferences(List<UserPreference> preferences)
         {
+            if (preferences == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             int nRows = _db.InsertAll(preferences);
             return nRows == preferences.Count;
         }
 
         public bool InsertUserPreference(UserPreference preference)
         {
+            if (preference == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             int nRows = _db.Insert(preference);
             return nRows == 1;
         }
 
         public bool DeleteUserPreferences(List<UserPreference> preferences)
         {
+            if (preferences == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             int nRows = 0;
             foreach (UserPreference userPreference in preferences)
             {
@@ -138,19 +153,35 @@ namespace DiscordScraperBot
 
         public bool DeleteUserPreference(UserPreference preference)
         {
+            if (preference == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             int nRows = _db.Delete<UserPreference>(preference._id);
             return nRows == 1;
         }
 
         public bool UpdateUserPreference(UserPreference preference)
         {
+            if (preference == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             int nRows = _db.Update(preference);
             return nRows == 1;
         }
 
         public bool UpdateUserPreferences(List<UserPreference> preferences)
         {
-            return false;
+            if (preferences == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            int nRows = _db.UpdateAll(preferences);
+            return nRows == preferences.Count;
         }
 
         public int GetNumberOfRows()
