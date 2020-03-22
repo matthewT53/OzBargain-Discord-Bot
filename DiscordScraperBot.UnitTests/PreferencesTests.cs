@@ -222,7 +222,16 @@ namespace DiscordScraperBot.UnitTests
         [Fact]
         public void RetrievePriceRangeTest()
         {
+            IStorage storage = new MockStorage();
+            Preferences preferences = new Preferences(storage);
 
+            preferences.AddCategory("cars");
+
+            Tuple<double, double> priceRange = new Tuple<double, double>(100.0, 856.0);
+            preferences.AddPriceRange("cars", priceRange);
+
+            Tuple<double, double> existingPriceRange = preferences.GetPriceRange("cars");
+            Assert.Equal(priceRange, existingPriceRange);
         }
 
         public class MockStorage : IStorage

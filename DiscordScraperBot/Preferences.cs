@@ -13,6 +13,8 @@ namespace DiscordScraperBot
     public class Preferences
     {
         IStorage _storage;
+
+        // Cache layer for user preferences
         List<UserPreference> _preferences;
 
         public Preferences(IStorage storage)
@@ -33,7 +35,9 @@ namespace DiscordScraperBot
 
         public bool AddCategory(string category, Tuple<double, double> priceRange)
         {
-            return false;
+            UserPreference preference = new UserPreference(category, priceRange.Item1, priceRange.Item2);
+            _preferences.Add(preference);
+            return _storage.InsertUserPreference(preference);
         }
 
         public bool AddCategories(List<string> categories)
@@ -48,11 +52,7 @@ namespace DiscordScraperBot
 
         public bool RemoveCategory(string category)
         {
-            UserPreference preference = _preferences.Find((pref) =>
-            {
-                return pref._category == category;
-            });
-
+            UserPreference preference = FindUserPreferenceCache(category);
             return _storage.DeleteUserPreference(preference);
         }
 
@@ -61,11 +61,7 @@ namespace DiscordScraperBot
             List<UserPreference> preferencesToRemove = new List<UserPreference>();
             foreach (string category in categories)
             {
-                UserPreference preference = _preferences.Find((pref) =>
-                {
-                    return pref._category == category;
-                });
-
+                UserPreference preference = FindUserPreferenceCache(category);
                 preferencesToRemove.Add(preference);
             }
 
@@ -74,22 +70,56 @@ namespace DiscordScraperBot
 
         public bool AddPriceRange(string category, Tuple<double, double> priceRange)
         {
-            return false;
+            UserPreference preference = FindUserPreferenceCache(category);
+            preference._minPrice = priceRange.Item1;
+            preference._maxPrice = priceRange.Item2;
+
+            return _storage.UpdateUserPreference(preference);
         }
 
         public bool RemovePriceRange(string category)
         {
-            return false;
+            UserPreference preference = FindUserPreferenceCache(category);
+            preference._minPrice = 0.0;
+            preference._maxPrice = 0.0;
+
+            return _storage.UpdateUserPreference(preference);
         }
 
         public Tuple<double, double> GetPriceRange(string category)
         {
-            return null;
+            UserPreference preference = FindUserPreferenceCache(category);
+            Tuple<double, double> priceRange = new Tuple<double, double>(preference._minPrice, preference._maxPrice);
+            return priceRange;
         }
 
+        /***
+         * Returns the names of all the categories stored in the list of user preferences 
+         * from the cache layer.
+         */
         public List<string> GetCategories()
         {
-            return null;
+            List<string> categories = new List<string>();
+
+            foreach (UserPreference preference in _preferences)
+            {
+                categories.Add(preference._category);
+            }
+
+            return categories;
+        }
+
+        /***
+         * Returns a user preference from the cache if found otherwise null is returned 
+         */
+        private UserPreference FindUserPreferenceCache(string category)
+        {
+            UserPreference preference = _preferences.Find((pref) =>
+            {
+                return pref._category == category;
+            });
+
+            return preference;
         }
     }
 }
