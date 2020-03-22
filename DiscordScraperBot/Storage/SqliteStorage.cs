@@ -117,7 +117,7 @@ namespace DiscordScraperBot
         {
             if (preferences == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("preferences list cannot be null.");
             }
 
             int nRows = _db.InsertAll(preferences);
@@ -128,7 +128,7 @@ namespace DiscordScraperBot
         {
             if (preference == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("preference cannot be null.");
             }
 
             int nRows = _db.Insert(preference);
@@ -139,7 +139,7 @@ namespace DiscordScraperBot
         {
             if (preferences == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("preferences cannot be null.");
             }
 
             int nRows = 0;
@@ -155,7 +155,7 @@ namespace DiscordScraperBot
         {
             if (preference == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("preference cannot be null.");
             }
 
             int nRows = _db.Delete<UserPreference>(preference._id);
@@ -166,8 +166,10 @@ namespace DiscordScraperBot
         {
             if (preference == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("preference cannot be null.");
             }
+
+            Console.WriteLine("[UpdateUserPreference] preference.id = " + preference._id);
 
             int nRows = _db.Update(preference);
             return nRows == 1;
@@ -177,7 +179,7 @@ namespace DiscordScraperBot
         {
             if (preferences == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("preferences cannot be null.");
             }
 
             int nRows = _db.UpdateAll(preferences);
