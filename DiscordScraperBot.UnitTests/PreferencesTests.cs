@@ -302,7 +302,7 @@ namespace DiscordScraperBot.UnitTests
             {
                 foreach (UserPreference preference in preferencesToUpdate)
                 {
-                   if (!UpdateUserPreference(preference))
+                    if (!UpdateUserPreference(preference))
                     {
                         return false;
                     }
