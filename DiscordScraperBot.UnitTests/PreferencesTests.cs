@@ -69,7 +69,7 @@ namespace DiscordScraperBot.UnitTests
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
 
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<Preferences.UserPreferenceNotFoundException>(() =>
             {
                 preferences.RemoveCategory(null);
             });
@@ -112,7 +112,7 @@ namespace DiscordScraperBot.UnitTests
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
 
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<Preferences.UserPreferenceNotFoundException>(() =>
             {
                 preferences.AddPriceRange(null, null);
             });
@@ -152,20 +152,20 @@ namespace DiscordScraperBot.UnitTests
          * Ensures that the user is not able to add a price range for a NULL category.
          */
         [Fact]
-        public void AddPriceWithNoCategoryTest()
+        public void AddPriceWithNullCategoryTest()
         {
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
 
             Tuple<double, double> priceRange = new Tuple<double, double>(10.0, 100.0);
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<Preferences.UserPreferenceNotFoundException>(() =>
             {
                 preferences.AddPriceRange(null, priceRange);
             });
         }
 
         /***
-         * Ensures that the user is unable to add a price range for a catefory that does NOT exist.
+         * Ensures that the user is unable to add a price range for a category that does NOT exist.
          */
         [Fact]
         public void AddPriceWithFakeCategoryTest()
@@ -175,7 +175,10 @@ namespace DiscordScraperBot.UnitTests
 
             Tuple<double, double> priceRange = new Tuple<double, double>(10.0, 100.0);
 
-            Assert.False( preferences.AddPriceRange("fake_category", priceRange) );
+            Assert.Throws<Preferences.UserPreferenceNotFoundException>(() =>
+            {
+                preferences.AddPriceRange("fake_category", priceRange);
+            });
         }
 
         [Fact] 
@@ -184,7 +187,7 @@ namespace DiscordScraperBot.UnitTests
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
 
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<Preferences.UserPreferenceNotFoundException>(() =>
             {
                 preferences.RemovePriceRange(null);
             });
@@ -213,7 +216,8 @@ namespace DiscordScraperBot.UnitTests
             Assert.True( preferences.RemovePriceRange("test_cat2") );
 
             UserPreference userPreference = storage.GetUserPreference("test_cat2");
-            Assert.Null( userPreference );
+            Assert.Equal(0.0, userPreference._minPrice);
+            Assert.Equal(0.0, userPreference._maxPrice);
         }
 
         /*
@@ -296,12 +300,40 @@ namespace DiscordScraperBot.UnitTests
 
             public bool UpdateUserPreferences(List<UserPreference> preferencesToUpdate)
             {
-                return false;
+                foreach (UserPreference preference in preferencesToUpdate)
+                {
+                    int index = _pref.FindIndex((u) =>
+                    {
+                        return u._id == preference._id && u._category == preference._category;
+                    });
+
+                    if (index < 0)
+                    {
+                        return false;
+                    }
+
+                    _pref[index]._minPrice = preference._minPrice;
+                    _pref[index]._maxPrice = preference._maxPrice;
+                }
+
+                return true;
             }
 
             public bool UpdateUserPreference(UserPreference preference)
             {
-                return false;
+                int index = _pref.FindIndex( (u) =>
+                {
+                    return u._id == preference._id && u._category == preference._category;
+                });
+
+                if (index < 0)
+                {
+                    return false;
+                }
+
+                _pref[index]._minPrice = preference._minPrice;
+                _pref[index]._maxPrice = preference._maxPrice;
+                return true;
             }
 
             public int GetNumberOfRows()
