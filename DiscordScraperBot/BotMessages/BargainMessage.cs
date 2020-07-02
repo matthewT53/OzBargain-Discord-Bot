@@ -5,12 +5,12 @@ using System.Text;
 
 namespace DiscordScraperBot.BotMessages
 {
-    public class NewsMessage : IBotMessage
+    class BargainMessage : IBotMessage
     {
         public Embed GetEmbed()
         {
-            Embed e = new EmbedBuilder().Build();
-            return e;
+            var embed = new EmbedBuilder();
+            return embed.Build();
         }
     }
 }

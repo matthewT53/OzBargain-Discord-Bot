@@ -10,7 +10,6 @@ namespace DiscordScraperBot
         [PrimaryKey, AutoIncrement]
         public int _id { get; set; }
         public string _category { get; set; }
-
         public double _minPrice { get; set; }
         public double _maxPrice { get; set; }
 
@@ -206,10 +205,8 @@ namespace DiscordScraperBot
             string fullPath = path + "/" + filename;
             if (!File.Exists(fullPath))
             {
-                using (FileStream fileStream = File.Create(fullPath))
-                {
-                    // Do nothing, we just wanted to create the file.
-                }
+                FileStream fileStream = File.Create(fullPath);
+                fileStream.Close();
             }
         }
     }

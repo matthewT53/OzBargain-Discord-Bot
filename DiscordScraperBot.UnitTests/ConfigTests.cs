@@ -32,9 +32,7 @@ namespace DiscordScraperBot.UnitTests
             Config.BotConfig bot = new Config.BotConfig();
             bot.token = "";
             bot.commandPrefix = "test_prefix";
-            bot.productsChannelId = 1;
-            bot.newsChannelId = 2;
-            bot.jobsChannelId = 3;
+            bot.bargainChannelID = 1;
 
             DeleteConfig();
             Config.WriteConfig(bot);
@@ -42,9 +40,7 @@ namespace DiscordScraperBot.UnitTests
 
             Assert.Equal("", botRead.token);
             Assert.Equal("test_prefix", botRead.commandPrefix);
-            Assert.Equal<ulong>(1, botRead.productsChannelId);
-            Assert.Equal<ulong>(2, botRead.newsChannelId);
-            Assert.Equal<ulong>(3, botRead.jobsChannelId);
+            Assert.Equal<ulong>(1, botRead.bargainChannelID);
         }
 
         [Fact]
@@ -53,9 +49,7 @@ namespace DiscordScraperBot.UnitTests
             Config.BotConfig bot = new Config.BotConfig();
             bot.token = "test_token";
             bot.commandPrefix = "";
-            bot.productsChannelId = 6;
-            bot.newsChannelId = 5;
-            bot.jobsChannelId = 4;
+            bot.bargainChannelID = 5;
 
             DeleteConfig();
             Config.WriteConfig(bot);
@@ -63,9 +57,7 @@ namespace DiscordScraperBot.UnitTests
 
             Assert.Equal("test_token", botRead.token);
             Assert.Equal("", botRead.commandPrefix);
-            Assert.Equal<ulong>(6, botRead.productsChannelId);
-            Assert.Equal<ulong>(5, botRead.newsChannelId);
-            Assert.Equal<ulong>(4, botRead.jobsChannelId);
+            Assert.Equal<ulong>(5, botRead.bargainChannelID);
         }
 
         /*

@@ -21,7 +21,6 @@ namespace DiscordScraperBot.Scapers
         public OzBargainScraper(ulong channelId)
             : base(channelId)
         {
-
         }
 
         public override void Scrape()
@@ -75,11 +74,11 @@ namespace DiscordScraperBot.Scapers
                 }
 
                 // Acquire the links to the next pages:
-                var link_nodes = html_doc.DocumentNode.SelectNodes(NEXT_PAGE_LINKS_XPATH);
+                /*var link_nodes = html_doc.DocumentNode.SelectNodes(NEXT_PAGE_LINKS_XPATH);
                 foreach (var node in link_nodes)
                 {
 
-                }
+                }*/
             }
         }
     }

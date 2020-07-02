@@ -40,7 +40,7 @@ namespace DiscordScraperBot
                     scraper.Scrape();
 
                     // There is no result so we do not need to await.
-                    _bot.SendMessagesAsync(scraper.GetMessages());
+                    _bot.SendToChannelAsync(scraper.GetMessages());
                 }
 
                 Console.WriteLine("[+] Delay: " + _delay);

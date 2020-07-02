@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 
 namespace DiscordScraperBot
@@ -20,13 +21,19 @@ namespace DiscordScraperBot
 
             if (!File.Exists(ConfigPath))
             {
+                Console.WriteLine("Unable to find config file.");
                 bot = new BotConfig();
                 WriteConfig(bot);
             }
 
             else
             {
+                Console.WriteLine("Found config file.");
                 bot = ReadConfig();
+
+                Console.WriteLine("Token read: " + bot.token);
+                Console.WriteLine("Command prefix: " + bot.commandPrefix);
+                Console.WriteLine("Channel ID: " + bot.bargainChannelID);
             }
         }
 
@@ -49,9 +56,7 @@ namespace DiscordScraperBot
             public string commandPrefix;
 
             // These are the ID's of the channels for each specific type of scraper.
-            public ulong jobsChannelId;
-            public ulong newsChannelId;
-            public ulong productsChannelId;
+            public ulong bargainChannelID;
         }
     }
 }
