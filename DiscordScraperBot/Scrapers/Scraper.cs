@@ -32,6 +32,11 @@ namespace DiscordScraperBot.Scapers
             return _channelId;
         }
 
+        public void AddMessage(IBotMessage message)
+        {
+            _messages.Add(message);
+        }
+
         /*
          * This function will return a list of items that were scraped from the 
          * source. 

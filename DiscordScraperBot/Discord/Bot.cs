@@ -11,7 +11,7 @@ namespace DiscordScraperBot.Discord
     {
         DiscordSocketClient _client;
         CommandHandler _cmdHandler;
-        Boolean _isReady;
+        bool _isReady = false;
 
         public async Task StartAsync(InitializeCommandHandler init)
         {
