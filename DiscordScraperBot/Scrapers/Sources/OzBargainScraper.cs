@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DiscordScraperBot.BotMessages;
 using HtmlAgilityPack;
+using LLibrary;
 
 namespace DiscordScraperBot.Scapers
 {
@@ -84,9 +85,19 @@ namespace DiscordScraperBot.Scapers
                 return null;
             }
 
-            // TODO: Add exception handling code incase title_nodes[0] = null
-            string name = title_nodes.Count >= 1 ? title_nodes[0].InnerText : null;
-            string price = title_nodes.Count >= 2 ? title_nodes[1].InnerText : null;
+            string name  = "";
+            string price = "";
+            try
+            {
+                name = title_nodes.Count >= 1 ? title_nodes[0].InnerText : null;
+                price = title_nodes.Count >= 2 ? title_nodes[1].InnerText : null;
+            }
+
+            catch (Exception e)
+            {
+                Logger logger = Logger.GetInstance();
+                logger.realLogger.Error(e);
+            }
 
             Console.WriteLine("[+] Name: " + name);
             Console.WriteLine("[+] Price: " + price);
@@ -100,8 +111,21 @@ namespace DiscordScraperBot.Scapers
                 return null;
             }
 
-            string externalUrl = BaseUrl + right_nodes[0].Attributes["href"].Value;
-            string imageUrl = right_nodes[0].FirstChild.Attributes["src"].Value;
+            string externalUrl = "";
+            string imageUrl = "";
+            try
+            {
+                externalUrl = BaseUrl + right_nodes[0].Attributes["href"].Value;
+                imageUrl = right_nodes[0].FirstChild.Attributes["src"].Value;
+            }
+
+            catch (Exception e)
+            {
+                // TODO: Write to a log file.
+                Logger logger = Logger.GetInstance();
+                logger.realLogger.Error(e);
+            }
+            
             Console.WriteLine("[+] externalUrl: " + externalUrl);
             Console.WriteLine("[+] imageUrl: " + imageUrl);
 
