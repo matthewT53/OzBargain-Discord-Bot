@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DiscordScraperBot.BotMessages;
 using HtmlAgilityPack;
 using LLibrary;
@@ -34,12 +35,12 @@ namespace DiscordScraperBot.Scapers
 
             HtmlWeb web = new HtmlWeb();
 
-            Stack<string> links_to_follow = new Stack<string>();
-            links_to_follow.Push(BaseUrl);
+            var base_html = web.Load(BaseUrl);
+            List<string> links_to_follow = ExtractNextLinks(base_html);
+            links_to_follow.Add(BaseUrl);
 
-            while (links_to_follow.Count > 0)
+            foreach (string link in links_to_follow)
             {
-                string link = links_to_follow.Pop();
                 var html_doc = web.Load(link);
 
                 /*
@@ -121,7 +122,6 @@ namespace DiscordScraperBot.Scapers
 
             catch (Exception e)
             {
-                // TODO: Write to a log file.
                 Logger logger = Logger.GetInstance();
                 logger.realLogger.Error(e);
             }
@@ -139,11 +139,29 @@ namespace DiscordScraperBot.Scapers
          * - HtmlDocument object 
          * Returns a list of URLs that lead to the next set of pages on the ozbargain website.
          */
-        private Stack<string> ExtractNextLinks(HtmlDocument html_doc)
+        private List<string> ExtractNextLinks(HtmlDocument htmlDoc)
         {
-            //TODO:
-            Stack<string> next_links = new Stack<string>();
-            return next_links;
+            List<string> nextLinks = new List<string>();
+            var unorderedList = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"main\"]/ul");
+
+            foreach (var listItem in unorderedList.ChildNodes)
+            {
+                if ( IsLinkRelevant(listItem) )
+                {
+                    //TODO Skip duplicates
+                    var linkItem = listItem.FirstChild;
+                    var link = BaseUrl + linkItem.Attributes["href"].Value;
+                    nextLinks.Add(link);
+                    Console.WriteLine("[+] Child class: " + link);
+                }
+            }
+
+            return nextLinks;
+        }
+
+        private bool IsLinkRelevant(HtmlNode listItem)
+        {
+            return listItem.GetAttributeValue("class", "empty").Equals("empty");
         }
     }
 }
