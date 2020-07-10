@@ -9,16 +9,13 @@ namespace DiscordScraperBot.Scapers
 {
     class OzBargainScraper : Scraper
     {
-        const string BaseUrl = "https://www.ozbargain.com.au/";
+        const string BaseUrl = "https://www.ozbargain.com.au";
 
-        /*
-         * The strings below are XPATHs for the OzBargain website. 
-         * 
-         * These XPATHs are used to extract desired information from the site.
-         */
         const string NextPageLinksXpath  = "//*[@id=\"content\"]/ul/li";
         const string BargainsXpath = "//*[@class=\"node node-ozbdeal node-teaser\"]";
         const string BargainTitleXPath = ".//h2//a//text()";
+        const string BargainExternalLinkXPath = ".//div[2]//div[1]//div//a";
+        const string ListOfNextPagesXPath = "//*[@id=\"main\"]/ul";
 
         public OzBargainScraper(ulong channelId)
             : base(channelId)
@@ -31,36 +28,30 @@ namespace DiscordScraperBot.Scapers
          */
         public override void Scrape()
         {
-            Console.Out.WriteLine("[+] Scraping the ozbargain website: ");
-
             HtmlWeb web = new HtmlWeb();
 
             var base_html = web.Load(BaseUrl);
-            List<string> links_to_follow = ExtractNextLinks(base_html);
+            HashSet<string> links_to_follow = ExtractNextLinks(base_html);
             links_to_follow.Add(BaseUrl);
 
             foreach (string link in links_to_follow)
             {
+                Console.WriteLine("[+] Link: " + link);
                 var html_doc = web.Load(link);
 
                 /*
                  * Extract all the bargains from the OzBargains website. 
                  */
                 var bargain_nodes = html_doc.DocumentNode.SelectNodes(BargainsXpath);
-                /* Console.Out.WriteLine("[+] Bargain nodes: ");*/
                 if (bargain_nodes != null)
                 {
                     Console.Out.WriteLine("[+] Bargain nodes: ");
-                    /*
-                     * Iterate over each product that was extracted from the ozbargain page
-                     * and extract the desired information.
-                     */
                     foreach (var product_node in bargain_nodes)
                     {
                         IBotMessage message = ExtractProductInfo(product_node);
                         if (message != null)
                         {
-                            base.AddMessage(message);
+                            AddMessage(message);
                         }
                     }
                 }
@@ -76,48 +67,37 @@ namespace DiscordScraperBot.Scapers
         private BargainMessage ExtractProductInfo(HtmlNode product_node)
         {
             Console.Out.WriteLine("[+] Product: ");
-            /*
-             * Seems like the product title text is split up, so we need to select 
-             * an XPATH that can extract all these pieces of text.
-             */
-            var title_nodes = product_node.SelectNodes(BargainTitleXPath);
-            if (title_nodes == null || title_nodes.Count == 0)
-            {
-                return null;
-            }
-
-            string name  = "";
+        
+            string name = "";
             string price = "";
-            try
-            {
-                name = title_nodes.Count >= 1 ? title_nodes[0].InnerText : null;
-                price = title_nodes.Count >= 2 ? title_nodes[1].InnerText : null;
-            }
-
-            catch (Exception e)
-            {
-                Logger logger = Logger.GetInstance();
-                logger.realLogger.Error(e);
-            }
-
-            Console.WriteLine("[+] Name: " + name);
-            Console.WriteLine("[+] Price: " + price);
-
-            /*
-             * Extract the link to the external source selling the product.
-             */
-            var right_nodes = product_node.SelectNodes(".//div[2]//div[1]//div//a");
-            if (right_nodes == null || right_nodes.Count == 0)
-            {
-                return null;
-            }
-
             string externalUrl = "";
             string imageUrl = "";
+
             try
             {
+                var title_nodes = product_node.SelectNodes(BargainTitleXPath);
+                if (title_nodes == null || title_nodes.Count == 0)
+                {
+                    return null;
+                }
+
+                name = title_nodes.Count >= 1 ? title_nodes[0].InnerText : null;
+                price = title_nodes.Count >= 2 ? title_nodes[1].InnerText : null;
+
+                Console.WriteLine("[+] Name: " + name);
+                Console.WriteLine("[+] Price: " + price);
+
+                var right_nodes = product_node.SelectNodes(BargainExternalLinkXPath);
+                if (right_nodes == null || right_nodes.Count == 0)
+                {
+                    return null;
+                }
+
                 externalUrl = BaseUrl + right_nodes[0].Attributes["href"].Value;
                 imageUrl = right_nodes[0].FirstChild.Attributes["src"].Value;
+
+                Console.WriteLine("[+] externalUrl: " + externalUrl);
+                Console.WriteLine("[+] imageUrl: " + imageUrl);
             }
 
             catch (Exception e)
@@ -125,9 +105,6 @@ namespace DiscordScraperBot.Scapers
                 Logger logger = Logger.GetInstance();
                 logger.realLogger.Error(e);
             }
-            
-            Console.WriteLine("[+] externalUrl: " + externalUrl);
-            Console.WriteLine("[+] imageUrl: " + imageUrl);
 
             BargainMessage message = new BargainMessage(name, price, externalUrl, imageUrl);
             return message;
@@ -137,22 +114,20 @@ namespace DiscordScraperBot.Scapers
          * This method extracts the URLs that lead to the next pages.
          * Input:
          * - HtmlDocument object 
-         * Returns a list of URLs that lead to the next set of pages on the ozbargain website.
+         * Returns a set of URLs that lead to the next set of pages on the ozbargain website.
          */
-        private List<string> ExtractNextLinks(HtmlDocument htmlDoc)
+        private HashSet<string> ExtractNextLinks(HtmlDocument htmlDoc)
         {
-            List<string> nextLinks = new List<string>();
-            var unorderedList = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"main\"]/ul");
+            HashSet<string> nextLinks = new HashSet<string>();
+            var unorderedList = htmlDoc.DocumentNode.SelectSingleNode(ListOfNextPagesXPath);
 
             foreach (var listItem in unorderedList.ChildNodes)
             {
                 if ( IsLinkRelevant(listItem) )
                 {
-                    //TODO Skip duplicates
                     var linkItem = listItem.FirstChild;
                     var link = BaseUrl + linkItem.Attributes["href"].Value;
                     nextLinks.Add(link);
-                    Console.WriteLine("[+] Child class: " + link);
                 }
             }
 

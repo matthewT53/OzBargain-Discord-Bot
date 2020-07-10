@@ -7,10 +7,10 @@ namespace DiscordScraperBot.BotMessages
 {
     public class BargainMessage : IBotMessage
     {
-        string name;
-        string price;
-        string externalUrl;
-        string imageUrl;
+        string name { get; set; }
+        string price { get; set; }
+        string externalUrl { get; set; }
+        string imageUrl { get; set; }
 
         public BargainMessage(string name, string price, string externalUrl, string imageUrl)
         {
@@ -23,6 +23,12 @@ namespace DiscordScraperBot.BotMessages
         public Embed GetEmbed()
         {
             var embed = new EmbedBuilder();
+            embed.Title = name;
+            embed.Color = Color.Green;
+            embed.AddField("Price: ", string.IsNullOrEmpty(price) ? "No Price found" : price);
+            embed.AddField("Source: ", string.IsNullOrEmpty(externalUrl) ? "No source found" : externalUrl);
+            embed.ImageUrl = imageUrl;
+
             return embed.Build();
         }
     }

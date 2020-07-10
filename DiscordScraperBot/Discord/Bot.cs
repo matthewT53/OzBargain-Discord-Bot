@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using DiscordScraperBot.BotMessages;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DiscordScraperBot.Discord
@@ -43,14 +44,11 @@ namespace DiscordScraperBot.Discord
             {
                 var channel = _client.GetChannel(Config.bot.bargainChannelID) as IMessageChannel;
 
-
-                var embed = new EmbedBuilder();
-
-                embed.WithTitle("Test message sent by the bot ");
-                embed.WithDescription("info");
-                embed.WithColor(new Color(10, 98, 234));
-
-                await channel.SendMessageAsync("", false, embed.Build());
+                foreach (IBotMessage message in messages)
+                {
+                    await channel.SendMessageAsync("", false, message.GetEmbed());
+                    Thread.Sleep(1000);
+                }
             }
         }
 

@@ -29,18 +29,16 @@ namespace DiscordScraperBot
             _scrapers.Add(scraper);
         }
 
-        public void StartScraping()
+        public async Task StartScraping()
         {
             while (true)
             {
                 Console.WriteLine("[+] Scraper running...");
-
                 foreach (Scraper scraper in _scrapers)
                 {
                     scraper.Scrape();
-
-                    // There is no result so we do not need to await.
-                    _bot.SendToChannelAsync(scraper.GetMessages());
+                    await _bot.SendToChannelAsync(scraper.GetMessages());
+                    scraper.ClearMessages();
                 }
 
                 Console.WriteLine("[+] Delay: " + _delay);

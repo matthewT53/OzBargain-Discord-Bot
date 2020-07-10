@@ -17,12 +17,10 @@ namespace DiscordScraperBot
             InitializeCommandHandler init = new InitializeCommandHandler(scraperManager);
             Task botTask = bot.StartAsync(init);
 
-            Thread thread = new Thread(scraperManager.StartScraping);
-            thread.Start();
-            thread.Join();
-
+            Task scrapeTask = scraperManager.StartScraping();
             // Wait indefinitely for the bot to finish.
             botTask.Wait(-1);
+            scrapeTask.Wait(-1);
         }
 
         static void InitializeScrapers(ScraperManager scraperManager)
