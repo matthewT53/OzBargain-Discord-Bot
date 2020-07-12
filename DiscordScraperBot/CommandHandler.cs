@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Discord;
+using DiscordScraperBot.Discord;
 
 namespace DiscordScraperBot
 {
@@ -14,7 +15,7 @@ namespace DiscordScraperBot
         public CommandService _commands { get; set; }
         public IServiceProvider _services { get; set; }
 
-        public InitializeCommandHandler(ScraperManager scrape_manager)
+        public InitializeCommandHandler(ScraperManager scrape_manager, Bot bot)
         {
             Console.WriteLine("[+] IntializeCmdHandler: ");
 
@@ -28,14 +29,14 @@ namespace DiscordScraperBot
             });
 
             _commands = new CommandService();
-            _services = BuildServiceProvider(scrape_manager);
+            _services = BuildServiceProvider(scrape_manager, bot);
 
             Console.WriteLine("[+] _client hashcode: " + _client.GetHashCode());
             Console.WriteLine("[+] _commands hashcode: " + _commands.GetHashCode());
             Console.WriteLine("[+] _services hashcode: " + _services.GetHashCode());
         }
 
-        private IServiceProvider BuildServiceProvider(ScraperManager scrape_manager) => new ServiceCollection()
+        private IServiceProvider BuildServiceProvider(ScraperManager scrape_manager, Bot bot) => new ServiceCollection()
             .AddSingleton(_client)
             .AddSingleton(_commands)
             // You can pass in an instance of the desired type
@@ -46,6 +47,7 @@ namespace DiscordScraperBot
             // dependencies that are specified under the constructor 
             // for us.
             .AddSingleton(scrape_manager)
+            .AddSingleton(bot)
             .BuildServiceProvider();
     }
 

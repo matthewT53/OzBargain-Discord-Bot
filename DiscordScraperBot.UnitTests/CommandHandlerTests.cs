@@ -18,7 +18,7 @@ namespace DiscordScraperBot.UnitTests
             {
                 Bot bot = new Bot();
                 ScraperManager scraper_manager = new ScraperManager(bot);
-                InitializeCommandHandler init = new InitializeCommandHandler(scraper_manager);
+                InitializeCommandHandler init = new InitializeCommandHandler(scraper_manager, bot);
 
                 Assert.NotNull(init._client);
                 Assert.NotNull(init._commands);

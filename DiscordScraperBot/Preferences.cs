@@ -98,7 +98,7 @@ namespace DiscordScraperBot
         }
 
         /***
-         * Associates a price range with a certain category.
+         * Associates a price range for an existing category.
          * Returns true if successful and false otherwise.
          * 
          * Throws:
@@ -121,7 +121,7 @@ namespace DiscordScraperBot
         }
 
         /***
-         * Removes a price range from a category. 
+         * Removes a price range from an existing category. 
          * Returns true if successful and false otherwise.
          * 
          * Can throw UserPreferenceNotFoundException if the category is not found.
@@ -136,7 +136,7 @@ namespace DiscordScraperBot
         }
 
         /***
-         * Retrieves the price range for a specific category. 
+         * Retrieves the price range for an existing category. 
          * If there is not price range associated with a category then a tuple of (0.0, 0.0) is returned.
          * 
          * Can throw UserPreferenceNotFoundException is the category is not found.

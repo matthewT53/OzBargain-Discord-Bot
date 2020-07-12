@@ -10,27 +10,28 @@ namespace DiscordScraperBot.Discord
 {
     public class Bot
     {
-        DiscordSocketClient _client;
-        CommandHandler _cmdHandler;
-        bool _isReady = false;
+        DiscordSocketClient Client;
+        CommandHandler CmdHandler;
+        bool IsReady = false;
+        int PostDelay = 5000;
 
         public async Task StartAsync(InitializeCommandHandler init)
         {
             Console.Out.WriteLine("[+] Inside StartAsync(): ");
             if (Config.bot.token == "" || Config.bot.token == null) return;
 
-            _client = init._client;
-            _client.Log += LogMessageAsync;
-            _client.Ready += ReadyEventAsync;
+            Client = init._client;
+            Client.Log += LogMessageAsync;
+            Client.Ready += ReadyEventAsync;
 
             // Log in and start the bot. 
-            await _client.LoginAsync(TokenType.Bot, Config.bot.token);
-            await _client.StartAsync();
+            await Client.LoginAsync(TokenType.Bot, Config.bot.token);
+            await Client.StartAsync();
             
             // Create the services that the modules will require:
-            _cmdHandler = new CommandHandler(init);
+            CmdHandler = new CommandHandler(init);
             
-            await _cmdHandler.InitialiseAsync();
+            await CmdHandler.InitialiseAsync();
         }
 
         /***
@@ -40,22 +41,32 @@ namespace DiscordScraperBot.Discord
         {
             Console.WriteLine("Channel ID: " + Config.bot.bargainChannelID);
             
-            if ( _isReady )
+            if (IsReady)
             {
-                var channel = _client.GetChannel(Config.bot.bargainChannelID) as IMessageChannel;
+                var channel = Client.GetChannel(Config.bot.bargainChannelID) as IMessageChannel;
 
                 foreach (IBotMessage message in messages)
                 {
                     await channel.SendMessageAsync("", false, message.GetEmbed());
-                    Thread.Sleep(1000);
+                    Thread.Sleep(PostDelay);
                 }
             }
         }
 
+        public void SetPostDelay(int newDelay)
+        {
+            PostDelay = newDelay;
+        }
+
+        public int GetPostDelay()
+        {
+            return PostDelay;
+        }
+
         private Task ReadyEventAsync()
         {
-            Console.WriteLine("[+] Bot is connected! ");
-            _isReady = true;
+            Console.WriteLine("[+] Bot is connected!");
+            IsReady = true;
             return Task.CompletedTask;
         }
 

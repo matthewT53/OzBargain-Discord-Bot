@@ -9,24 +9,24 @@ namespace DiscordScraperBot
 {
     public class ScraperManager
     {
-        List<Scraper> _scrapers;
-        int _delay;
-        Bot _bot;
+        List<Scraper> Scrapers;
+        Bot DiscordBot;
+        int Delay;
 
         const int SCRAPER_DEFAULT_DELAY = 1000;
         
         public ScraperManager(Bot bot)
         {
-            _bot = bot;
-            _scrapers = new List<Scraper>();
+            DiscordBot = bot;
+            Scrapers = new List<Scraper>();
 
             // Intialize constants here:
-            _delay = SCRAPER_DEFAULT_DELAY;
+            Delay = SCRAPER_DEFAULT_DELAY;
         }
 
         public void AddScraper(Scraper scraper)
         {
-            _scrapers.Add(scraper);
+            Scrapers.Add(scraper);
         }
 
         public async Task StartScraping()
@@ -34,26 +34,31 @@ namespace DiscordScraperBot
             while (true)
             {
                 Console.WriteLine("[+] Scraper running...");
-                foreach (Scraper scraper in _scrapers)
+                foreach (Scraper scraper in Scrapers)
                 {
                     scraper.Scrape();
-                    await _bot.SendToChannelAsync(scraper.GetMessages());
+                    await DiscordBot.SendToChannelAsync(scraper.GetMessages());
                     scraper.ClearMessages();
                 }
 
-                Console.WriteLine("[+] Delay: " + _delay);
-                Thread.Sleep(_delay);
+                Console.WriteLine("[+] Delay: " + Delay);
+                Thread.Sleep(Delay);
             }
+        }
+
+        public List<Scraper> GetScrapers()
+        {
+            return Scrapers;
         }
 
         public void SetDelay(int delay)
         {
-            _delay = delay;
+            Delay = delay;
         }
 
         public int GetDelay()
         {
-            return _delay;
+            return Delay;
         }
     }
 }

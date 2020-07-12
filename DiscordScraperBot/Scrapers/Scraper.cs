@@ -1,20 +1,24 @@
 ﻿using DiscordScraperBot.BotMessages;
+using System;
 using System.Collections.Generic;
 
 namespace DiscordScraperBot.Scapers
 {
     public abstract class Scraper
     {
-        ulong _channelId;
-        List<IBotMessage> _messages;
+        List<IBotMessage> Messages;
+        Preferences UserPreferences;
+        int depth = Int32.MaxValue;
+        string Name;
 
-        protected Scraper(ulong channelId)
+        protected Scraper(Preferences preferences, string name)
         {
-            _channelId = channelId;
-            _messages = new List<IBotMessage>();
+            this.Messages = new List<IBotMessage>();
+            this.UserPreferences = preferences;
+            this.Name = name;
         }
 
-        /*
+        /***
          * Calling this function will scrape the targeted website for items.
          * These items will be stored in a list that is managed by a concrete 
          * implementation of this interface. 
@@ -23,35 +27,44 @@ namespace DiscordScraperBot.Scapers
          */
         public abstract void Scrape();
 
-        /*
-         * Associates this scraper with a specific channel. It makes sense to associate a scraper with a channel. 
-         * At this stage a scraper should NOT have the ability to send messages to different channels.
-         */
-        public ulong GetChannelId()
-        {
-            return _channelId;
-        }
+        public abstract string GetName();
 
         public void AddMessage(IBotMessage message)
         {
-            _messages.Add(message);
+            Messages.Add(message);
         }
 
-        /*
+        /***
          * This function will return a list of items that were scraped from the 
          * source. 
          */
         public List<IBotMessage> GetMessages()
         {
-            return _messages;
+            return Messages;
         }
 
-        /*
+        /***
          * Clears the list of scraped items.
          */
         public void ClearMessages()
         {
-            _messages.Clear();
+            Messages.Clear();
+        }
+
+        /***
+         * Sets how many pages to scrape.
+         */
+        public void SetDepth(int newDepth)
+        {
+            depth = newDepth;
+        }
+
+        /***
+         * Returns the level of scraping this scraper will perform.
+         */
+        public int GetDepth()
+        {
+            return depth;
         }
     }
 }

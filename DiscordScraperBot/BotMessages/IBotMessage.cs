@@ -8,6 +8,5 @@ namespace DiscordScraperBot.BotMessages
     public interface IBotMessage
     {
         public Embed GetEmbed();
-
     }
 }

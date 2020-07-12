@@ -11,14 +11,15 @@ namespace DiscordScraperBot.Scapers
     {
         const string BaseUrl = "https://www.ozbargain.com.au";
 
-        const string NextPageLinksXpath  = "//*[@id=\"content\"]/ul/li";
         const string BargainsXpath = "//*[@class=\"node node-ozbdeal node-teaser\"]";
         const string BargainTitleXPath = ".//h2//a//text()";
         const string BargainExternalLinkXPath = ".//div[2]//div[1]//div//a";
         const string ListOfNextPagesXPath = "//*[@id=\"main\"]/ul";
 
-        public OzBargainScraper(ulong channelId)
-            : base(channelId)
+        const string ScraperName = "OzBargainScraper";
+
+        public OzBargainScraper(Preferences preferences)
+            : base(preferences, ScraperName)
         { 
         }
 
@@ -30,32 +31,43 @@ namespace DiscordScraperBot.Scapers
         {
             HtmlWeb web = new HtmlWeb();
 
-            var base_html = web.Load(BaseUrl);
-            HashSet<string> links_to_follow = ExtractNextLinks(base_html);
-            links_to_follow.Add(BaseUrl);
+            var baseHtml = web.Load(BaseUrl);
+            HashSet<string> linksToFollow = ExtractNextLinks(baseHtml);
+            linksToFollow.Add(BaseUrl);
 
-            foreach (string link in links_to_follow)
+            int currentDepth = 1;
+            foreach (string link in linksToFollow)
             {
                 Console.WriteLine("[+] Link: " + link);
-                var html_doc = web.Load(link);
+                var htmlDoc = web.Load(link);
 
                 /*
                  * Extract all the bargains from the OzBargains website. 
                  */
-                var bargain_nodes = html_doc.DocumentNode.SelectNodes(BargainsXpath);
-                if (bargain_nodes != null)
+                var bargainNodes = htmlDoc.DocumentNode.SelectNodes(BargainsXpath);
+                if (bargainNodes != null)
                 {
                     Console.Out.WriteLine("[+] Bargain nodes: ");
-                    foreach (var product_node in bargain_nodes)
+                    foreach (var productNode in bargainNodes)
                     {
-                        IBotMessage message = ExtractProductInfo(product_node);
+                        IBotMessage message = ExtractProductInfo(productNode);
                         if (message != null)
                         {
                             AddMessage(message);
                         }
                     }
                 }
+
+                if (currentDepth >= GetDepth())
+                {
+                    break;
+                }
             }
+        }
+
+        public override string GetName()
+        {
+            return ScraperName;
         }
 
         /***
