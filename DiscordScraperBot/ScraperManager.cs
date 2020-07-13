@@ -20,7 +20,6 @@ namespace DiscordScraperBot
             DiscordBot = bot;
             Scrapers = new List<Scraper>();
 
-            // Intialize constants here:
             Delay = SCRAPER_DEFAULT_DELAY;
         }
 

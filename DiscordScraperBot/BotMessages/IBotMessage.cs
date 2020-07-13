@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DiscordScraperBot.BotMessages
 {
-    public interface IBotMessage
+    public interface IBotMessage : IEquatable<IBotMessage>
     {
         public Embed GetEmbed();
     }
