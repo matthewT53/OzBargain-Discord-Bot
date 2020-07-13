@@ -66,24 +66,27 @@ namespace DiscordScraperBot.Modules
             foreach (var scraper in scrapers)
             {
                 int depth = scraper.GetDepth();
-                embed.AddField(scraper.GetName(), depth == Int32.MaxValue ? "NO limit" : depth.ToString(), true);
+                embed.AddField(scraper.GetName(), depth == Int32.MaxValue ? "No limit" : depth.ToString(), true);
             }
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
         [Command("set_depth")]
-        public async Task ChangeDepth([Remainder] int botIndex, [Remainder] int depth)
+        public async Task ChangeDepth(int botIndex, [Remainder] int depth)
         {
             var scrapers = Manager.GetScrapers();
-            scrapers[botIndex].SetDepth(depth);
+            if (botIndex >= 0 && botIndex < scrapers.Count && depth > 0)
+            {
+                scrapers[botIndex].SetDepth(depth);
 
-            var embed = new EmbedBuilder();
-            embed.WithTitle("Changed depth of: " + scrapers[botIndex].GetName() + " to:");
-            embed.WithDescription(depth.ToString());
-            embed.WithColor(new Color(10, 98, 234));
+                var embed = new EmbedBuilder();
+                embed.WithTitle("Changed depth of " + scrapers[botIndex].GetName() + " to:");
+                embed.WithDescription(depth.ToString() + " levels.");
+                embed.WithColor(new Color(10, 98, 234));
 
-            await Context.Channel.SendMessageAsync("", false, embed.Build());
+                await Context.Channel.SendMessageAsync("", false, embed.Build());
+            }
         }
     }
 }

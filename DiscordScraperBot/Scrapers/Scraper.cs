@@ -27,6 +27,9 @@ namespace DiscordScraperBot.Scapers
          */
         public abstract void Scrape();
 
+        /***
+         * Returns the name of the scraper.
+         */
         public abstract string GetName();
 
         public void AddMessage(IBotMessage message)

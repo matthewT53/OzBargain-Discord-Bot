@@ -146,6 +146,9 @@ namespace DiscordScraperBot.Scapers
             return nextLinks;
         }
 
+        /***
+         * Determines if the <li> item that contains a link is required.
+         */
         private bool IsLinkRelevant(HtmlNode listItem)
         {
             return listItem.GetAttributeValue("class", "empty").Equals("empty");
