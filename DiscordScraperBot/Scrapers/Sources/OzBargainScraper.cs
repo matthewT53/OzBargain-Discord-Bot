@@ -5,9 +5,9 @@ using DiscordScraperBot.BotMessages;
 using HtmlAgilityPack;
 using LLibrary;
 
-namespace DiscordScraperBot.Scapers
+namespace DiscordScraperBot.Scrapers
 {
-    class OzBargainScraper : Scraper
+    public class OzBargainScraper : Scraper
     {
         const string BaseUrl = "https://www.ozbargain.com.au";
 
@@ -65,11 +65,6 @@ namespace DiscordScraperBot.Scapers
             }
         }
 
-        public override string GetName()
-        {
-            return ScraperName;
-        }
-
         /***
          * This method extracts information about a product found on the OzBargain website.
          * Input:
@@ -93,8 +88,8 @@ namespace DiscordScraperBot.Scapers
                     return null;
                 }
 
-                name = title_nodes.Count >= 1 ? title_nodes[0].InnerText : null;
-                price = title_nodes.Count >= 2 ? title_nodes[1].InnerText : null;
+                name = title_nodes.Count >= 1 ? title_nodes[0].InnerText : "";
+                price = title_nodes.Count >= 2 ? title_nodes[1].InnerText : "";
 
                 Console.WriteLine("[+] Name: " + name);
                 Console.WriteLine("[+] Price: " + price);

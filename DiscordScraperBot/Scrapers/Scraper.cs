@@ -2,13 +2,22 @@
 using System;
 using System.Collections.Generic;
 
-namespace DiscordScraperBot.Scapers
+namespace DiscordScraperBot.Scrapers
 {
     public abstract class Scraper
     {
+        // Store the messages to be posted to the channel
         List<IBotMessage> Messages;
+
+        // Stores the messages already seen
+        HashSet<IBotMessage> Cache;
+
+        // The user preferences that are used to filter the items.
         Preferences UserPreferences;
+
+        // How many links/pages to scrape.
         int depth = Int32.MaxValue;
+
         string Name;
 
         protected Scraper(Preferences preferences, string name)
@@ -16,6 +25,7 @@ namespace DiscordScraperBot.Scapers
             this.Messages = new List<IBotMessage>();
             this.UserPreferences = preferences;
             this.Name = name;
+            this.Cache = new HashSet<IBotMessage>();
         }
 
         /***
@@ -30,11 +40,22 @@ namespace DiscordScraperBot.Scapers
         /***
          * Returns the name of the scraper.
          */
-        public abstract string GetName();
+        public string GetName()
+        {
+            return Name;
+        }
 
+        /***
+         * Stores a message if it is not already in the cache.
+         */
         public void AddMessage(IBotMessage message)
         {
-            Messages.Add(message);
+            if (!Cache.Contains(message))
+            {
+                Messages.Add(message);
+            }
+
+            Cache.Add(message);
         }
 
         /***

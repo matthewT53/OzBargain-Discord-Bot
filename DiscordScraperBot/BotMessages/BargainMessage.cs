@@ -35,6 +35,7 @@ namespace DiscordScraperBot.BotMessages
 
         public override int GetHashCode()
         {
+            Console.WriteLine("[+] Name: " + Name);
             return  Name.GetHashCode() + 
                     Price.GetHashCode() + 
                     ExternalUrl.GetHashCode() + 

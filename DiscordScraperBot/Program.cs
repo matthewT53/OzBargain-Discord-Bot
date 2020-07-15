@@ -1,4 +1,4 @@
-﻿using DiscordScraperBot.Scapers;
+﻿using DiscordScraperBot.Scrapers;
 using DiscordScraperBot.Discord;
 using System.Threading.Tasks;
 using System.Threading;
