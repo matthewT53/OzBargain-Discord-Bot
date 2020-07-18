@@ -12,12 +12,12 @@ namespace DiscordScraperBot.Discord
     {
         DiscordSocketClient Client;
         CommandHandler CmdHandler;
-        bool IsReady = false;
-        int PostDelay = 5000;
+        public bool IsReady { get; private set; } = false;
+        public int PostDelay { get; set; } = 5000;
+        public DateTime StartTime { get; private set;  }
 
         public async Task StartAsync(InitializeCommandHandler init)
         {
-            Console.Out.WriteLine("[+] Inside StartAsync(): ");
             if (Config.bot.token == "" || Config.bot.token == null) return;
 
             Client = init._client;
@@ -39,8 +39,6 @@ namespace DiscordScraperBot.Discord
          */
         public async Task SendToChannelAsync(List<IBotMessage> messages)
         {
-            Console.WriteLine("Channel ID: " + Config.bot.bargainChannelID);
-            
             if (IsReady)
             {
                 var channel = Client.GetChannel(Config.bot.bargainChannelID) as IMessageChannel;
@@ -53,20 +51,11 @@ namespace DiscordScraperBot.Discord
             }
         }
 
-        public void SetPostDelay(int newDelay)
-        {
-            PostDelay = newDelay;
-        }
-
-        public int GetPostDelay()
-        {
-            return PostDelay;
-        }
-
         private Task ReadyEventAsync()
         {
             Console.WriteLine("[+] Bot is connected!");
             IsReady = true;
+            StartTime = DateTime.Now;
             return Task.CompletedTask;
         }
 

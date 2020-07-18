@@ -17,8 +17,6 @@ namespace DiscordScraperBot
 
         public InitializeCommandHandler(ScraperManager scrape_manager, Bot bot)
         {
-            Console.WriteLine("[+] IntializeCmdHandler: ");
-
             /*
              * Create a DiscordSocketClient object which will allow us to communicate with our BOT 
              * through the Discord API.
@@ -30,10 +28,6 @@ namespace DiscordScraperBot
 
             _commands = new CommandService();
             _services = BuildServiceProvider(scrape_manager, bot);
-
-            Console.WriteLine("[+] _client hashcode: " + _client.GetHashCode());
-            Console.WriteLine("[+] _commands hashcode: " + _commands.GetHashCode());
-            Console.WriteLine("[+] _services hashcode: " + _services.GetHashCode());
         }
 
         private IServiceProvider BuildServiceProvider(ScraperManager scrape_manager, Bot bot) => new ServiceCollection()
@@ -67,11 +61,6 @@ namespace DiscordScraperBot
             _client     = init._client;
             _commands   = init._commands;
             _services   = init._services;
-
-            Console.WriteLine("[+] CmdHandler: ");
-            Console.WriteLine("[+] _client hashcode: " + _client.GetHashCode());
-            Console.WriteLine("[+] _commands hashcode: " + _commands.GetHashCode());
-            Console.WriteLine("[+] _services hashcode: " + _services.GetHashCode());
         }
 
         public async Task InitialiseAsync()
@@ -82,7 +71,6 @@ namespace DiscordScraperBot
 
         private async Task HandleCommandMessageAsync(SocketMessage s)
         {
-            Console.WriteLine("[+] Command message received: ");
             var msg = s as SocketUserMessage;
             if (msg == null)
                 return;

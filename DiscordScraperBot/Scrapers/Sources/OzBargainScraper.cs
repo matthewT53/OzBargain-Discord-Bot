@@ -38,7 +38,7 @@ namespace DiscordScraperBot.Scrapers
             int currentDepth = 1;
             foreach (string link in linksToFollow)
             {
-                Console.WriteLine("[+] Link: " + link);
+                //Console.WriteLine("[+] Link: " + link);
                 var htmlDoc = web.Load(link);
 
                 /*
@@ -47,7 +47,7 @@ namespace DiscordScraperBot.Scrapers
                 var bargainNodes = htmlDoc.DocumentNode.SelectNodes(BargainsXpath);
                 if (bargainNodes != null)
                 {
-                    Console.Out.WriteLine("[+] Bargain nodes: ");
+                    //Console.Out.WriteLine("[+] Bargain nodes: ");
                     foreach (var productNode in bargainNodes)
                     {
                         IBotMessage message = ExtractProductInfo(productNode);
@@ -58,10 +58,12 @@ namespace DiscordScraperBot.Scrapers
                     }
                 }
 
-                if (currentDepth >= GetDepth())
+                if (currentDepth >= Depth)
                 {
                     break;
                 }
+
+                currentDepth++;
             }
         }
 
@@ -73,7 +75,7 @@ namespace DiscordScraperBot.Scrapers
          */
         private BargainMessage ExtractProductInfo(HtmlNode product_node)
         {
-            Console.Out.WriteLine("[+] Product: ");
+            // Console.Out.WriteLine("[+] Product: ");
         
             string name = "";
             string price = "";
@@ -91,8 +93,8 @@ namespace DiscordScraperBot.Scrapers
                 name = title_nodes.Count >= 1 ? title_nodes[0].InnerText : "";
                 price = title_nodes.Count >= 2 ? title_nodes[1].InnerText : "";
 
-                Console.WriteLine("[+] Name: " + name);
-                Console.WriteLine("[+] Price: " + price);
+                //Console.WriteLine("[+] Name: " + name);
+                //Console.WriteLine("[+] Price: " + price);
 
                 var right_nodes = product_node.SelectNodes(BargainExternalLinkXPath);
                 if (right_nodes == null || right_nodes.Count == 0)
@@ -103,8 +105,8 @@ namespace DiscordScraperBot.Scrapers
                 externalUrl = BaseUrl + right_nodes[0].Attributes["href"].Value;
                 imageUrl = right_nodes[0].FirstChild.Attributes["src"].Value;
 
-                Console.WriteLine("[+] externalUrl: " + externalUrl);
-                Console.WriteLine("[+] imageUrl: " + imageUrl);
+                //Console.WriteLine("[+] externalUrl: " + externalUrl);
+                //Console.WriteLine("[+] imageUrl: " + imageUrl);
             }
 
             catch (Exception e)

@@ -20,12 +20,12 @@ namespace DiscordScraperBot.Modules
         [Command("show_post_delay")]
         public async Task ShowDelay()
         {
-            int rate = bot.GetPostDelay();
+            int rate = bot.PostDelay / 1000;
 
             var embed = new EmbedBuilder();
-            embed.WithTitle("Post delay: ");
-            embed.WithDescription(rate.ToString());
-            embed.WithColor(new Color(10, 98, 234));
+            embed.WithTitle("The bot will post a new item every:  ");
+            embed.WithDescription(rate.ToString() + " seconds.");
+            embed.WithColor(Color.Orange);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
@@ -33,12 +33,12 @@ namespace DiscordScraperBot.Modules
         [Command("set_post_delay")]
         public async Task SetDelay([Remainder] int postDelay)
         {
-            bot.SetPostDelay(postDelay);
+            bot.PostDelay = postDelay * 1000;
 
             var embed = new EmbedBuilder();
-            embed.WithTitle("Changed post delay to: ");
-            embed.WithDescription(postDelay.ToString());
-            embed.WithColor(new Color(10, 98, 234));
+            embed.WithTitle("The bot will post every: ");
+            embed.WithDescription(postDelay.ToString() + " seconds.");
+            embed.WithColor(Color.Orange);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }

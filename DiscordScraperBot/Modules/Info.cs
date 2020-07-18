@@ -4,11 +4,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using DiscordScraperBot.Discord;
 
 namespace DiscordScraperBot.Modules
 {
     public class Info : ModuleBase<SocketCommandContext>
     {
+        ScraperManager Manager;
+        Bot DiscordBot;
+
+        public Info(ScraperManager manager, Bot bot)
+        {
+            Manager = manager;
+            DiscordBot = bot;
+        }
         /***
          * Displays the status of the bot. 
          * The information displayed includes:
@@ -20,9 +29,17 @@ namespace DiscordScraperBot.Modules
         {
             var embed = new EmbedBuilder();
 
-            embed.WithTitle("Current scrape rate: ");
-            embed.WithDescription("info");
-            embed.WithColor(new Color(10, 98, 234));
+            DateTime timeNow = DateTime.Now;
+            TimeSpan elapsed = timeNow - DiscordBot.StartTime;
+
+            embed.WithTitle("Some statistics: ");
+            embed.AddField("Start time: ", DiscordBot.StartTime, true);
+            embed.AddField("Run time: ", elapsed, true);
+            embed.AddField("Last scrape time: ", Manager.LastScrapeTime, true);
+            embed.AddField("Scrape Delay: ", Manager.Delay / 1000 + " seconds.", true);
+            embed.AddField("Post Delay: ", DiscordBot.PostDelay / 1000 + " seconds.", true);
+            embed.AddField("Cache Size: ", Manager.GetTotalCacheSize(), true);
+            embed.WithColor(Color.Orange);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
@@ -40,13 +57,14 @@ namespace DiscordScraperBot.Modules
 
             embed.AddField("Command Prefix", "\t\tThe command prefix is $", true);
             embed.AddField("help", "\t\tDisplays the available commands.", true);
-            embed.AddField("info", "\t\tShows the info about this discord bot.", true);
-            embed.AddField("show_scrape_rate", "\t\tDisplays how often web scraping will occur (milliseconds).", true);
-            embed.AddField("set_scrape_rate <scrapte_rate>", "\t\tSets how often the scrapers will run (milliseconds).", true);
+            embed.AddField("info", "\t\tShows some statistics about this discord bot.", true);
+            embed.AddField("show_scrape_delay", "\t\tDisplays how often web scraping will occur (seconds).", true);
+            embed.AddField("set_scrape_delay <scrapte_rate>", "\t\tSets how often the scrapers will run (seconds).", true);
             embed.AddField("show_depth", "\t\tDisplays how many links each bot will follow to scrape.", true);
             embed.AddField("set_depth <bot index> <depth>", "\t\tChanges how many links the scraper will follow.", true);
             embed.AddField("show_post_delay", "\t\tDisplays how often bargains will be posted to the discord channel (milliseconds).", true);
             embed.AddField("set_post_delay <post delay>", "\t\tSets how often bargains will be posted to the discord channel (milliseconds).", true);
+            embed.WithColor(Color.Orange);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }

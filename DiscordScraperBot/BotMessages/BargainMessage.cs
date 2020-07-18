@@ -8,10 +8,10 @@ namespace DiscordScraperBot.BotMessages
 {
     public class BargainMessage : IBotMessage, IEquatable<IBotMessage>
     {
-        string Name { get; set; }
-        string Price { get; set; }
-        string ExternalUrl { get; set; }
-        string ImageUrl { get; set; }
+        string Name;
+        string Price;
+        string ExternalUrl;
+        string ImageUrl;
 
         public BargainMessage(string name, string price, string externalUrl, string imageUrl)
         {
@@ -35,7 +35,6 @@ namespace DiscordScraperBot.BotMessages
 
         public override int GetHashCode()
         {
-            Console.WriteLine("[+] Name: " + Name);
             return  Name.GetHashCode() + 
                     Price.GetHashCode() + 
                     ExternalUrl.GetHashCode() + 

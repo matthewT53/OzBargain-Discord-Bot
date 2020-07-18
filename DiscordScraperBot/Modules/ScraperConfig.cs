@@ -17,7 +17,6 @@ namespace DiscordScraperBot.Modules
         {
             Console.Out.WriteLine("[+] Inside scraper module constructor");
             Manager = scraperManager;
-
             Console.Out.WriteLine("[+] Manager hashcode: " + Manager.GetHashCode());
         }
 
@@ -25,15 +24,15 @@ namespace DiscordScraperBot.Modules
          * The user can issue this command to show the delay in milliseconds 
          * between scraping the Ozbargain website.
          */
-        [Command("show_scrape_rate")]
+        [Command("show_scrape_delay")]
         public async Task ShowRate()
         {
-            int rate = Manager.GetDelay();
+            int rate = Manager.Delay / 1000;
 
             var embed = new EmbedBuilder();
-            embed.WithTitle("Current scrape rate: ");
-            embed.WithDescription(rate.ToString());
-            embed.WithColor(new Color(10, 98, 234));
+            embed.WithTitle("This bot scrapes every:  ");
+            embed.WithDescription(rate.ToString() + " seconds.");
+            embed.WithColor(Color.Orange);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
@@ -42,15 +41,16 @@ namespace DiscordScraperBot.Modules
          * The user can issue this command to modify the delay between scraping
          * the ozbargain website.
          */
-        [Command("set_scrape_rate")]
-        public async Task ChangeRate([Remainder] int new_rate)
+        [Command("set_scrape_delay")]
+        public async Task ChangeRate([Remainder] int newRate)
         {
-            Manager.SetDelay(new_rate);
+            int rate = newRate * 1000;
+            Manager.Delay = rate;
 
             var embed = new EmbedBuilder();
-            embed.WithTitle("Changed scrape rate to: ");
-            embed.WithDescription(new_rate.ToString());
-            embed.WithColor(new Color(10, 98, 234));
+            embed.WithTitle("The scraper will run every: ");
+            embed.WithDescription(newRate.ToString() + " seconds.");
+            embed.WithColor(Color.Orange);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
@@ -60,13 +60,13 @@ namespace DiscordScraperBot.Modules
         {
             var embed = new EmbedBuilder();
             embed.WithTitle("Depths:");
-            embed.WithColor(new Color(10, 98, 234));
+            embed.WithColor(Color.Orange);
 
             var scrapers = Manager.GetScrapers();
             foreach (var scraper in scrapers)
             {
-                int depth = scraper.GetDepth();
-                embed.AddField(scraper.GetName(), depth == Int32.MaxValue ? "No limit" : depth.ToString(), true);
+                int depth = scraper.Depth;
+                embed.AddField(scraper.Name, depth == Int32.MaxValue ? "No limit" : depth.ToString(), true);
             }
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
@@ -78,12 +78,12 @@ namespace DiscordScraperBot.Modules
             var scrapers = Manager.GetScrapers();
             if (botIndex >= 0 && botIndex < scrapers.Count && depth > 0)
             {
-                scrapers[botIndex].SetDepth(depth);
+                scrapers[botIndex].Depth = depth;
 
                 var embed = new EmbedBuilder();
-                embed.WithTitle("Changed depth of " + scrapers[botIndex].GetName() + " to:");
+                embed.WithTitle("Changed depth of " + scrapers[botIndex].Name + " to:");
                 embed.WithDescription(depth.ToString() + " levels.");
-                embed.WithColor(new Color(10, 98, 234));
+                embed.WithColor(Color.Orange);
 
                 await Context.Channel.SendMessageAsync("", false, embed.Build());
             }

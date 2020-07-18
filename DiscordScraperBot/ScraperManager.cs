@@ -11,16 +11,17 @@ namespace DiscordScraperBot
     {
         List<Scraper> Scrapers;
         Bot DiscordBot;
-        int Delay;
+        public int Delay { get; set; }
+        public DateTime LastScrapeTime { get; private set; }
 
-        const int SCRAPER_DEFAULT_DELAY = 1000;
+        const int ScraperDefaultDelay = 1000;
         
         public ScraperManager(Bot bot)
         {
             DiscordBot = bot;
             Scrapers = new List<Scraper>();
 
-            Delay = SCRAPER_DEFAULT_DELAY;
+            Delay = ScraperDefaultDelay;
         }
 
         public void AddScraper(Scraper scraper)
@@ -32,15 +33,18 @@ namespace DiscordScraperBot
         {
             while (true)
             {
-                Console.WriteLine("[+] Scraper running...");
-                foreach (Scraper scraper in Scrapers)
+                //Console.WriteLine("[+] Scraper running...");
+                if (DiscordBot.IsReady)
                 {
-                    scraper.Scrape();
-                    await DiscordBot.SendToChannelAsync(scraper.GetMessages());
-                    scraper.ClearMessages();
+                    foreach (Scraper scraper in Scrapers)
+                    {
+                        LastScrapeTime = DateTime.Now;
+                        scraper.Scrape();
+                        await DiscordBot.SendToChannelAsync(scraper.GetMessages());
+                        scraper.ClearMessages();
+                    }
                 }
-
-                Console.WriteLine("[+] Delay: " + Delay);
+                
                 Thread.Sleep(Delay);
             }
         }
@@ -50,14 +54,15 @@ namespace DiscordScraperBot
             return Scrapers;
         }
 
-        public void SetDelay(int delay)
+        public int GetTotalCacheSize()
         {
-            Delay = delay;
-        }
+            int cacheSize = 0;
+            foreach (Scraper scraper in Scrapers)
+            {
+                cacheSize += scraper.GetCacheSize();
+            }
 
-        public int GetDelay()
-        {
-            return Delay;
+            return cacheSize;
         }
     }
 }

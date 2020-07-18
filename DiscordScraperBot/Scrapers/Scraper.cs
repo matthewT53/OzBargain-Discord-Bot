@@ -16,16 +16,16 @@ namespace DiscordScraperBot.Scrapers
         Preferences UserPreferences;
 
         // How many links/pages to scrape.
-        int depth = Int32.MaxValue;
+        public int Depth { get; set; } = Int32.MaxValue;
 
-        string Name;
+        public string Name { get; private set; }
 
         protected Scraper(Preferences preferences, string name)
         {
             this.Messages = new List<IBotMessage>();
+            this.Cache = new HashSet<IBotMessage>();
             this.UserPreferences = preferences;
             this.Name = name;
-            this.Cache = new HashSet<IBotMessage>();
         }
 
         /***
@@ -36,14 +36,6 @@ namespace DiscordScraperBot.Scrapers
          * Every derived class must implement this method.
          */
         public abstract void Scrape();
-
-        /***
-         * Returns the name of the scraper.
-         */
-        public string GetName()
-        {
-            return Name;
-        }
 
         /***
          * Stores a message if it is not already in the cache.
@@ -75,20 +67,9 @@ namespace DiscordScraperBot.Scrapers
             Messages.Clear();
         }
 
-        /***
-         * Sets how many pages to scrape.
-         */
-        public void SetDepth(int newDepth)
+        public int GetCacheSize()
         {
-            depth = newDepth;
-        }
-
-        /***
-         * Returns the level of scraping this scraper will perform.
-         */
-        public int GetDepth()
-        {
-            return depth;
+            return Cache.Count;
         }
     }
 }
