@@ -38,6 +38,11 @@ namespace DiscordScraperBot.Scrapers
         public abstract void Scrape();
 
         /***
+         * This function filters the scraped items based on the user's preferences defined in UserPreferences.
+         */
+        public abstract void Filter();
+
+        /***
          * Stores a message if it is not already in the cache.
          */
         public void AddMessage(IBotMessage message)
@@ -67,6 +72,17 @@ namespace DiscordScraperBot.Scrapers
             Messages.Clear();
         }
 
+        /***
+         * Clears the cached messages.
+         */
+        public void ClearCache()
+        {
+            Cache.Clear();
+        }
+
+        /***
+         * Returns the number of items in the cache.
+         */
         public int GetCacheSize()
         {
             return Cache.Count;

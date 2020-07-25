@@ -12,7 +12,9 @@ namespace DiscordScraperBot
         List<Scraper> Scrapers;
         Bot DiscordBot;
         public int Delay { get; set; }
+
         public DateTime LastScrapeTime { get; private set; }
+        public DateTime LastClearTime { get; private set; }
 
         const int ScraperDefaultDelay = 1000;
         
@@ -33,12 +35,21 @@ namespace DiscordScraperBot
         {
             while (true)
             {
-                //Console.WriteLine("[+] Scraper running...");
                 if (DiscordBot.IsReady)
                 {
                     foreach (Scraper scraper in Scrapers)
                     {
-                        LastScrapeTime = DateTime.Now;
+                        DateTime currentTime = DateTime.Now;
+                        TimeSpan TimeUntilCacheClear = new TimeSpan(7, 0, 0, 0);
+
+                        if (currentTime - LastClearTime > TimeUntilCacheClear)
+                        {
+                            scraper.ClearCache();
+                            LastClearTime = currentTime;
+
+                            Logger.GetInstance().realLogger.Info("Cleared cache for scraper: " + scraper.Name);
+                        }
+
                         scraper.Scrape();
                         await DiscordBot.SendToChannelAsync(scraper.GetMessages());
                         scraper.ClearMessages();

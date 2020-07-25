@@ -53,7 +53,7 @@ namespace DiscordScraperBot.Discord
 
         private Task ReadyEventAsync()
         {
-            Console.WriteLine("[+] Bot is connected!");
+            Console.WriteLine("[+] Bot is ready!");
             IsReady = true;
             StartTime = DateTime.Now;
             return Task.CompletedTask;

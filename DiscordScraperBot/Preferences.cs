@@ -12,10 +12,10 @@ namespace DiscordScraperBot
      */
     public class Preferences
     {
-        IStorage _storage;
+        IStorage Storage;
 
         // Cache layer for user preferences
-        List<UserPreference> _preferences;
+        List<UserPreference> UserPreferences;
 
         public Preferences(IStorage storage)
         {
@@ -23,11 +23,11 @@ namespace DiscordScraperBot
             {
                 throw new ArgumentNullException("storage cannot be null.");
             }
-            _storage = storage;
-            _storage.CreatePreferenceTable();
+            Storage = storage;
+            Storage.CreatePreferenceTable();
 
             // Load the existing preferences from the database.
-            _preferences = _storage.GetUserPreferences();
+            UserPreferences = Storage.GetUserPreferences();
         }
 
         /***
@@ -42,8 +42,8 @@ namespace DiscordScraperBot
             }
 
             UserPreference preference = new UserPreference(category);
-            _preferences.Add(preference);
-            return _storage.InsertUserPreference(preference);
+            UserPreferences.Add(preference);
+            return Storage.InsertUserPreference(preference);
         }
 
         /***
@@ -53,8 +53,8 @@ namespace DiscordScraperBot
         public bool AddCategory(string category, Tuple<double, double> priceRange)
         {
             UserPreference preference = new UserPreference(category, priceRange.Item1, priceRange.Item2);
-            _preferences.Add(preference);
-            return _storage.InsertUserPreference(preference);
+            UserPreferences.Add(preference);
+            return Storage.InsertUserPreference(preference);
         }
 
         /***
@@ -65,10 +65,10 @@ namespace DiscordScraperBot
         {
             foreach (string category in categories)
             {
-                _preferences.Add(new UserPreference(category));
+                UserPreferences.Add(new UserPreference(category));
             }
 
-            return _storage.InsertUserPreferences(_preferences);
+            return Storage.InsertUserPreferences(UserPreferences);
         }
 
         /***
@@ -78,7 +78,7 @@ namespace DiscordScraperBot
         public bool RemoveCategory(string category)
         {
             UserPreference preference = FindUserPreferenceCache(category);
-            return _storage.DeleteUserPreference(preference);
+            return Storage.DeleteUserPreference(preference);
         }
 
         /***
@@ -94,7 +94,7 @@ namespace DiscordScraperBot
                 preferencesToRemove.Add(preference);
             }
 
-            return _storage.DeleteUserPreferences(preferencesToRemove);
+            return Storage.DeleteUserPreferences(preferencesToRemove);
         }
 
         /***
@@ -117,7 +117,7 @@ namespace DiscordScraperBot
             preference._minPrice = priceRange.Item1;
             preference._maxPrice = priceRange.Item2;
 
-            return _storage.UpdateUserPreference(preference);
+            return Storage.UpdateUserPreference(preference);
         }
 
         /***
@@ -132,7 +132,7 @@ namespace DiscordScraperBot
             preference._minPrice = 0.0;
             preference._maxPrice = 0.0;
 
-            return _storage.UpdateUserPreference(preference);
+            return Storage.UpdateUserPreference(preference);
         }
 
         /***
@@ -156,7 +156,7 @@ namespace DiscordScraperBot
         {
             List<string> categories = new List<string>();
 
-            foreach (UserPreference preference in _preferences)
+            foreach (UserPreference preference in UserPreferences)
             {
                 categories.Add(preference._category);
             }
@@ -189,7 +189,7 @@ namespace DiscordScraperBot
          */
         private UserPreference FindUserPreferenceCache(string category)
         {
-            UserPreference preference = _preferences.Find((pref) =>
+            UserPreference preference = UserPreferences.Find((pref) =>
             {
                 return pref._category == category;
             });

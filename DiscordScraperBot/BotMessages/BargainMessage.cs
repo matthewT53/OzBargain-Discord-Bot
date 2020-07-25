@@ -6,22 +6,20 @@ using System.Text;
 
 namespace DiscordScraperBot.BotMessages
 {
-    public class BargainMessage : IBotMessage, IEquatable<IBotMessage>
+    public class BargainMessage : IBotMessage
     {
-        string Name;
-        string Price;
-        string ExternalUrl;
-        string ImageUrl;
+        public string Category { get; private set; }
 
-        public BargainMessage(string name, string price, string externalUrl, string imageUrl)
+        public BargainMessage(string name, string price, string externalUrl, string imageUrl, string category)
         {
-            this.Name = name;
-            this.Price = price;
-            this.ExternalUrl = externalUrl;
-            this.ImageUrl = imageUrl;
+            Name = name;
+            Price = price;
+            ExternalUrl = externalUrl;
+            ImageUrl = imageUrl;
+            Category = category;
         }
 
-        public Embed GetEmbed()
+        public override Embed GetEmbed()
         {
             var embed = new EmbedBuilder();
             embed.Title = Name;
@@ -31,29 +29,6 @@ namespace DiscordScraperBot.BotMessages
             embed.ImageUrl = ImageUrl;
 
             return embed.Build();
-        }
-
-        public override int GetHashCode()
-        {
-            return  Name.GetHashCode() + 
-                    Price.GetHashCode() + 
-                    ExternalUrl.GetHashCode() + 
-                    ImageUrl.GetHashCode();
-        }
-
-        public bool Equals(BargainMessage message)
-        {
-            return this.Name == message.Name &&
-                    this.Price == message.Price &&
-                    this.ExternalUrl == message.ExternalUrl &&
-                    this.ImageUrl == message.ImageUrl;
-        }
-
-        public bool Equals([AllowNull] IBotMessage other)
-        {
-            return  other != null && 
-                    other is BargainMessage && 
-                    Equals((BargainMessage)other);
         }
     }
 }

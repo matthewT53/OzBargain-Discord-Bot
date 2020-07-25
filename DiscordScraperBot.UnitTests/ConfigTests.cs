@@ -97,7 +97,7 @@ namespace DiscordScraperBot.UnitTests
 
                 catch (Exception ex)
                 {
-                    throw new Exception("[Exception] Invalid configuration file!");
+                    throw new Exception("[Exception]: " + ex.Message);
                 }
             });
         }
@@ -115,7 +115,7 @@ namespace DiscordScraperBot.UnitTests
 
             catch (DirectoryNotFoundException ex)
             {
-                System.Console.WriteLine("[Exception] " + ex.Message);
+                System.Console.WriteLine("[Exception]: " + ex.Message);
             }
         }
     }

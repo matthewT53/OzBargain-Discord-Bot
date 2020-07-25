@@ -15,6 +15,7 @@ namespace DiscordScraperBot.Scrapers
         const string BargainTitleXPath = ".//h2//a//text()";
         const string BargainExternalLinkXPath = ".//div[2]//div[1]//div//a";
         const string ListOfNextPagesXPath = "//*[@id=\"main\"]/ul";
+        const string CategoryXPath = ".//div[4]/ul/li[2]/span/a";
 
         const string ScraperName = "OzBargainScraper";
 
@@ -23,10 +24,6 @@ namespace DiscordScraperBot.Scrapers
         { 
         }
 
-        /***
-         * This method scrapes all the products that are on sale from the ozbargain website. 
-         * These products are stored in a list of IBotMessages.
-         */
         public override void Scrape()
         {
             HtmlWeb web = new HtmlWeb();
@@ -38,16 +35,11 @@ namespace DiscordScraperBot.Scrapers
             int currentDepth = 1;
             foreach (string link in linksToFollow)
             {
-                //Console.WriteLine("[+] Link: " + link);
                 var htmlDoc = web.Load(link);
 
-                /*
-                 * Extract all the bargains from the OzBargains website. 
-                 */
                 var bargainNodes = htmlDoc.DocumentNode.SelectNodes(BargainsXpath);
                 if (bargainNodes != null)
                 {
-                    //Console.Out.WriteLine("[+] Bargain nodes: ");
                     foreach (var productNode in bargainNodes)
                     {
                         IBotMessage message = ExtractProductInfo(productNode);
@@ -67,46 +59,53 @@ namespace DiscordScraperBot.Scrapers
             }
         }
 
+        public override void Filter()
+        {
+            throw new NotImplementedException();
+        }
+
         /***
          * This method extracts information about a product found on the OzBargain website.
+         * Filtering of objects is also done here.
          * Input:
          *  - HtmlNode object.
          * Returns a BargainMessage object with the extracted inforamtion. 
          */
-        private BargainMessage ExtractProductInfo(HtmlNode product_node)
+        private BargainMessage ExtractProductInfo(HtmlNode productNode)
         {
-            // Console.Out.WriteLine("[+] Product: ");
-        
             string name = "";
             string price = "";
             string externalUrl = "";
             string imageUrl = "";
+            string category = "";
 
             try
             {
-                var title_nodes = product_node.SelectNodes(BargainTitleXPath);
-                if (title_nodes == null || title_nodes.Count == 0)
+                var titleNodes = productNode.SelectNodes(BargainTitleXPath);
+                if (titleNodes == null || titleNodes.Count == 0)
                 {
                     return null;
                 }
 
-                name = title_nodes.Count >= 1 ? title_nodes[0].InnerText : "";
-                price = title_nodes.Count >= 2 ? title_nodes[1].InnerText : "";
+                name = titleNodes.Count >= 1 ? titleNodes[0].InnerText : "";
+                price = titleNodes.Count >= 2 ? titleNodes[1].InnerText : "";
 
-                //Console.WriteLine("[+] Name: " + name);
-                //Console.WriteLine("[+] Price: " + price);
-
-                var right_nodes = product_node.SelectNodes(BargainExternalLinkXPath);
-                if (right_nodes == null || right_nodes.Count == 0)
+                var rightNodes = productNode.SelectNodes(BargainExternalLinkXPath);
+                if (rightNodes == null || rightNodes.Count == 0)
                 {
                     return null;
                 }
 
-                externalUrl = BaseUrl + right_nodes[0].Attributes["href"].Value;
-                imageUrl = right_nodes[0].FirstChild.Attributes["src"].Value;
+                externalUrl = BaseUrl + rightNodes[0].Attributes["href"].Value;
+                imageUrl = rightNodes[0].FirstChild.Attributes["src"].Value;
 
-                //Console.WriteLine("[+] externalUrl: " + externalUrl);
-                //Console.WriteLine("[+] imageUrl: " + imageUrl);
+                var categoryNode = productNode.SelectSingleNode(CategoryXPath);
+                if (categoryNode == null)
+                {
+                    return null;
+                }
+
+                category = categoryNode.InnerText;
             }
 
             catch (Exception e)
@@ -115,7 +114,7 @@ namespace DiscordScraperBot.Scrapers
                 logger.realLogger.Error(e);
             }
 
-            BargainMessage message = new BargainMessage(name, price, externalUrl, imageUrl);
+            BargainMessage message = new BargainMessage(name, price, externalUrl, imageUrl, category);
             return message;
         }
 
