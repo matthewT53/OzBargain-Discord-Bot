@@ -7,13 +7,13 @@ namespace DiscordScraperBot.Scrapers
     public abstract class Scraper
     {
         // Store the messages to be posted to the channel
-        List<IBotMessage> Messages;
+        protected List<IBotMessage> Messages;
 
         // Stores the messages already seen
-        HashSet<IBotMessage> Cache;
+        private HashSet<IBotMessage> Cache;
 
         // The user preferences that are used to filter the items.
-        Preferences UserPreferences;
+        protected Preferences UserPreferences;
 
         // How many links/pages to scrape.
         public int Depth { get; set; } = Int32.MaxValue;

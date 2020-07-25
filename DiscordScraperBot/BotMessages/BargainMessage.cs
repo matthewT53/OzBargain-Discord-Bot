@@ -8,7 +8,7 @@ namespace DiscordScraperBot.BotMessages
 {
     public class BargainMessage : IBotMessage
     {
-        public string Category { get; private set; }
+        public List<string> Categories { get; private set; }
 
         public BargainMessage(string name, string price, string externalUrl, string imageUrl, string category)
         {
@@ -16,7 +16,13 @@ namespace DiscordScraperBot.BotMessages
             Price = price;
             ExternalUrl = externalUrl;
             ImageUrl = imageUrl;
-            Category = category;
+            Categories = new List<string>();
+
+            string[] extractedCategories = category.Split(' ');
+            foreach (string bargainCategory in extractedCategories)
+            {
+                Categories.Add(bargainCategory);
+            }
         }
 
         public override Embed GetEmbed()

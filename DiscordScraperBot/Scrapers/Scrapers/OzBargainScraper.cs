@@ -61,7 +61,22 @@ namespace DiscordScraperBot.Scrapers
 
         public override void Filter()
         {
-            throw new NotImplementedException();
+            List<string> categories = UserPreferences.GetCategories();
+            List<IBotMessage> filteredMessages = new List<IBotMessage>(); 
+
+            foreach (BargainMessage message in GetMessages())
+            {
+                foreach (string category in categories)
+                {
+                    if (message.Categories.Contains(category))
+                    {
+                        filteredMessages.Add(message);
+                        break;
+                    }
+                }
+            }
+
+            base.Messages = filteredMessages;
         }
 
         /***

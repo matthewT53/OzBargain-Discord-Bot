@@ -26,9 +26,7 @@ namespace DiscordScraperBot
 
         static void InitializeScrapers(ScraperManager scraperManager)
         {
-            // Load the categories that the user is interested in
             Preferences preferences = new Preferences(new SqliteStorage());
-
             scraperManager.AddScraper(new OzBargainScraper(preferences));
         }
     }
