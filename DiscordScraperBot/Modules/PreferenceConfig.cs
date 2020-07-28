@@ -16,27 +16,41 @@ namespace DiscordScraperBot.Modules
             UserPreferences = preferences;
         }
 
-        [Command("add_category")]
-        public async Task AddCategory([Remainder] string category)
+        /***
+         * This command will add a search filter into the user's preferences which will 
+         * inform the bot about which products to display to the user.
+         */
+        [Command("add_filter")]
+        public async Task AddFilter([Remainder] string category)
         {
-            UserPreferences.AddCategory(category);
+            bool result = UserPreferences.AddCategory(category.ToLower());
+            string message = (result) 
+                ? "The category " + category + " added as a user preference." 
+                : "Failed to add category!";
 
             var embed = new EmbedBuilder();
-            embed.WithTitle("Result: ");
-            embed.WithDescription("Added " + category + " as a user preference.");
+            embed.WithTitle("Adding category: ");
+            embed.WithDescription(message);
             embed.WithColor(Color.Orange);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
-        [Command("remove_category")]
-        public async Task RemoveCategory([Remainder] string category)
+        /***
+        * This command will remove a search filter from the user's preferences which will 
+        * inform the bot about which products to display to the user.
+        */
+        [Command("remove_filter")]
+        public async Task RemoveFilter([Remainder] string category)
         {
-            UserPreferences.RemoveCategory(category);
+            bool result = UserPreferences.RemoveCategory(category.ToLower());
+            string message = (result) 
+                ? "The category " + category + " user preference has been removed." 
+                : "Failed to remove category!";
 
             var embed = new EmbedBuilder();
-            embed.WithTitle("Result: ");
-            embed.WithDescription("Removed " + category + " as a user preference.");
+            embed.WithTitle("Removing category: ");
+            embed.WithDescription(message);
             embed.WithColor(Color.Orange);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());

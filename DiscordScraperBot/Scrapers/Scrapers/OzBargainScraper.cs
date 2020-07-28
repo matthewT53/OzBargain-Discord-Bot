@@ -120,7 +120,7 @@ namespace DiscordScraperBot.Scrapers
                     return null;
                 }
 
-                category = categoryNode.InnerText;
+                category = categoryNode.InnerText.ToLower();
             }
 
             catch (Exception e)
