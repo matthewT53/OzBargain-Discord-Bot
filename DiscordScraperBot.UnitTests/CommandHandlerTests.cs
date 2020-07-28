@@ -18,11 +18,12 @@ namespace DiscordScraperBot.UnitTests
             {
                 Bot bot = new Bot();
                 ScraperManager scraper_manager = new ScraperManager(bot);
-                InitializeCommandHandler init = new InitializeCommandHandler(scraper_manager, bot);
+                Preferences preferences = new Preferences(new MockStorage());
+                InitializeCommandHandler init = new InitializeCommandHandler(scraper_manager, bot, preferences);
 
-                Assert.NotNull(init._client);
-                Assert.NotNull(init._commands);
-                Assert.NotNull(init._services);
+                Assert.NotNull(init.Client);
+                Assert.NotNull(init.Commands);
+                Assert.NotNull(init.Services);
             }
         }
 

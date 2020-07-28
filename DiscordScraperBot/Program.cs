@@ -10,11 +10,12 @@ namespace DiscordScraperBot
         static void Main(string[] args)
         {
             Bot bot = new Bot();
-
+            Preferences preferences = new Preferences(new SqliteStorage());
             ScraperManager scraperManager = new ScraperManager(bot);
-            InitializeScrapers(scraperManager);
 
-            InitializeCommandHandler init = new InitializeCommandHandler(scraperManager, bot);
+            InitializeScrapers(scraperManager, preferences);
+
+            InitializeCommandHandler init = new InitializeCommandHandler(scraperManager, bot, preferences);
             Task botTask = bot.StartAsync(init);
 
             Task scrapeTask = scraperManager.StartScraping();
@@ -24,9 +25,9 @@ namespace DiscordScraperBot
             scrapeTask.Wait(-1);
         }
 
-        static void InitializeScrapers(ScraperManager scraperManager)
+        static void InitializeScrapers(ScraperManager scraperManager, Preferences preferences)
         {
-            Preferences preferences = new Preferences(new SqliteStorage());
+           
             scraperManager.AddScraper(new OzBargainScraper(preferences));
         }
     }

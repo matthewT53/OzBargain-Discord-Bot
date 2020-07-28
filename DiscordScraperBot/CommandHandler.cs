@@ -6,33 +6,44 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using DiscordScraperBot.Discord;
+using DiscordScraperBot.Scrapers;
 
 namespace DiscordScraperBot
 {
     public class InitializeCommandHandler
     {
-        public DiscordSocketClient _client { get; set; }
-        public CommandService _commands { get; set; }
-        public IServiceProvider _services { get; set; }
+        public DiscordSocketClient Client { get; set; }
+        public CommandService Commands { get; set; }
+        public IServiceProvider Services { get; set; }
 
-        public InitializeCommandHandler(ScraperManager scrape_manager, Bot bot)
+        ScraperManager ScrapeManager { get; set; }
+        Bot DiscordBot { get; set; }
+        Preferences UserPreferences { get; set; }
+        
+
+        public InitializeCommandHandler(ScraperManager scraperManager, Bot bot, Preferences preferences)
         {
             /*
              * Create a DiscordSocketClient object which will allow us to communicate with our BOT 
              * through the Discord API.
              */
-            _client = new DiscordSocketClient(new DiscordSocketConfig
+            Client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Verbose
             });
 
-            _commands = new CommandService();
-            _services = BuildServiceProvider(scrape_manager, bot);
+            Commands = new CommandService();
+
+            ScrapeManager = scraperManager;
+            DiscordBot = bot;
+            UserPreferences = preferences;
+
+            Services = BuildServiceProvider();
         }
 
-        private IServiceProvider BuildServiceProvider(ScraperManager scrape_manager, Bot bot) => new ServiceCollection()
-            .AddSingleton(_client)
-            .AddSingleton(_commands)
+        private IServiceProvider BuildServiceProvider() => new ServiceCollection()
+            .AddSingleton(Client)
+            .AddSingleton(Commands)
             // You can pass in an instance of the desired type
             // ...or by using the generic method.
             //
@@ -40,16 +51,17 @@ namespace DiscordScraperBot
             // ASP.NET DI will attempt to inject the required
             // dependencies that are specified under the constructor 
             // for us.
-            .AddSingleton(scrape_manager)
-            .AddSingleton(bot)
+            .AddSingleton(ScrapeManager)
+            .AddSingleton(DiscordBot)
+            .AddSingleton(UserPreferences)
             .BuildServiceProvider();
     }
 
     public class CommandHandler
     {
-        private DiscordSocketClient _client;
-        private CommandService _commands;
-        private IServiceProvider _services;
+        private DiscordSocketClient Client;
+        private CommandService Commands;
+        private IServiceProvider Services;
 
         public CommandHandler(InitializeCommandHandler init)
         {
@@ -58,15 +70,15 @@ namespace DiscordScraperBot
                 throw new ArgumentNullException();
             }
 
-            _client     = init._client;
-            _commands   = init._commands;
-            _services   = init._services;
+            Client     = init.Client;
+            Commands   = init.Commands;
+            Services   = init.Services;
         }
 
         public async Task InitialiseAsync()
         {
-            await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-            _client.MessageReceived += HandleCommandMessageAsync;
+            await Commands.AddModulesAsync(Assembly.GetEntryAssembly(), Services);
+            Client.MessageReceived += HandleCommandMessageAsync;
         }
 
         private async Task HandleCommandMessageAsync(SocketMessage s)
@@ -75,15 +87,15 @@ namespace DiscordScraperBot
             if (msg == null)
                 return;
 
-            var context = new SocketCommandContext(_client, msg);
+            var context = new SocketCommandContext(Client, msg);
             int argPos = 0;
 
             // Handle the event where the user enters a command or mentions the bot.
             // _client.CurrentUser is the bot.
             if (msg.HasStringPrefix(Config.bot.commandPrefix, ref argPos)
-                || msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
+                || msg.HasMentionPrefix(Client.CurrentUser, ref argPos))
             {
-                var result = await _commands.ExecuteAsync(context, argPos, _services);
+                var result = await Commands.ExecuteAsync(context, argPos, Services);
                 if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
                 {
                     Console.WriteLine(result.ErrorReason);

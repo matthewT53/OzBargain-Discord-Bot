@@ -20,7 +20,7 @@ namespace DiscordScraperBot.Discord
         {
             if (Config.bot.token == "" || Config.bot.token == null) return;
 
-            Client = init._client;
+            Client = init.Client;
             Client.Log += LogMessageAsync;
             Client.Ready += ReadyEventAsync;
 
