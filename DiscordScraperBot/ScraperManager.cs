@@ -51,6 +51,7 @@ namespace DiscordScraperBot
                         }
 
                         scraper.Scrape();
+                        scraper.Filter();
                         await DiscordBot.SendToChannelAsync(scraper.GetMessages());
                         scraper.ClearMessages();
                     }
