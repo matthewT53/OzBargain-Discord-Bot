@@ -15,7 +15,7 @@ namespace DiscordScraperBot
         IStorage Storage;
 
         // Cache layer for user preferences
-        List<UserPreference> UserPreferences;
+        public List<UserPreference> UserPreferences { get; private set; }
 
         public Preferences(IStorage storage)
         {

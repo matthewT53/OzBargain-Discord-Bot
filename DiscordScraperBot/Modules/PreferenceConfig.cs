@@ -55,5 +55,74 @@ namespace DiscordScraperBot.Modules
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
+
+        [Command("add_filter_price")]
+        public async Task AddFilterPrice(string category, double minPrice, [Remainder] double maxPrice)
+        {
+            Tuple<double, double> price = new Tuple<double, double>(minPrice, maxPrice);
+            bool result = UserPreferences.AddCategory(category, price);
+            string message = (result)
+                ? "The category " + category + " with price: " + "(" + minPrice + "," + maxPrice + ") has been added!"
+                : "Failed to add category with price!";
+
+            var embed = new EmbedBuilder();
+            embed.WithTitle("Adding price filter: ");
+            embed.WithDescription(message);
+            embed.WithColor(Color.Orange);
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
+        [Command("remove_filter_price")]
+        public async Task RemoveFilterPrice([Remainder] string category)
+        {
+            bool result = UserPreferences.RemovePriceRange(category);
+            string message = (result)
+                ? "The price filter has been removed for category: " + category
+                : "Failed to remove price filter!";
+
+            var embed = new EmbedBuilder();
+            embed.WithTitle("Removing price filter: ");
+            embed.WithDescription(message);
+            embed.WithColor(Color.Orange);
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
+        [Command("update_filter_price")]
+        public async Task UpdateFilterPrice(string category, double minPrice, [Remainder] double maxPrice)
+        {
+            Tuple<double, double> price = new Tuple<double, double>(minPrice, maxPrice);
+            bool result = UserPreferences.AddPriceRange(category, price);
+            string message = (result)
+                ? "The price range of " + category + " has been updated to: " + "(" + minPrice + "," + maxPrice + ")"
+                : "Failed to update category price!";
+
+            var embed = new EmbedBuilder();
+            embed.WithTitle("Updating price filter: ");
+            embed.WithDescription(message);
+            embed.WithColor(Color.Orange);
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
+
+        [Command("show_filters")]
+        public async Task ShowFilters()
+        {
+            var embed = new EmbedBuilder();
+            embed.WithTitle("Filters: ");
+            embed.WithColor(Color.Orange);
+
+            List<UserPreference> preferences = UserPreferences.UserPreferences;
+            foreach (UserPreference preference in preferences)
+            {
+                embed.AddField(
+                    preference._category, 
+                    "(Min price: " + preference._minPrice + ", Max price: " + preference._maxPrice + ")"
+                );
+            }
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+        }
     }
 }

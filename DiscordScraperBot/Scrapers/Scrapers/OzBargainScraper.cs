@@ -61,22 +61,38 @@ namespace DiscordScraperBot.Scrapers
 
         public override void Filter()
         {
-            List<string> categories = UserPreferences.GetCategories();
-            List<IBotMessage> filteredMessages = new List<IBotMessage>(); 
+            List<UserPreference> preferences = UserPreferences.UserPreferences;
+            List<IBotMessage> filteredMessages = new List<IBotMessage>();
 
-            foreach (BargainMessage message in GetMessages())
+            if (preferences.Count != 0)
             {
-                foreach (string category in categories)
+                foreach (BargainMessage message in GetMessages())
                 {
-                    if (message.Categories.Contains(category))
+                    foreach (UserPreference preference in preferences)
                     {
-                        filteredMessages.Add(message);
-                        break;
+                        if (message.Categories.Contains(preference._category))
+                        {
+                            if (preference._minPrice > 0.0 && preference._maxPrice > 0.0)
+                            {
+                                double messagePrice = Convert.ToDouble(message.Price);
+                                if (messagePrice >= preference._minPrice && messagePrice <= preference._maxPrice)
+                                {
+                                    filteredMessages.Add(message);
+                                }
+                            } 
+
+                            else
+                            {
+                                filteredMessages.Add(message);
+                            }
+                            
+                            break;
+                        }
                     }
                 }
-            }
 
-            base.Messages = filteredMessages;
+                base.Messages = filteredMessages;
+            }
         }
 
         /***

@@ -27,7 +27,6 @@ namespace DiscordScraperBot
 
         static void InitializeScrapers(ScraperManager scraperManager, Preferences preferences)
         {
-           
             scraperManager.AddScraper(new OzBargainScraper(preferences));
         }
     }

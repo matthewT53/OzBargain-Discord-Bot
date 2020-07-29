@@ -19,7 +19,6 @@ namespace DiscordScraperBot
         ScraperManager ScrapeManager { get; set; }
         Bot DiscordBot { get; set; }
         Preferences UserPreferences { get; set; }
-        
 
         public InitializeCommandHandler(ScraperManager scraperManager, Bot bot, Preferences preferences)
         {
