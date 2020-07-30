@@ -64,6 +64,13 @@ namespace DiscordScraperBot.Modules
             embed.AddField("set_depth <bot index> <depth>", "\t\tChanges how many links the scraper will follow.", true);
             embed.AddField("show_post_delay", "\t\tDisplays how often bargains will be posted to the discord channel (milliseconds).", true);
             embed.AddField("set_post_delay <post delay>", "\t\tSets how often bargains will be posted to the discord channel (milliseconds).", true);
+            embed.AddField("add_filter <category>", "\t\tAdds a category to filter for. e.g electronics", true);
+            embed.AddField("remove_filter <category>", "\t\tRemoves a category from the filter.", true);
+            embed.AddField("add_filter_price <category> <min price> <max price>", "\t\tAdds a category and a price to filter for.", true);
+            embed.AddField("remove_filter_price <category> <min price> <max price>", "\t\tRemoves a category and its price from filtering.", true);
+            embed.AddField("update_filter_price <category> <min price> <max price>", "\t\tUpdates an existing filter category with a new price.", true);
+            embed.AddField("show_filters", "\t\tDisplays all the categories as well as their prices that are being used as filters.", true);
+
             embed.WithColor(Color.Orange);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());

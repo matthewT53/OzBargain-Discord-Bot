@@ -66,7 +66,7 @@ namespace DiscordScraperBot.Scrapers
 
             if (preferences.Count != 0)
             {
-                foreach (BargainMessage message in GetMessages())
+                foreach (BargainMessage message in base.Messages)
                 {
                     foreach (UserPreference preference in preferences)
                     {
