@@ -1,12 +1,11 @@
-# Discord Scraper Bot
+# OzBargain Discord Bot
 [![Build status](https://ci.appveyor.com/api/projects/status/7hemkueb44yb9r0v?svg=true)](https://ci.appveyor.com/project/matthewT53/discord-scraper-bot)
 ## What is this about?
-* This project aims to create a discord bot that scrapes a variety of sources and then filters these large amounts of data according to your preferences. This information is then delivered to your Discord Server into a channel of your choosing as an Embed notification.
-
-* This project runs on Microsoft C# .Net Core 3.
+* You can add this Discord bot into your channel and it will scrape the ozBargain website for the latest bargains and discounts.
+* Many settings such the period between scraping and the post delay of a bargain can all be adjusted with the commands below.
 
 ## Building:
-* This project can be built with Microsoft Visual studio 2019. 
+* This project runs on Microsoft C# .Net Core 3 and can be built with Microsoft Visual studio 2019. 
 
 ## Configuring:
 ### Resources/config.json:
