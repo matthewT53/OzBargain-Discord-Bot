@@ -6,6 +6,8 @@
 
 ## Building:
 * This project runs on Microsoft C# .Net Core 3 and can be built with Microsoft Visual studio 2019. 
+### Packages:
+* To obtain the required packages, simply use the restore Nuget packages tool in Visual Studio. 
 
 ## Configuring:
 ### Resources/config.json:
@@ -21,14 +23,7 @@
 * The Discord bot's token can be found by following [this](https://discordpy.readthedocs.io/en/latest/discord.html).
 * To find the channel id, follow this [link](https://stackoverflow.com/questions/41515134/discord-bot-cant-get-channel-by-name).
 
-### Packages:
-* To obtain the required packages, simply use the restore Nuget packages tool in Visual Studio. 
-
 ## Usage
-* The following commands must be prefixed with the commandPrefix.
-```
-e.g $help
-```
 ### Commands:
 ```markdown
 # Bot management commands:
@@ -50,6 +45,10 @@ show_filters                        Displays all the categories as well as their
 add_filter_price <category> <min price> <max price>         Adds a category and a price to filter for.
 remove_filter_price <category> <min price> <max price>      Removes a category and its price from filtering.
 update_filter_price <category> <min price> <max price>      Updates an existing filter category with a new price.
+```
+* The following commands must be prefixed with the commandPrefix.
+```
+e.g $help
 ```
 
 ## Libraries:
