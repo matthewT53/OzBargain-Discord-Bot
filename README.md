@@ -12,14 +12,18 @@
 ## Configuring:
 ### Resources/config.json:
 * A configuration file with the relative path "Resources/config.json" to the executable must be created.
-* It must have the following contents.
+* An example of the config.json contents:
 ```c#
 {
   "token": "Your discord bot token here",
   "commandPrefix": "$",
-  "bargainChannelID": "Channel ID that the bot will post to"
+  "bargainChannelID": "Channel ID that the bot will post to",
+  "scrapeDelay": 300,
+  "postDelay": 30,
+  "maxDepth": 5
 }
 ```
+* **Only the token, commandPrefix and bargainChannelID are required.**
 * The Discord bot's token can be found by following [this](https://discordpy.readthedocs.io/en/latest/discord.html).
 * To find the channel id, follow this [link](https://stackoverflow.com/questions/41515134/discord-bot-cant-get-channel-by-name).
 
