@@ -34,6 +34,9 @@ namespace DiscordScraperBot
                 Console.WriteLine("Token read: " + bot.token);
                 Console.WriteLine("Command prefix: " + bot.commandPrefix);
                 Console.WriteLine("Channel ID: " + bot.bargainChannelID);
+                Console.WriteLine("scrapeDelay: " + bot.scrapeDelay);
+                Console.WriteLine("postDelay: " + bot.postDelay);
+                Console.WriteLine("maxDepth: " + bot.maxDepth);
             }
         }
 
@@ -57,6 +60,11 @@ namespace DiscordScraperBot
 
             // These are the ID's of the channels for each specific type of scraper.
             public ulong bargainChannelID;
+            
+            // Common settings for the bot and its scrapers
+            public int scrapeDelay;
+            public int postDelay;
+            public int maxDepth;
         }
     }
 }

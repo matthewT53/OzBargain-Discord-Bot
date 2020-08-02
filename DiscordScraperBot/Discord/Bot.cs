@@ -13,8 +13,15 @@ namespace DiscordScraperBot.Discord
         DiscordSocketClient Client;
         CommandHandler CmdHandler;
         public bool IsReady { get; private set; } = false;
-        public int PostDelay { get; set; } = 5000;
+        public int PostDelay { get; set; }
         public DateTime StartTime { get; private set;  }
+
+        int DefaultPostDelay = 5000;
+
+        public Bot()
+        {
+            this.PostDelay = (Config.bot.postDelay != 0) ? Config.bot.postDelay * 1000 : DefaultPostDelay;
+        }
 
         public async Task StartAsync(InitializeCommandHandler init)
         {

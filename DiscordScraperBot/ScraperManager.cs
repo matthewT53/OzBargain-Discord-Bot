@@ -22,8 +22,7 @@ namespace DiscordScraperBot
         {
             DiscordBot = bot;
             Scrapers = new List<Scraper>();
-
-            Delay = ScraperDefaultDelay;
+            Delay = (Config.bot.scrapeDelay != 0) ? Config.bot.scrapeDelay * 1000 : ScraperDefaultDelay;
         }
 
         public void AddScraper(Scraper scraper)

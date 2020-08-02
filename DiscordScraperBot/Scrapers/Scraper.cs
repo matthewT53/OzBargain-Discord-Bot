@@ -16,7 +16,7 @@ namespace DiscordScraperBot.Scrapers
         protected Preferences UserPreferences;
 
         // How many links/pages to scrape.
-        public int Depth { get; set; } = Int32.MaxValue;
+        public int Depth { get; set; }
 
         public string Name { get; private set; }
 
@@ -26,6 +26,7 @@ namespace DiscordScraperBot.Scrapers
             this.Cache = new HashSet<IBotMessage>();
             this.UserPreferences = preferences;
             this.Name = name;
+            this.Depth = (Config.bot.maxDepth != 0) ? Config.bot.maxDepth : Int32.MaxValue;
         }
 
         /***

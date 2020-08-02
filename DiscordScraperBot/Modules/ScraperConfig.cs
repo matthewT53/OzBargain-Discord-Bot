@@ -15,9 +15,7 @@ namespace DiscordScraperBot.Modules
          */
         public ScraperConfig(ScraperManager scraperManager)
         {
-            Console.Out.WriteLine("[+] Inside scraper module constructor");
             Manager = scraperManager;
-            Console.Out.WriteLine("[+] Manager hashcode: " + Manager.GetHashCode());
         }
 
         /*

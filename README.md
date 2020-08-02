@@ -30,7 +30,7 @@
 help                                Displays the available commands.
 info                                Shows some statistics about this discord bot.
 show_scrape_delay                   Displays how often web scraping will occur (seconds).
-set_scrape_delay <scrapte_rate>     Sets how often the scrapers will run (seconds).
+set_scrape_delay <scrape_rate>      Sets how often the scrapers will run (seconds).
 show_depth                          Displays how many links each bot will follow to scrape.
 set_depth <bot index> <depth>       Changes how many links the scraper will follow.
 show_post_delay                     Displays how often bargains will be posted to the discord channel (milliseconds).
