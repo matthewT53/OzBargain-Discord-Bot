@@ -38,7 +38,7 @@ namespace DiscordScraperBot.Modules
             embed.AddField("Last scrape time: ", Manager.LastScrapeTime, true);
             embed.AddField("Scrape Delay: ", Manager.Delay / 1000 + " seconds.", true);
             embed.AddField("Post Delay: ", DiscordBot.PostDelay / 1000 + " seconds.", true);
-            embed.AddField("Cache Size: ", Manager.GetTotalCacheSize(), true);
+            embed.AddField("Cache Size: ", Manager.GetTotalCacheSize() + " items.", true);
             embed.WithColor(Color.Orange);
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());

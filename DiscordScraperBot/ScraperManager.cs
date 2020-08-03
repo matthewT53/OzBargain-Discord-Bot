@@ -23,6 +23,7 @@ namespace DiscordScraperBot
             DiscordBot = bot;
             Scrapers = new List<Scraper>();
             Delay = (Config.bot.scrapeDelay != 0) ? Config.bot.scrapeDelay * 1000 : ScraperDefaultDelay;
+            LastClearTime = DateTime.Now;
         }
 
         public void AddScraper(Scraper scraper)
@@ -32,31 +33,38 @@ namespace DiscordScraperBot
 
         public async Task StartScraping()
         {
+            TimeSpan TimeUntilCacheClear = new TimeSpan(7, 0, 0, 0);
             while (true)
             {
                 if (DiscordBot.IsReady)
                 {
                     foreach (Scraper scraper in Scrapers)
                     {
-                        DateTime currentTime = DateTime.Now;
-                        TimeSpan TimeUntilCacheClear = new TimeSpan(7, 0, 0, 0);
-
-                        if (currentTime - LastClearTime > TimeUntilCacheClear)
-                        {
-                            scraper.ClearCache();
-                            LastClearTime = currentTime;
-
-                            Logger.GetInstance().realLogger.Info("Cleared cache for scraper: " + scraper.Name);
-                        }
-
                         scraper.Scrape();
                         scraper.Filter();
+
+                        LastScrapeTime = DateTime.Now;
+
+                        Console.WriteLine("[+] Size of messages: " + scraper.GetMessages().Count);
+
                         await DiscordBot.SendToChannelAsync(scraper.GetMessages());
                         scraper.ClearMessages();
                     }
+
+                    DateTime currentTime = DateTime.Now;
+                    if (currentTime - LastClearTime > TimeUntilCacheClear)
+                    {
+                        foreach (Scraper scraper in this.Scrapers)
+                        {
+                            scraper.ClearCache();
+                            Logger.GetInstance().realLogger.Info("Cleared cache for scraper: " + scraper.Name);
+                        }
+
+                        LastClearTime = currentTime;
+                    }
+
+                    Thread.Sleep(Delay);
                 }
-                
-                Thread.Sleep(Delay);
             }
         }
 
