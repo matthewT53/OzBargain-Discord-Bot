@@ -78,6 +78,7 @@ namespace DiscordScraperBot
         public bool RemoveCategory(string category)
         {
             UserPreference preference = FindUserPreferenceCache(category);
+            UserPreferences.Remove(preference);
             return Storage.DeleteUserPreference(preference);
         }
 

@@ -115,6 +115,8 @@ namespace DiscordScraperBot.Scrapers
                 var titleNodes = productNode.SelectNodes(BargainTitleXPath);
                 if (titleNodes == null || titleNodes.Count == 0)
                 {
+                    Logger logger = Logger.GetInstance();
+                    logger.realLogger.Info("TitleNodes is null.");
                     return null;
                 }
 
@@ -124,6 +126,8 @@ namespace DiscordScraperBot.Scrapers
                 var rightNodes = productNode.SelectNodes(BargainExternalLinkXPath);
                 if (rightNodes == null || rightNodes.Count == 0)
                 {
+                    Logger logger = Logger.GetInstance();
+                    logger.realLogger.Info("External URL and image URL are null.");
                     return null;
                 }
 
@@ -133,6 +137,8 @@ namespace DiscordScraperBot.Scrapers
                 var categoryNode = productNode.SelectSingleNode(CategoryXPath);
                 if (categoryNode == null)
                 {
+                    Logger logger = Logger.GetInstance();
+                    logger.realLogger.Info("Category is null.");
                     return null;
                 }
 

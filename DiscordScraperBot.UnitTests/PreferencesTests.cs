@@ -45,13 +45,27 @@ namespace DiscordScraperBot.UnitTests
                 Assert.True( preferences.AddCategory(category) );
             }
 
-            // Ensure these categories have been added to the mock 
+            // Ensure these categories have been added to the mock storage
             List<UserPreference> mockPreferences = storage.GetUserPreferences();
-
             foreach (string category in categories)
             {
                 bool found = false;
                 foreach (UserPreference pref in mockPreferences)
+                {
+                    if (pref._category == category)
+                    {
+                        found = true;
+                    }
+                }
+
+                Assert.True(found);
+            }
+
+            // Ensure these categories have been added to the cache storage
+            foreach (string category in categories)
+            {
+                bool found = false;
+                foreach (UserPreference pref in preferences.UserPreferences)
                 {
                     if (pref._category == category)
                     {
@@ -99,10 +113,19 @@ namespace DiscordScraperBot.UnitTests
             Assert.True( preferences.RemoveCategory("policeman") );
             Assert.True( preferences.RemoveCategory("policewoman") );
 
+            // Ensure these filters are removed from the persistence storage
             List<UserPreference> mockPreferences = storage.GetUserPreferences();
             foreach (UserPreference pref in mockPreferences)
             {
-                Assert.False(pref._category == "policeman" && pref._category == "policewoman");
+                Assert.False(pref._category == "policeman");
+                Assert.False(pref._category == "policewoman");
+            }
+
+            // Ensure these filters are removed from the cache storage
+            foreach (UserPreference pref in preferences.UserPreferences)
+            {
+                Assert.False(pref._category == "policeman");
+                Assert.False(pref._category == "policewoman");
             }
         }
 
@@ -133,17 +156,27 @@ namespace DiscordScraperBot.UnitTests
             categories.Add("test_cat2");
             categories.Add("test_cat3");
 
-            Tuple<double, double> priceRange = new Tuple<double, double>(10.0, 100.0);
-
             foreach (string category in categories) 
             {
                 preferences.AddCategory(category);
             }
 
+            Tuple<double, double> priceRange = new Tuple<double, double>(10.0, 100.0);
             preferences.AddPriceRange("test_cat2", priceRange);
 
+            // Check that the category was updated in the mock storage
             UserPreference userPreference = storage.GetUserPreference("test_cat2");
             Assert.Equal("test_cat2", userPreference._category);
+            Assert.True(userPreference._minPrice == 10.0);
+            Assert.True(userPreference._maxPrice == 100.0);
+
+            // Check that the category was updated in the cache
+            userPreference = preferences.UserPreferences.Find((UserPreference pref) =>
+            {
+                return pref._category == "test_cat2";
+            });
+
+            Assert.NotNull(userPreference);
             Assert.True(userPreference._minPrice == 10.0);
             Assert.True(userPreference._maxPrice == 100.0);
         }
@@ -206,7 +239,6 @@ namespace DiscordScraperBot.UnitTests
             categories.Add("test_cat3");
 
             Tuple<double, double> priceRange = new Tuple<double, double>(10.0, 100.0);
-
             foreach (string category in categories) 
             {
                 preferences.AddCategory(category);
@@ -218,6 +250,16 @@ namespace DiscordScraperBot.UnitTests
             UserPreference userPreference = storage.GetUserPreference("test_cat2");
             Assert.Equal(0.0, userPreference._minPrice);
             Assert.Equal(0.0, userPreference._maxPrice);
+
+            // Check that the category was updated in the cache
+            userPreference = preferences.UserPreferences.Find((UserPreference pref) =>
+            {
+                return pref._category == "test_cat2";
+            });
+
+            Assert.NotNull(userPreference);
+            Assert.True(userPreference._minPrice == 0.0);
+            Assert.True(userPreference._maxPrice == 0.0);
         }
 
         /*
