@@ -70,7 +70,10 @@ namespace DiscordScraperBot.Scrapers
                 {
                     foreach (UserPreference preference in preferences)
                     {
-                        if (message.Categories.Contains(preference._category))
+                        string preferenceTransformed = preference._category.ToLower();
+                        string title = message.Name.ToLower();
+                       
+                        if (message.Categories.Contains(preferenceTransformed) || title.Contains(preferenceTransformed))
                         {
                             if (preference._minPrice > 0.0 && preference._maxPrice > 0.0)
                             {

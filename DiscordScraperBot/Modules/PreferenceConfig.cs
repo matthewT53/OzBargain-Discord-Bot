@@ -114,12 +114,20 @@ namespace DiscordScraperBot.Modules
             embed.WithColor(Color.Orange);
 
             List<UserPreference> preferences = UserPreferences.UserPreferences;
-            foreach (UserPreference preference in preferences)
+            if (preferences.Count != 0)
             {
-                embed.AddField(
-                    preference._category, 
-                    "(Min price: " + preference._minPrice + ", Max price: " + preference._maxPrice + ")"
-                );
+                foreach (UserPreference preference in preferences)
+                {
+                    embed.AddField(
+                        preference._category,
+                        "(Min price: " + preference._minPrice + ", Max price: " + preference._maxPrice + ")"
+                    );
+                }
+            }
+            
+            else
+            {
+                embed.WithDescription("No filters found!");
             }
 
             await Context.Channel.SendMessageAsync("", false, embed.Build());
