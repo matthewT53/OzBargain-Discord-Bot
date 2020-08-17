@@ -41,7 +41,7 @@ show_post_delay                     Displays how often bargains will be posted t
 set_post_delay <post delay>         Sets how often bargains will be posted to the discord channel (milliseconds).
 
 # Filtering commands:
-add_filter <category>               Adds a category to filter for. e.g electronics
+add_filter <category>               Adds a category to filter (this filter is applied to the category and name of the product) for. e.g electronics
 remove_filter <category>            Removes a category from the filter.
 show_filters                        Displays all the categories as well as their prices that are being used as filters.
 

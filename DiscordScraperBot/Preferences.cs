@@ -17,6 +17,8 @@ namespace DiscordScraperBot
         // Cache layer for user preferences
         public List<UserPreference> UserPreferences { get; private set; }
 
+        Dictionary<string, UserPreference> CachedPreferences { get; set; }
+
         public Preferences(IStorage storage)
         {
             if (storage == null)
@@ -28,6 +30,21 @@ namespace DiscordScraperBot
 
             // Load the existing preferences from the database.
             UserPreferences = Storage.GetUserPreferences();
+        }
+
+        /***
+         * Retrieves a UserPreference object from the cache that corresponds to the filter.
+         * i.e filter == preference._category
+         * 
+         * Parameters:
+         * [out] preference : UserPreference
+         * Returns true if a user preference object was found and false otherwise.
+         */
+        public bool FindUserPreference(string filter, out UserPreference preference)
+        {
+            //return CachePreferences.TryGetValue(filter, out preference);
+            preference = null;
+            return false;
         }
 
         /***

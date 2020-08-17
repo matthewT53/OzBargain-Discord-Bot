@@ -65,15 +65,10 @@ namespace DiscordScraperBot.UnitTests
             foreach (string category in categories)
             {
                 bool found = false;
-                foreach (UserPreference pref in preferences.UserPreferences)
-                {
-                    if (pref._category == category)
-                    {
-                        found = true;
-                    }
-                }
-
+                UserPreference userPref;
+                found = preferences.FindUserPreference(category, out userPref);
                 Assert.True(found);
+                Assert.NotNull(userPref);
             }
         }
 
@@ -121,12 +116,9 @@ namespace DiscordScraperBot.UnitTests
                 Assert.False(pref._category == "policewoman");
             }
 
-            // Ensure these filters are removed from the cache storage
-            foreach (UserPreference pref in preferences.UserPreferences)
-            {
-                Assert.False(pref._category == "policeman");
-                Assert.False(pref._category == "policewoman");
-            }
+            UserPreference userPrefOne, userPrefTwo;
+            Assert.False(preferences.FindUserPreference("policeman", out userPrefOne));
+            Assert.False(preferences.FindUserPreference("policewoman", out userPrefTwo));
         }
 
         [Fact]
@@ -169,13 +161,8 @@ namespace DiscordScraperBot.UnitTests
             Assert.Equal("test_cat2", userPreference._category);
             Assert.True(userPreference._minPrice == 10.0);
             Assert.True(userPreference._maxPrice == 100.0);
-
-            // Check that the category was updated in the cache
-            userPreference = preferences.UserPreferences.Find((UserPreference pref) =>
-            {
-                return pref._category == "test_cat2";
-            });
-
+            
+            Assert.True(preferences.FindUserPreference("test_cat2", out userPreference));
             Assert.NotNull(userPreference);
             Assert.True(userPreference._minPrice == 10.0);
             Assert.True(userPreference._maxPrice == 100.0);
@@ -251,12 +238,7 @@ namespace DiscordScraperBot.UnitTests
             Assert.Equal(0.0, userPreference._minPrice);
             Assert.Equal(0.0, userPreference._maxPrice);
 
-            // Check that the category was updated in the cache
-            userPreference = preferences.UserPreferences.Find((UserPreference pref) =>
-            {
-                return pref._category == "test_cat2";
-            });
-
+            Assert.True(preferences.FindUserPreference("test_cat2", out userPreference));
             Assert.NotNull(userPreference);
             Assert.True(userPreference._minPrice == 0.0);
             Assert.True(userPreference._maxPrice == 0.0);

@@ -21,17 +21,14 @@ namespace DiscordScraperBot
 
             if (!File.Exists(ConfigPath))
             {
-                Console.WriteLine("Unable to find config file.");
                 bot = new BotConfig();
                 WriteConfig(bot);
             }
 
             else
             {
-                Console.WriteLine("Found config file.");
                 bot = ReadConfig();
 
-                Console.WriteLine("Token read: " + bot.token);
                 Console.WriteLine("Command prefix: " + bot.commandPrefix);
                 Console.WriteLine("Channel ID: " + bot.bargainChannelID);
                 Console.WriteLine("scrapeDelay: " + bot.scrapeDelay);

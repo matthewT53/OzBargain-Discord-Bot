@@ -12,7 +12,6 @@ namespace DiscordScraperBot
         List<Scraper> Scrapers;
         Bot DiscordBot;
         public int Delay { get; set; }
-
         public DateTime LastScrapeTime { get; private set; }
         public DateTime LastClearTime { get; private set; }
 
