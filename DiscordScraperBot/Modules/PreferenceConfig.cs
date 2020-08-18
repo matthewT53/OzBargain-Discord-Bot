@@ -113,7 +113,7 @@ namespace DiscordScraperBot.Modules
             embed.WithTitle("Filters: ");
             embed.WithColor(Color.Orange);
 
-            List<UserPreference> preferences = UserPreferences.UserPreferences;
+            List<UserPreference> preferences = UserPreferences.GetUserPreferences();
             if (preferences.Count != 0)
             {
                 foreach (UserPreference preference in preferences)

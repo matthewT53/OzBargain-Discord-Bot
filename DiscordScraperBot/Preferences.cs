@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using DiscordScraperBot;
 
@@ -15,8 +16,6 @@ namespace DiscordScraperBot
         IStorage Storage;
 
         // Cache layer for user preferences
-        public List<UserPreference> UserPreferences { get; private set; }
-
         Dictionary<string, UserPreference> CachedPreferences { get; set; }
 
         public Preferences(IStorage storage)
@@ -28,8 +27,14 @@ namespace DiscordScraperBot
             Storage = storage;
             Storage.CreatePreferenceTable();
 
+            CachedPreferences = new Dictionary<string, UserPreference>();
+
             // Load the existing preferences from the database.
-            UserPreferences = Storage.GetUserPreferences();
+            List<UserPreference> userPreferences = Storage.GetUserPreferences();
+            foreach (UserPreference preference in userPreferences)
+            {
+                CachedPreferences.Add(preference._category, preference);
+            }
         }
 
         /***
@@ -40,12 +45,24 @@ namespace DiscordScraperBot
          * [out] preference : UserPreference
          * Returns true if a user preference object was found and false otherwise.
          */
-        public bool FindUserPreference(string filter, out UserPreference preference)
+        public bool FindUserPreferenceFromCache(string filter, out UserPreference preference)
         {
             //return CachePreferences.TryGetValue(filter, out preference);
             preference = null;
             return false;
         }
+
+        /****
+         * Returns a list of UserPreferences objects stored in the cache.
+         * 
+         * Returns:
+         * @List<UserPreference>
+         */
+        public List<UserPreference> GetUserPreferences()
+        {
+            return CachedPreferences.Values.ToList();
+        }
+        
 
         /***
          * Creates a UserPreference object for a category and then inserts into the database.
@@ -59,7 +76,7 @@ namespace DiscordScraperBot
             }
 
             UserPreference preference = new UserPreference(category);
-            UserPreferences.Add(preference);
+            CachedPreferences.Add(category, preference);
             return Storage.InsertUserPreference(preference);
         }
 
@@ -70,22 +87,8 @@ namespace DiscordScraperBot
         public bool AddCategory(string category, Tuple<double, double> priceRange)
         {
             UserPreference preference = new UserPreference(category, priceRange.Item1, priceRange.Item2);
-            UserPreferences.Add(preference);
+            CachedPreferences.Add(category, preference);
             return Storage.InsertUserPreference(preference);
-        }
-
-        /***
-         * Creates a UserPreference object for each category in categories list and then inserts them into the database.
-         * Returns true if all the categories were successfully added into the storage and false otherwise.
-         */
-        public bool AddCategories(List<string> categories)
-        {
-            foreach (string category in categories)
-            {
-                UserPreferences.Add(new UserPreference(category));
-            }
-
-            return Storage.InsertUserPreferences(UserPreferences);
         }
 
         /***
@@ -94,25 +97,14 @@ namespace DiscordScraperBot
          */
         public bool RemoveCategory(string category)
         {
-            UserPreference preference = FindUserPreferenceCache(category);
-            UserPreferences.Remove(preference);
-            return Storage.DeleteUserPreference(preference);
-        }
-
-        /***
-         * Removes all the UserPreference object corresponding to all categories inside the categories list. 
-         * Returns true if successful and false otherwise.
-         */
-        public bool RemoveCategories(List<string> categories)
-        {
-            List<UserPreference> preferencesToRemove = new List<UserPreference>();
-            foreach (string category in categories)
+            UserPreference preference;
+            bool result = FindUserPreferenceFromCache(category, out preference);
+            if (result)
             {
-                UserPreference preference = FindUserPreferenceCache(category);
-                preferencesToRemove.Add(preference);
+                CachedPreferences.Remove(category);
+                result = Storage.DeleteUserPreference(preference);
             }
-
-            return Storage.DeleteUserPreferences(preferencesToRemove);
+            return result;
         }
 
         /***
@@ -125,15 +117,19 @@ namespace DiscordScraperBot
          */
         public bool AddPriceRange(string category, Tuple<double, double> priceRange)
         {
-            UserPreference preference = FindUserPreferenceCache(category);
+            UserPreference preference;
+            bool result = FindUserPreferenceFromCache(category, out preference);
 
             if (priceRange == null)
             {
                 throw new ArgumentNullException("priceRange cannot be null.");
             }
 
-            preference._minPrice = priceRange.Item1;
-            preference._maxPrice = priceRange.Item2;
+            if (result)
+            {
+                preference._minPrice = priceRange.Item1;
+                preference._maxPrice = priceRange.Item2;
+            }
 
             return Storage.UpdateUserPreference(preference);
         }
@@ -146,9 +142,14 @@ namespace DiscordScraperBot
          */
         public bool RemovePriceRange(string category)
         {
-            UserPreference preference = FindUserPreferenceCache(category);
-            preference._minPrice = 0.0;
-            preference._maxPrice = 0.0;
+            UserPreference preference;
+            bool result = FindUserPreferenceFromCache(category, out preference);
+
+            if (result)
+            {
+                preference._minPrice = 0.0;
+                preference._maxPrice = 0.0;
+            }
 
             return Storage.UpdateUserPreference(preference);
         }
@@ -161,25 +162,15 @@ namespace DiscordScraperBot
          */
         public Tuple<double, double> GetPriceRange(string category)
         {
-            UserPreference preference = FindUserPreferenceCache(category);
-            Tuple<double, double> priceRange = new Tuple<double, double>(preference._minPrice, preference._maxPrice);
-            return priceRange;
-        }
-
-        /***
-         * Returns the names of all the categories stored in the list of user preferences 
-         * from the cache layer.
-         */
-        public List<string> GetCategories()
-        {
-            List<string> categories = new List<string>();
-
-            foreach (UserPreference preference in UserPreferences)
+            UserPreference preference;
+            bool result = FindUserPreferenceFromCache(category, out preference);
+            if (!result)
             {
-                categories.Add(preference._category);
+                throw new UserPreferenceNotFoundException();
             }
 
-            return categories;
+            Tuple<double, double> priceRange = new Tuple<double, double>(preference._minPrice, preference._maxPrice);
+            return priceRange;
         }
 
         /***
@@ -200,24 +191,6 @@ namespace DiscordScraperBot
                 : base(message, exception)
             {
             }
-        }
-
-        /***
-         * Returns a user preference from the cache if found otherwise null is returned 
-         */
-        private UserPreference FindUserPreferenceCache(string category)
-        {
-            UserPreference preference = UserPreferences.Find((pref) =>
-            {
-                return pref._category == category;
-            });
-
-            if (preference == null)
-            {
-                throw new UserPreferenceNotFoundException();
-            }
-
-            return preference;
         }
     }
 }

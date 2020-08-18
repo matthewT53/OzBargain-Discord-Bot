@@ -12,6 +12,7 @@ namespace DiscordScraperBot.Discord
     {
         DiscordSocketClient Client;
         CommandHandler CmdHandler;
+        Preferences UserPreferences;
         public bool IsReady { get; private set; } = false;
         public int PostDelay { get; set; }
         public DateTime StartTime { get; private set;  }
@@ -31,6 +32,8 @@ namespace DiscordScraperBot.Discord
             Client.Log += LogMessageAsync;
             Client.Ready += ReadyEventAsync;
 
+            UserPreferences = init.UserPreferences;
+
             // Log in and start the bot. 
             await Client.LoginAsync(TokenType.Bot, Config.bot.token);
             await Client.StartAsync();
@@ -49,10 +52,17 @@ namespace DiscordScraperBot.Discord
             if (IsReady)
             {
                 var channel = Client.GetChannel(Config.bot.bargainChannelID) as IMessageChannel;
-
                 foreach (IBotMessage message in messages)
                 {
-                    await channel.SendMessageAsync("", false, message.GetEmbed());
+                    foreach (string category in message.Categories)
+                    {
+                        UserPreference preference; 
+                        if (UserPreferences.FindUserPreferenceFromCache(category, out preference))
+                        {
+                            await channel.SendMessageAsync("", false, message.GetEmbed());
+                            break;
+                        }
+                    }
                     Thread.Sleep(PostDelay);
                 }
             }

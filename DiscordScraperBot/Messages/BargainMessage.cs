@@ -8,20 +8,18 @@ namespace DiscordScraperBot.BotMessages
 {
     public class BargainMessage : IBotMessage
     {
-        public List<string> Categories { get; private set; }
-
         public BargainMessage(string name, string price, string externalUrl, string imageUrl, string category)
         {
             Name = name;
             Price = price;
             ExternalUrl = externalUrl;
             ImageUrl = imageUrl;
-            Categories = new List<string>();
+            base.Categories = new List<string>();
 
             string[] extractedCategories = category.Split(' ');
             foreach (string bargainCategory in extractedCategories)
             {
-                Categories.Add(bargainCategory);
+                base.Categories.Add(bargainCategory);
             }
         }
 

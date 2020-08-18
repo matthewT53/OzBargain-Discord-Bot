@@ -12,6 +12,7 @@ namespace DiscordScraperBot.BotMessages
         public string Price { get; protected set; }
         public string ExternalUrl { get;  protected set; }
         public string ImageUrl { get; protected set; }
+        public List<string> Categories { get; protected set; }
 
         /***
          * Uses the information acquired from scarping to create an Embed object that is presentable to discord.

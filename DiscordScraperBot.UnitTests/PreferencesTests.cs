@@ -66,7 +66,7 @@ namespace DiscordScraperBot.UnitTests
             {
                 bool found = false;
                 UserPreference userPref;
-                found = preferences.FindUserPreference(category, out userPref);
+                found = preferences.FindUserPreferenceFromCache(category, out userPref);
                 Assert.True(found);
                 Assert.NotNull(userPref);
             }
@@ -117,8 +117,8 @@ namespace DiscordScraperBot.UnitTests
             }
 
             UserPreference userPrefOne, userPrefTwo;
-            Assert.False(preferences.FindUserPreference("policeman", out userPrefOne));
-            Assert.False(preferences.FindUserPreference("policewoman", out userPrefTwo));
+            Assert.False(preferences.FindUserPreferenceFromCache("policeman", out userPrefOne));
+            Assert.False(preferences.FindUserPreferenceFromCache("policewoman", out userPrefTwo));
         }
 
         [Fact]
@@ -162,7 +162,7 @@ namespace DiscordScraperBot.UnitTests
             Assert.True(userPreference._minPrice == 10.0);
             Assert.True(userPreference._maxPrice == 100.0);
             
-            Assert.True(preferences.FindUserPreference("test_cat2", out userPreference));
+            Assert.True(preferences.FindUserPreferenceFromCache("test_cat2", out userPreference));
             Assert.NotNull(userPreference);
             Assert.True(userPreference._minPrice == 10.0);
             Assert.True(userPreference._maxPrice == 100.0);
@@ -238,7 +238,7 @@ namespace DiscordScraperBot.UnitTests
             Assert.Equal(0.0, userPreference._minPrice);
             Assert.Equal(0.0, userPreference._maxPrice);
 
-            Assert.True(preferences.FindUserPreference("test_cat2", out userPreference));
+            Assert.True(preferences.FindUserPreferenceFromCache("test_cat2", out userPreference));
             Assert.NotNull(userPreference);
             Assert.True(userPreference._minPrice == 0.0);
             Assert.True(userPreference._maxPrice == 0.0);

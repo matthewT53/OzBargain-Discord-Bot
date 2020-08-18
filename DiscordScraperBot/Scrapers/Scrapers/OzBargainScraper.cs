@@ -59,45 +59,6 @@ namespace DiscordScraperBot.Scrapers
             }
         }
 
-        public override void Filter()
-        {
-            List<UserPreference> preferences = UserPreferences.UserPreferences;
-            List<IBotMessage> filteredMessages = new List<IBotMessage>();
-
-            if (preferences.Count != 0)
-            {
-                foreach (BargainMessage message in base.Messages)
-                {
-                    foreach (UserPreference preference in preferences)
-                    {
-                        string preferenceTransformed = preference._category.ToLower();
-                        string title = message.Name.ToLower();
-                       
-                        if (message.Categories.Contains(preferenceTransformed) || title.Contains(preferenceTransformed))
-                        {
-                            if (preference._minPrice > 0.0 && preference._maxPrice > 0.0)
-                            {
-                                double messagePrice = Convert.ToDouble(message.Price);
-                                if (messagePrice >= preference._minPrice && messagePrice <= preference._maxPrice)
-                                {
-                                    filteredMessages.Add(message);
-                                }
-                            } 
-
-                            else
-                            {
-                                filteredMessages.Add(message);
-                            }
-                            
-                            break;
-                        }
-                    }
-                }
-
-                base.Messages = filteredMessages;
-            }
-        }
-
         /***
          * This method extracts information about a product found on the OzBargain website.
          * Filtering of objects is also done here.

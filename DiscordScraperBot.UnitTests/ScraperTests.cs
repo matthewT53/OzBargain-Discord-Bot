@@ -91,8 +91,6 @@ namespace DiscordScraperBot.UnitTests
                 )
             );
 
-            scraper.Filter();
-
             List<IBotMessage> botMessages = scraper.GetMessages();
             Assert.Equal(2, botMessages.Count);
             Assert.Equal("test_name", botMessages[0].Name);

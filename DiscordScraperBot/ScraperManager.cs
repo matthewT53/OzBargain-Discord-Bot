@@ -40,7 +40,6 @@ namespace DiscordScraperBot
                     foreach (Scraper scraper in Scrapers)
                     {
                         scraper.Scrape();
-                        scraper.Filter();
 
                         LastScrapeTime = DateTime.Now;
 
