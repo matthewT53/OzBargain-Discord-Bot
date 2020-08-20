@@ -47,9 +47,7 @@ namespace DiscordScraperBot
          */
         public bool FindUserPreferenceFromCache(string filter, out UserPreference preference)
         {
-            //return CachePreferences.TryGetValue(filter, out preference);
-            preference = null;
-            return false;
+            return CachedPreferences.TryGetValue(filter, out preference);
         }
 
         /****
@@ -70,7 +68,7 @@ namespace DiscordScraperBot
          */
         public bool AddCategory(string category)
         {
-            if (category == null)
+            if (string.IsNullOrEmpty(category))
             {
                 throw new ArgumentNullException("category cannot be null.");
             }
@@ -117,18 +115,22 @@ namespace DiscordScraperBot
          */
         public bool AddPriceRange(string category, Tuple<double, double> priceRange)
         {
-            UserPreference preference;
-            bool result = FindUserPreferenceFromCache(category, out preference);
-
             if (priceRange == null)
             {
-                throw new ArgumentNullException("priceRange cannot be null.");
+                throw new ArgumentNullException("PriceRange cannot be null.");
             }
 
+            UserPreference preference;
+            bool result = FindUserPreferenceFromCache(category, out preference);
             if (result)
             {
                 preference._minPrice = priceRange.Item1;
                 preference._maxPrice = priceRange.Item2;
+            }
+
+            else
+            {
+                throw new UserPreferenceNotFoundException();
             }
 
             return Storage.UpdateUserPreference(preference);
@@ -144,11 +146,15 @@ namespace DiscordScraperBot
         {
             UserPreference preference;
             bool result = FindUserPreferenceFromCache(category, out preference);
-
             if (result)
             {
                 preference._minPrice = 0.0;
                 preference._maxPrice = 0.0;
+            }
+
+            else
+            {
+                throw new UserPreferenceNotFoundException();
             }
 
             return Storage.UpdateUserPreference(preference);

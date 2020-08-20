@@ -78,7 +78,7 @@ namespace DiscordScraperBot.UnitTests
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
 
-            Assert.Throws<Preferences.UserPreferenceNotFoundException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 preferences.RemoveCategory(null);
             });
@@ -127,7 +127,7 @@ namespace DiscordScraperBot.UnitTests
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
 
-            Assert.Throws<Preferences.UserPreferenceNotFoundException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 preferences.AddPriceRange(null, null);
             });
@@ -178,7 +178,7 @@ namespace DiscordScraperBot.UnitTests
             Preferences preferences = new Preferences(storage);
 
             Tuple<double, double> priceRange = new Tuple<double, double>(10.0, 100.0);
-            Assert.Throws<Preferences.UserPreferenceNotFoundException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 preferences.AddPriceRange(null, priceRange);
             });
@@ -207,7 +207,7 @@ namespace DiscordScraperBot.UnitTests
             IStorage storage = new MockStorage();
             Preferences preferences = new Preferences(storage);
 
-            Assert.Throws<Preferences.UserPreferenceNotFoundException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 preferences.RemovePriceRange(null);
             });
@@ -260,6 +260,62 @@ namespace DiscordScraperBot.UnitTests
 
             Tuple<double, double> existingPriceRange = preferences.GetPriceRange("cars");
             Assert.Equal(priceRange, existingPriceRange);
+        }
+
+        /***
+         * Test that ensures we can retrieve items that were recently added from the cache.
+         */
+        [Fact]
+        public void RetrievePreferenceFromCacheTest()
+        {
+            IStorage storage = new MockStorage();
+            Preferences preferences = new Preferences(storage);
+
+            preferences.AddCategory("cars");
+            preferences.AddCategory("towns");
+            preferences.AddCategory("garages");
+
+            UserPreference pref;
+            Assert.True(preferences.FindUserPreferenceFromCache("cars", out pref));
+            Assert.True(preferences.FindUserPreferenceFromCache("towns", out pref));
+            Assert.True(preferences.FindUserPreferenceFromCache("garages", out pref));
+        }
+
+        /***
+         * Test that ensures non-existant items cannot be retrieved from the cache.
+         */
+        [Fact]
+        public void RetrieveFakePreferenceFromCacheTest()
+        {
+            IStorage storage = new MockStorage();
+            Preferences preferences = new Preferences(storage);
+
+            UserPreference pref;
+            Assert.False(preferences.FindUserPreferenceFromCache("cars", out pref));
+        }
+
+        /***
+         * Test that ensures that removed items cannot be retrieved from the cache.
+         */
+        [Fact]
+        public void RetrieveRemovedPreferenceFromCacheTest()
+        {
+            IStorage storage = new MockStorage();
+            Preferences preferences = new Preferences(storage);
+
+            preferences.AddCategory("cars");
+            preferences.AddCategory("towns");
+            preferences.AddCategory("garages");
+
+            UserPreference pref;
+            Assert.True(preferences.FindUserPreferenceFromCache("cars", out pref));
+            Assert.True(preferences.FindUserPreferenceFromCache("towns", out pref));
+            Assert.True(preferences.FindUserPreferenceFromCache("garages", out pref));
+
+            preferences.RemoveCategory("cars");
+            Assert.False(preferences.FindUserPreferenceFromCache("cars", out pref));
+            Assert.True(preferences.FindUserPreferenceFromCache("towns", out pref));
+            Assert.True(preferences.FindUserPreferenceFromCache("garages", out pref));
         }
     }
 }
