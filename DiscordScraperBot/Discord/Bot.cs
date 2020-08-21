@@ -54,18 +54,65 @@ namespace DiscordScraperBot.Discord
                 var channel = Client.GetChannel(Config.bot.bargainChannelID) as IMessageChannel;
                 foreach (IBotMessage message in messages)
                 {
-                    foreach (string category in message.Categories)
+                    Console.WriteLine("[+] Considering message: " + message.Name);
+                    if (isDesirable(message))
                     {
-                        UserPreference preference; 
-                        if (UserPreferences.FindUserPreferenceFromCache(category, out preference))
+                        await channel.SendMessageAsync("", false, message.GetEmbed());
+                        Thread.Sleep(PostDelay);
+                    }
+                }
+            }
+        }
+
+        /***
+         * Determines if a message is desirable to the user. 
+         * @Returns: 
+         *  true if the message should be posted because it matches a filter applied by the user.
+         *  false otherwise.
+         */
+        private bool isDesirable(IBotMessage message)
+        {
+            bool desirable = false;
+            // No filters have been created by the user so we accept the message.
+            if (UserPreferences.Count() == 0)
+            {
+                Console.WriteLine("[+] No filters applied so we take all messages!");
+                return true;
+            }
+
+            else
+            {
+                foreach (string category in message.Categories)
+                {
+                    Console.WriteLine("[+] Considering category: " + category);
+                    UserPreference preference;
+
+                    if (UserPreferences.FindUserPreferenceFromCache(category, out preference))
+                    {
+                        desirable = true;
+                        break;
+                    }
+                }
+
+                if (!desirable)
+                {
+                    // Consider the title of the message too!
+                    string [] titleHints = message.Name.Split(' ');
+                    foreach (string hint in titleHints)
+                    {
+                        Console.WriteLine("[+] Hint: " + hint);
+                        UserPreference preference;
+                        if (UserPreferences.FindUserPreferenceFromCache(hint, out preference))
                         {
-                            await channel.SendMessageAsync("", false, message.GetEmbed());
+                            desirable = true;
                             break;
                         }
                     }
-                    Thread.Sleep(PostDelay);
                 }
+
             }
+
+            return desirable;
         }
 
         private Task ReadyEventAsync()

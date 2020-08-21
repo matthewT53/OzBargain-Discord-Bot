@@ -50,6 +50,15 @@ namespace DiscordScraperBot
             return CachedPreferences.TryGetValue(filter, out preference);
         }
 
+        /***
+         * Returns the number of categories the user has selected.
+         * This number is the same as the number of objects inside the CachedPreferences collection.
+         */
+        public int Count()
+        {
+            return CachedPreferences.Count;
+        }
+
         /****
          * Returns a list of UserPreferences objects stored in the cache.
          * 
