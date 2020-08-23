@@ -36,6 +36,7 @@ namespace DiscordScraperBot.UnitTests
             bot.scrapeDelay = 100;
             bot.postDelay = 200;
             bot.maxDepth = 5;
+            bot.logFile = "test_logfile";
 
             DeleteConfig();
             Config.WriteConfig(bot);
@@ -47,6 +48,7 @@ namespace DiscordScraperBot.UnitTests
             Assert.Equal(100, botRead.scrapeDelay);
             Assert.Equal(200, botRead.postDelay);
             Assert.Equal(5, botRead.maxDepth);
+            Assert.Equal("test_logfile", botRead.logFile);
         }
 
         [Fact]
@@ -59,6 +61,7 @@ namespace DiscordScraperBot.UnitTests
             bot.scrapeDelay = 100;
             bot.postDelay = 200;
             bot.maxDepth = 5;
+            bot.logFile = "test_logfile";
 
             DeleteConfig();
             Config.WriteConfig(bot);
@@ -70,6 +73,7 @@ namespace DiscordScraperBot.UnitTests
             Assert.Equal(100, botRead.scrapeDelay);
             Assert.Equal(200, botRead.postDelay);
             Assert.Equal(5, botRead.maxDepth);
+            Assert.Equal("test_logfile", botRead.logFile);
         }
 
         /*

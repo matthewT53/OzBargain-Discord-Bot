@@ -34,6 +34,7 @@ namespace DiscordScraperBot
                 Console.WriteLine("scrapeDelay: " + bot.scrapeDelay);
                 Console.WriteLine("postDelay: " + bot.postDelay);
                 Console.WriteLine("maxDepth: " + bot.maxDepth);
+                Console.WriteLine("logfile: " + bot.logFile);
             }
         }
 
@@ -62,6 +63,8 @@ namespace DiscordScraperBot
             public int scrapeDelay;
             public int postDelay;
             public int maxDepth;
+
+            public string logFile;
         }
     }
 }

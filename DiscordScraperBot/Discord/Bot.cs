@@ -47,9 +47,6 @@ namespace DiscordScraperBot.Discord
             await CmdHandler.InitialiseAsync();
         }
 
-        /***
-         * This method will send the results acquired from a scraper to a specified channel.
-         */
         public async Task SendToChannelAsync(List<IBotMessage> messages)
         {
             if (IsReady)
@@ -75,12 +72,10 @@ namespace DiscordScraperBot.Discord
             return Task.CompletedTask;
         }
 
-        /***
-         * Logs a message to a file.
-         */
         private async Task LogMessageAsync(LogMessage m)
         {
             Console.WriteLine(m.Message);
+            Logger.GetInstance().realLogger.Info(m.Message);
         }
     }
 }

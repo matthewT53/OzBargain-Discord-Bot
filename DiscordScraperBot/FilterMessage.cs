@@ -39,7 +39,7 @@ namespace DiscordScraperBot
 
                 foreach (string filterItem in filterItems)
                 {
-                    Console.WriteLine("[+] Considering category: " + filterItem);
+                    Console.WriteLine("[+] Considering category: " + filterItem.ToLower());
                     UserPreference preference;
 
                     if (UserPreferences.FindUserPreferenceFromCache(filterItem.ToLower(), out preference))
