@@ -60,7 +60,7 @@ namespace DiscordScraperBot.Modules
         public async Task AddFilterPrice(string category, double minPrice, [Remainder] double maxPrice)
         {
             Tuple<double, double> price = new Tuple<double, double>(minPrice, maxPrice);
-            bool result = UserPreferences.AddCategory(category, price);
+            bool result = UserPreferences.AddCategory(category.ToLower(), price);
             string message = (result)
                 ? "The category " + category + " with price: " + "(" + minPrice + "," + maxPrice + ") has been added!"
                 : "Failed to add category with price!";
@@ -76,7 +76,7 @@ namespace DiscordScraperBot.Modules
         [Command("remove_filter_price")]
         public async Task RemoveFilterPrice([Remainder] string category)
         {
-            bool result = UserPreferences.RemovePriceRange(category);
+            bool result = UserPreferences.RemovePriceRange(category.ToLower());
             string message = (result)
                 ? "The price filter has been removed for category: " + category
                 : "Failed to remove price filter!";
@@ -93,7 +93,7 @@ namespace DiscordScraperBot.Modules
         public async Task UpdateFilterPrice(string category, double minPrice, [Remainder] double maxPrice)
         {
             Tuple<double, double> price = new Tuple<double, double>(minPrice, maxPrice);
-            bool result = UserPreferences.AddPriceRange(category, price);
+            bool result = UserPreferences.AddPriceRange(category.ToLower(), price);
             string message = (result)
                 ? "The price range of " + category + " has been updated to: " + "(" + minPrice + "," + maxPrice + ")"
                 : "Failed to update category price!";

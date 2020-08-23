@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using DiscordScraperBot.BotMessages;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace DiscordScraperBot.Discord
         DiscordSocketClient Client;
         CommandHandler CmdHandler;
         Preferences UserPreferences;
+        FilterMessage Filter;
         public bool IsReady { get; private set; } = false;
         public int PostDelay { get; set; }
         public DateTime StartTime { get; private set;  }
@@ -33,6 +35,7 @@ namespace DiscordScraperBot.Discord
             Client.Ready += ReadyEventAsync;
 
             UserPreferences = init.UserPreferences;
+            Filter = new FilterMessage(UserPreferences);
 
             // Log in and start the bot. 
             await Client.LoginAsync(TokenType.Bot, Config.bot.token);
@@ -55,64 +58,13 @@ namespace DiscordScraperBot.Discord
                 foreach (IBotMessage message in messages)
                 {
                     Console.WriteLine("[+] Considering message: " + message.Name);
-                    if (isDesirable(message))
+                    if (Filter.IsDesirable(message))
                     {
                         await channel.SendMessageAsync("", false, message.GetEmbed());
                         Thread.Sleep(PostDelay);
                     }
                 }
             }
-        }
-
-        /***
-         * Determines if a message is desirable to the user. 
-         * @Returns: 
-         *  true if the message should be posted because it matches a filter applied by the user.
-         *  false otherwise.
-         */
-        private bool isDesirable(IBotMessage message)
-        {
-            bool desirable = false;
-            // No filters have been created by the user so we accept the message.
-            if (UserPreferences.Count() == 0)
-            {
-                Console.WriteLine("[+] No filters applied so we take all messages!");
-                return true;
-            }
-
-            else
-            {
-                foreach (string category in message.Categories)
-                {
-                    Console.WriteLine("[+] Considering category: " + category);
-                    UserPreference preference;
-
-                    if (UserPreferences.FindUserPreferenceFromCache(category, out preference))
-                    {
-                        desirable = true;
-                        break;
-                    }
-                }
-
-                if (!desirable)
-                {
-                    // Consider the title of the message too!
-                    string [] titleHints = message.Name.Split(' ');
-                    foreach (string hint in titleHints)
-                    {
-                        Console.WriteLine("[+] Hint: " + hint);
-                        UserPreference preference;
-                        if (UserPreferences.FindUserPreferenceFromCache(hint, out preference))
-                        {
-                            desirable = true;
-                            break;
-                        }
-                    }
-                }
-
-            }
-
-            return desirable;
         }
 
         private Task ReadyEventAsync()
