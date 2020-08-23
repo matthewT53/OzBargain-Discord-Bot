@@ -20,7 +20,8 @@
   "bargainChannelID": "Channel ID that the bot will post to",
   "scrapeDelay": 300,
   "postDelay": 30,
-  "maxDepth": 5
+  "maxDepth": 5,
+  "logFile": "D:\\Projects\\Logs\\DiscordScraperBot",
 }
 ```
 * **Only the token, commandPrefix and bargainChannelID are required.**
