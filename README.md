@@ -42,15 +42,16 @@ show_post_delay                     Displays how often bargains will be posted t
 set_post_delay <post delay>         Sets how often bargains will be posted to the discord channel (milliseconds).
 
 # Filtering commands:
-add_filter <category>               Adds a category to filter (this filter is applied to the category and name of the product) for. e.g electronics
-remove_filter <category>            Removes a category from the filter.
-show_filters                        Displays all the categories as well as their prices that are being used as filters.
+add_filter <keyword>                Adds a keyword to filter (this filter is applied to the name of the item as well as any categories it belongs to e.g electronics)
+remove_filter <keyword>             Removes a keyword from the filter.
+show_filters                        Displays all the keywords as well as their prices that are being used as filters.
 
 # Filtering commands based on price:
-add_filter_price <category> <min price> <max price>         Adds a category and a price to filter for.
-remove_filter_price <category> <min price> <max price>      Removes a category and its price from filtering.
-update_filter_price <category> <min price> <max price>      Updates an existing filter category with a new price.
+add_filter_price <keyword> <min price> <max price>         Adds a keyword and a price to filter for.
+remove_filter_price <keyword> <min price> <max price>      Removes a keyword and its price from filtering.
+update_filter_price <keyword> <min price> <max price>      Updates an existing filter keyword with a new price.
 ```
+* The filters can be applied while the bot is running and will be saved, so when the bot restarts the previous filters still apply.
 * The following commands must be prefixed with the commandPrefix.
 ```
 e.g $help
