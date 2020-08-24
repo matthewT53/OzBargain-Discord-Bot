@@ -38,8 +38,8 @@ show_scrape_delay                   Displays how often web scraping will occur (
 set_scrape_delay <scrape_rate>      Sets how often the scrapers will run (seconds).
 show_depth                          Displays how many links each bot will follow to scrape.
 set_depth <bot index> <depth>       Changes how many links the scraper will follow.
-show_post_delay                     Displays how often bargains will be posted to the discord channel (milliseconds).
-set_post_delay <post delay>         Sets how often bargains will be posted to the discord channel (milliseconds).
+show_post_delay                     Displays how often bargains will be posted to the discord channel (seconds).
+set_post_delay <post delay>         Sets how often bargains will be posted to the discord channel (seconds).
 
 # Filtering commands:
 add_filter <keyword>                Adds a keyword to filter (this filter is applied to the name of the item as well as any categories it belongs to e.g electronics)
