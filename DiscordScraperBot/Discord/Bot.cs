@@ -28,7 +28,13 @@ namespace DiscordScraperBot.Discord
 
         public async Task StartAsync(InitializeCommandHandler init)
         {
-            if (Config.bot.token == "" || Config.bot.token == null) return;
+            if (string.IsNullOrEmpty(Config.bot.token))
+            {
+                string errorMessage = "Configuration error: Token cannot be empty or null.";
+                Console.WriteLine(errorMessage);
+                Logger.GetInstance().realLogger.Error(errorMessage);
+                await Task.CompletedTask;
+            }
 
             Client = init.Client;
             Client.Log += LogMessageAsync;
@@ -51,15 +57,25 @@ namespace DiscordScraperBot.Discord
         {
             if (IsReady)
             {
-                var channel = Client.GetChannel(Config.bot.bargainChannelID) as IMessageChannel;
-                foreach (IBotMessage message in messages)
+                if (Config.bot.bargainChannelID != 0)
                 {
-                    Console.WriteLine("[+] Considering message: " + message.Name);
-                    if (Filter.IsDesirable(message))
+                    var channel = Client.GetChannel(Config.bot.bargainChannelID) as IMessageChannel;
+                    foreach (IBotMessage message in messages)
                     {
-                        await channel.SendMessageAsync("", false, message.GetEmbed());
-                        Thread.Sleep(PostDelay);
+                        Console.WriteLine("[+] Considering message: " + message.Name);
+                        if (Filter.IsDesirable(message))
+                        {
+                            await channel.SendMessageAsync("", false, message.GetEmbed());
+                            Thread.Sleep(PostDelay);
+                        }
                     }
+                }
+
+                else
+                {
+                    string errorMessage = "Configuration error: Bargain Channel ID should not be zero.";
+                    Console.WriteLine(errorMessage);
+                    Logger.GetInstance().realLogger.Error(errorMessage);
                 }
             }
         }

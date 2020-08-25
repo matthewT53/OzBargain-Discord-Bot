@@ -25,7 +25,7 @@ namespace DiscordScraperBot
 
                 // Directory where to create the log files.
                 // Defaults to null, which creates a local "logs" directory.
-                directory: Config.bot.logFile
+                directory: string.IsNullOrEmpty(Config.bot.logFile) ? "C:\\Logs\\" : Config.bot.logFile
             );
         }
 
